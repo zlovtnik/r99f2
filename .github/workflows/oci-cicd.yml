@@ -46,19 +46,34 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install OCI CLI
+      run: |
+        curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+        chmod +x install.sh
+        ./install.sh --accept-all-defaults
+        echo "$HOME/bin" >> $GITHUB_PATH
+
     - name: Configure OCI CLI
-      uses: oracle-actions/configure-oci-credentials@v1
-      with:
-        user: ${{ secrets.OCI_USER_OCID }}
-        fingerprint: ${{ secrets.OCI_FINGERPRINT }}
-        tenancy: ${{ secrets.OCI_TENANCY_OCID }}
-        region: ${{ secrets.OCI_REGION }}
-        api_key: ${{ secrets.OCI_CLI_KEY }}
+      run: |
+        mkdir -p ~/.oci
+        echo "${{ secrets.OCI_CLI_KEY }}" > ~/.oci/oci_api_key.pem
+        chmod 600 ~/.oci/oci_api_key.pem
+        cat > ~/.oci/config << EOF
+        [DEFAULT]
+        user=${{ secrets.OCI_USER_OCID }}
+        fingerprint=${{ secrets.OCI_FINGERPRINT }}
+        tenancy=${{ secrets.OCI_TENANCY_OCID }}
+        region=${{ secrets.OCI_REGION }}
+        key_file=~/.oci/oci_api_key.pem
+        EOF
+        chmod 600 ~/.oci/config
 
     - name: Login to OCIR
-      uses: oracle-actions/login-ocir@v1.2.1
-      with:
-        auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+      run: |
+        echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login \
+          ${{ secrets.OCI_REGION }}.ocir.io \
+          -u "${{ secrets.OCI_NAMESPACE }}/oracleidentitycloudservice/${{ secrets.OCI_USER_EMAIL }}" \
+          --password-stdin
 
     - name: Build and push Docker image
       run: |
@@ -67,39 +82,35 @@ jobs:
         docker push "$IMAGE_TAG"
 
     - name: Delete existing container instance
-      uses: oracle-actions/run-oci-cli-command@v1.3.2
       continue-on-error: true
-      with:
-        command: |
-          # Find existing instance by display name
-          INSTANCE_ID=$(oci container-instances container-instance list \
-            --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
-            --display-name sveltekit-app-instance \
-            --lifecycle-state ACTIVE \
-            --query 'data[0].id' \
-            --raw-output 2>/dev/null || true)
-          
-          if [ -n "$INSTANCE_ID" ] && [ "$INSTANCE_ID" != "null" ]; then
-            echo "Deleting existing instance: $INSTANCE_ID"
-            oci container-instances container-instance delete \
-              --container-instance-id "$INSTANCE_ID" \
-              --force
-            # Wait for deletion to complete
-            echo "Waiting for instance deletion..."
-            sleep 30
-          else
-            echo "No existing instance found, proceeding with creation"
-          fi
+      run: |
+        # Find existing instance by display name
+        INSTANCE_ID=$($HOME/bin/oci container-instances container-instance list \
+          --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
+          --display-name sveltekit-app-instance \
+          --lifecycle-state ACTIVE \
+          --query 'data[0].id' \
+          --raw-output 2>/dev/null || true)
+        
+        if [ -n "$INSTANCE_ID" ] && [ "$INSTANCE_ID" != "null" ]; then
+          echo "Deleting existing instance: $INSTANCE_ID"
+          $HOME/bin/oci container-instances container-instance delete \
+            --container-instance-id "$INSTANCE_ID" \
+            --force
+          # Wait for deletion to complete
+          echo "Waiting for instance deletion..."
+          sleep 30
+        else
+          echo "No existing instance found, proceeding with creation"
+        fi
 
     - name: Deploy to OCI Container Instances
-      uses: oracle-actions/run-oci-cli-command@v1.3.2
-      with:
-        command: |
-          oci container-instances container-instance create \
-            --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
-            --display-name sveltekit-app-instance \
-            --availability-domain ${{ secrets.OCI_AVAILABILITY_DOMAIN }} \
-            --shape CI.Standard.E4.Flex \
-            --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
-            --containers '[{"displayName": "sveltekit-container", "imageUrl": "${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}", "environmentVariables": {"NODE_ENV": "production", "VITE_SITE_URL": "${{ secrets.VITE_SITE_URL }}", "VITE_BUSINESS_EMAIL": "${{ secrets.VITE_BUSINESS_EMAIL }}", "VITE_BUSINESS_PHONE": "${{ secrets.VITE_BUSINESS_PHONE }}", "VITE_GA_MEASUREMENT_ID": "${{ secrets.VITE_GA_MEASUREMENT_ID }}"}}]' \
-            --vnics '[{"subnetId": "${{ secrets.OCI_SUBNET_ID }}"}]'
+      run: |
+        $HOME/bin/oci container-instances container-instance create \
+          --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
+          --display-name sveltekit-app-instance \
+          --availability-domain ${{ secrets.OCI_AVAILABILITY_DOMAIN }} \
+          --shape CI.Standard.E4.Flex \
+          --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
+          --containers '[{"displayName": "sveltekit-container", "imageUrl": "${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}", "environmentVariables": {"NODE_ENV": "production", "VITE_SITE_URL": "${{ secrets.VITE_SITE_URL }}", "VITE_BUSINESS_EMAIL": "${{ secrets.VITE_BUSINESS_EMAIL }}", "VITE_BUSINESS_PHONE": "${{ secrets.VITE_BUSINESS_PHONE }}", "VITE_GA_MEASUREMENT_ID": "${{ secrets.VITE_GA_MEASUREMENT_ID }}"}}]' \
+          --vnics '[{"subnetId": "${{ secrets.OCI_SUBNET_ID }}"}]'
