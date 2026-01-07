@@ -10,11 +10,15 @@ export interface EmailResult {
   error?: string;
 }
 
-// HTML escaping utility for client-side
+// Server-safe HTML escaping utility
 function escapeHtml(text: string): string {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 }
 
 export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
@@ -22,16 +26,7 @@ export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
 
   try {
     // Escape HTML content to prevent XSS
-    const escapedHtml = html.replaceAll(/\{\{(\w+)\}\}/g, (match, key) => {
-      // This assumes template variables like {{name}}, {{email}}, etc.
-      // We need to escape each variable individually
-      return match;
-    });
-
-    // Replace template variables with escaped content
-    let processedHtml = escapedHtml;
-    // Note: In a real implementation, you'd want to pass the variables separately
-    // and escape them on the server. For now, we'll assume the HTML is pre-escaped.
+    const escapedHtml = escapeHtml(html);
 
     const response = await fetch('/api/send-email', {
       method: 'POST',
@@ -41,7 +36,7 @@ export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
       body: JSON.stringify({
         to,
         subject,
-        html: processedHtml,
+        html: escapedHtml,
         from,
       }),
     });
@@ -58,27 +53,11 @@ export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
     }
 
   } catch (err) {
-    console.error('Email request failed:', err);
+    // Sanitize error logging to avoid exposing sensitive information
+    console.error('Email request failed: An error occurred while sending email');
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'Unknown error'
+      error: 'Email service temporarily unavailable'
     };
   }
-}
-
-// Retry logic for email delivery
-export async function sendEmailWithRetry(options: EmailOptions, maxRetries = 3): Promise<EmailResult> {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    const result = await sendEmail(options);
-    if (result.success) {
-      return result;
-    }
-
-    if (attempt < maxRetries) {
-      // Wait before retry (exponential backoff)
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
-    }
-  }
-
-  return { success: false, error: 'Max retries exceeded' };
 }

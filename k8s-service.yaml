@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lbsunrise-roofing-service
+  labels:
+    app: lbsunrise-roofing
+spec:
+  selector:
+    app: lbsunrise-roofing
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+  type: LoadBalancer

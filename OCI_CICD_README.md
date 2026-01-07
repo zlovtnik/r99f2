@@ -190,6 +190,111 @@ export OCI_AUTH_TOKEN="your-auth-token"
 - SvelteKit Documentation: https://kit.svelte.dev/
 - Community Forums: Oracle Cloud Community, Svelte Discord
 
+## Approach 4: Kubernetes Deployment (OKE)
+
+Deploy your SvelteKit application to Oracle Kubernetes Engine (OKE) for scalable, containerized deployments.
+
+### Prerequisites
+
+- **OKE Cluster** created in OCI
+- **kubectl** installed and configured
+- **OCI CLI** 2.24.0+ installed
+- **Docker** installed
+
+### Setup Steps
+
+1. **Set up kubectl access to your OKE cluster**
+   ```bash
+   # Use the provided setup script (recommended)
+   ./setup-kubectl.sh <cluster-id> <region> [endpoint-type]
+
+   # Example:
+   ./setup-kubectl.sh ocid1.cluster.oc1.us-chicago-1.aaaaaaaagfp3m2azgas5imu4tanitysypbodhaso6kw5br5w2ci3mkr7ap4a us-chicago-1 PUBLIC_ENDPOINT
+
+   # To find your cluster ID, run:
+   oci ce cluster list --compartment-id <your-compartment-id>
+   ```
+
+   **Manual setup (alternative):**
+   ```bash
+   # Verify OCI CLI version (must be 2.24.0+)
+   oci -v
+
+   # Create kubeconfig directory
+   mkdir -p $HOME/.kube
+
+   # Generate kubeconfig (replace with your cluster OCID and region)
+   oci ce cluster create-kubeconfig \
+     --cluster-id ocid1.cluster.oc1.us-chicago-1.aaaaaaaagfp3m2azgas5imu4tanitysypbodhaso6kw5br5w2ci3mkr7ap4a \
+     --file $HOME/.kube/config \
+     --region us-chicago-1 \
+     --token-version 2.0.0 \
+     --kube-endpoint PUBLIC_ENDPOINT
+
+   # Set KUBECONFIG environment variable
+   export KUBECONFIG=$HOME/.kube/config
+   ```
+
+2. **Configure environment variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+
+   # Edit the .env file with your actual values
+   # Required variables:
+   # - OCI_REGION: Your OCI region (e.g., us-chicago-1)
+   # - OCI_USER: Your OCI user OCID
+   # - OCI_AUTH_TOKEN: Your OCI auth token
+   # - NAMESPACE: Your OCIR namespace
+   # - CLUSTER_ID: Your OKE cluster OCID
+   # - VITE_SITE_URL: Your domain URL
+   # - VITE_BUSINESS_EMAIL: Contact email
+   # - VITE_BUSINESS_PHONE: Contact phone
+   # - VITE_GA_MEASUREMENT_ID: Google Analytics ID
+   ```
+
+   **Or set environment variables manually:**
+   ```bash
+   export OCI_REGION="us-chicago-1"
+   export NAMESPACE="your-namespace"
+   export CLUSTER_ID="your-cluster-ocid"
+   export REPO_NAME="lbsunrise-roofing"
+   export IMAGE_TAG="latest"
+   export VITE_SITE_URL="https://your-domain.com"
+   export VITE_BUSINESS_EMAIL="contact@lbsunrise.com"
+   export VITE_BUSINESS_PHONE="(978) 519-9774"
+   export VITE_GA_MEASUREMENT_ID="your-ga-id"
+   export OCI_USER="your-oci-user"
+   export OCI_AUTH_TOKEN="your-auth-token"
+   ```
+
+3. **Update Kubernetes manifests**
+   - Edit `k8s-deployment.yaml` with your image URL
+   - Update `k8s-ingress.yaml` with your domain
+   - Configure environment variables in the deployment
+
+4. **Deploy to Kubernetes**
+   ```bash
+   # Using the deployment script
+   make deploy-k8s
+
+   # Or manually
+   ./deploy-k8s.sh
+   ```
+
+### Kubernetes Manifests
+
+The project includes the following Kubernetes manifests:
+- `k8s-deployment.yaml`: Application deployment with 2 replicas
+- `k8s-service.yaml`: Service to expose the application
+- `k8s-ingress.yaml`: Ingress for external access (configure with your domain)
+
+### Monitoring and Scaling
+
+- Check pod status: `kubectl get pods`
+- View logs: `kubectl logs -l app=lbsunrise-roofing`
+- Scale deployment: `kubectl scale deployment lbsunrise-roofing --replicas=3`
+
 ## Next Steps
 
 1. Choose your preferred CI/CD approach

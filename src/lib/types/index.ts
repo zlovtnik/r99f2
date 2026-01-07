@@ -62,7 +62,6 @@ export interface SEOMetadata {
 export interface BusinessInfo {
   name: string;
   telephone: string;
-  phone: string;
   email: string;
   address: string;
   city: string;
@@ -70,8 +69,8 @@ export interface BusinessInfo {
   zipCode: string;
   lat: number;
   lng: number;
-  hours: Record<string, string>;
-  businessHours?: string[];
+  hours: Record<string, string>; // Structured hours for data processing
+  businessHours: string[]; // Display-friendly hours for UI
   serviceAreas?: string;
   serviceRadius: string;
   foundedYear?: number;

@@ -1,8 +1,11 @@
 # Makefile for SvelteKit OCI Deployment Project
 
-.PHONY: help install dev build preview check clean test lint deploy deploy-local docker-build docker-push oci-deploy deploy-oci-ready
+.PHONY: help install dev build preview check clean test lint deploy deploy-local docker-build docker-push oci-deploy deploy-oci-ready deploy-k8s k8s-deploy all
 
 # Default target
+all: build
+
+# Help target
 help:
 	@echo "Available targets:"
 	@echo "  install       - Install dependencies"
@@ -13,12 +16,14 @@ help:
 	@echo "  clean         - Clean build artifacts"
 	@echo "  test          - Run tests (if available)"
 	@echo "  lint          - Run linting (if available)"
-	@echo "  deploy        - Deploy to OCI (requires env vars)"
+	@echo "  setup-kubectl - Set up kubectl access to OKE cluster"
+	@echo "  deploy        - Deploy to OCI Container Instances (requires env vars)"
 	@echo "  deploy-local  - Deploy locally using OCI CLI"
 	@echo "  docker-build  - Build Docker image"
 	@echo "  docker-push   - Push Docker image to OCIR"
 	@echo "  oci-deploy    - Show OCI deployment command with variables"
-	@echo "  deploy-oci-ready - Run ready-to-use OCI deployment command"
+	@echo "  deploy-k8s    - Deploy to Oracle Kubernetes Engine (OKE)"
+	@echo "  k8s-deploy    - Alias for deploy-k8s"
 
 # Install dependencies
 install:
@@ -60,6 +65,21 @@ lint:
 		echo "No lint script defined"; \
 	fi
 
+# Set up kubectl access to OKE cluster
+setup-kubectl:
+	@echo "Setting up kubectl access to OKE cluster..."
+	@echo "Usage: make setup-kubectl CLUSTER_ID=<cluster-ocid> REGION=<region>"
+	@echo "Example: make setup-kubectl CLUSTER_ID=ocid1.cluster.oc1.us-chicago-1.aaaaaaaagfp3m2azgas5imu4tanitysypbodhaso6kw5br5w2ci3mkr7ap4a REGION=us-chicago-1"
+	@if [ -z "$(CLUSTER_ID)" ]; then \
+		echo "Error: CLUSTER_ID is required"; \
+		exit 1; \
+	fi
+	@if [ -z "$(REGION)" ]; then \
+		echo "Error: REGION is required"; \
+		exit 1; \
+	fi
+	./setup-kubectl.sh $(CLUSTER_ID) $(REGION)
+
 # Deploy to OCI (assumes environment variables are set)
 deploy: build
 	./deploy-oci.sh
@@ -77,10 +97,22 @@ deploy-local:
 
 # Build Docker image
 docker-build: build
+	@if [ -z "$(NAMESPACE)" ]; then \
+		echo "Error: NAMESPACE environment variable is not set"; \
+		exit 1; \
+	fi
+	@if [ -z "$(IMAGE_TAG)" ]; then \
+		echo "Error: IMAGE_TAG environment variable is not set"; \
+		exit 1; \
+	fi
 	docker build -t $(NAMESPACE)/sveltekit-app:$(IMAGE_TAG) .
 
 # Push Docker image to OCIR
 docker-push: docker-build
+	@if [ -z "$(OCI_REGION)" ]; then \
+		echo "Error: OCI_REGION environment variable is not set"; \
+		exit 1; \
+	fi
 	@echo "Pushing to OCIR..."
 	@echo "Login to OCIR first with: docker login $(OCI_REGION).ocir.io -u $(NAMESPACE) -p <auth-token>"
 	docker tag $(NAMESPACE)/sveltekit-app:$(IMAGE_TAG) $(OCI_REGION).ocir.io/$(NAMESPACE)/sveltekit-app:$(IMAGE_TAG)
@@ -100,11 +132,11 @@ oci-deploy:
 
 # Ready-to-run OCI deployment command with hardcoded values
 deploy-oci-ready:
-	oci container-instances container-instance create \
-	  --compartment-id ocid1.tenancy.oc1..aaaaaaaa6j5cbx7otaftfvt3gois7qjjgwfxs6qp3zum2mq2mcpotcn3citq \
-	  --display-name sveltekit-app-instance \
-	  --availability-domain ocid1.availabilitydomain.oc1..aaaaaaaaag25rxkuwv76f77a57wz5h4a4pkm545dam4ndohfge25sffw5p3a \
-	  --shape CI.Standard.E4.Flex \
-	  --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
-	  --containers '[{"displayName": "sveltekit-container", "imageUrl": "us-chicago-1.ocir.io/axye6mel1l0n/sveltekit-app:latest", "environmentVariables": {"NODE_ENV": "production", "VITE_SITE_URL": "https://lbsunrise.com", "VITE_BUSINESS_EMAIL": "LEMADILAN5@gmail.com", "VITE_BUSINESS_PHONE": "(978) 519-9774", "VITE_GA_MEASUREMENT_ID": ""}}]' \
-	  --vnics '[{"subnetId": "ocid1.subnet.oc1.us-chicago-1.aaaaaaaav5rea7aafzmw4wetqjexre6m65hs63e5x2ve7wjlock6okgtnxtq"}]'
+	@echo "This target has been removed for security reasons. Use 'make deploy' with proper environment variables instead."
+
+# Deploy to Kubernetes (OKE)
+deploy-k8s:
+	./deploy-k8s.sh
+
+# Alias for deploy-k8s
+k8s-deploy: deploy-k8s
