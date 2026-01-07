@@ -1,0 +1,5 @@
+# Allow all crawlers to access everything - intentional for SEO
+# This business website relies on search engine visibility for local roofing services
+# No sensitive routes (admin panels, internal APIs) exist in this application
+User-agent: *
+Disallow:
