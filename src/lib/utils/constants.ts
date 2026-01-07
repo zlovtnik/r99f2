@@ -5,6 +5,7 @@ const envSiteUrl = import.meta.env.VITE_SITE_URL;
 export const BUSINESS_INFO = {
   name: 'LB Sunrise',
   telephone: envPhone || '(978) 519-9774',
+  phone: envPhone || '(978) 519-9774',
   email: envEmail || 'LEMADILAN5@gmail.com',
   address: '44 Veranda St',
   city: 'Portland',
@@ -17,7 +18,15 @@ export const BUSINESS_INFO = {
     'Saturday': '9:00 AM - 4:00 PM',
     'Sunday': 'Closed'
   },
-  serviceRadius: 'Portland Metro Area and surrounding Maine communities'
+  businessHours: [
+    'Monday - Friday: 8:00 AM - 6:00 PM',
+    'Saturday: 9:00 AM - 4:00 PM',
+    'Sunday: Closed'
+  ],
+  serviceAreas: 'Portland, Westbrook, and surrounding areas in Maine',
+  serviceRadius: 'Portland Metro Area and surrounding Maine communities',
+  foundedYear: 2010,
+  emergencyResponseTime: 'Emergency repairs within 2 hours'
 } as const;
 
 export const KEYWORDS = {
@@ -38,6 +47,14 @@ export const SERVICE_OPTIONS: readonly string[] = [
   'Roof Repair',
   'Roof Replacement',
   'Roof Inspection'
+] as const;
+
+export const STANDARD_SERVICES: readonly string[] = [
+  'Roof Repair',
+  'Roof Replacement',
+  'Emergency Roof Repair',
+  'Roof Inspection',
+  'Maintenance Services'
 ] as const;
 
 export const SITE_URL = envSiteUrl || 'https://lbsunrise.com';

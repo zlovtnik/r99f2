@@ -6,11 +6,17 @@
 set -e
 
 # Configuration - Update these variables according to your OCI setup
-OCI_REGION="${OCI_REGION:-us-ashburn-1}"
-COMPARTMENT_ID="${COMPARTMENT_ID}"
-NAMESPACE="${NAMESPACE:-your-namespace}"
+OCI_REGION="${OCI_REGION:-us-chicago-1}"
+COMPARTMENT_ID="${COMPARTMENT_ID:-ocid1.tenancy.oc1..aaaaaaaa6j5cbx7otaftfvt3gois7qjjgwfxs6qp3zum2mq2mcpotcn3citq}"
+NAMESPACE="${NAMESPACE:-axye6mel1l0n}"
 REPO_NAME="${REPO_NAME:-sveltekit-app}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
+
+# Environment variables for the application
+VITE_SITE_URL="${VITE_SITE_URL:-https://lbsunrise.com}"
+VITE_BUSINESS_EMAIL="${VITE_BUSINESS_EMAIL:-LEMADILAN5@gmail.com}"
+VITE_BUSINESS_PHONE="${VITE_BUSINESS_PHONE:-(978) 519-9774}"
+VITE_GA_MEASUREMENT_ID="${VITE_GA_MEASUREMENT_ID}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -66,13 +72,13 @@ check_prerequisites() {
     fi
 
     if [ -z "$AVAILABILITY_DOMAIN" ]; then
-        log_error "AVAILABILITY_DOMAIN environment variable is not set. Please set it to your OCI availability domain."
-        exit 1
+        AVAILABILITY_DOMAIN="ocid1.availabilitydomain.oc1..aaaaaaaaag25rxkuwv76f77a57wz5h4a4pkm545dam4ndohfge25sffw5p3a"
+        log_warn "AVAILABILITY_DOMAIN not set, using default: $AVAILABILITY_DOMAIN"
     fi
 
     if [ -z "$SUBNET_ID" ]; then
-        log_error "SUBNET_ID environment variable is not set. Please set it to your OCI subnet ID."
-        exit 1
+        SUBNET_ID="ocid1.subnet.oc1.us-chicago-1.aaaaaaaav5rea7aafzmw4wetqjexre6m65hs63e5x2ve7wjlock6okgtnxtq"
+        log_warn "SUBNET_ID not set, using default: $SUBNET_ID"
     fi
 
     log_info "Prerequisites check passed."
