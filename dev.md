@@ -1278,6 +1278,17 @@ npx tailwindcss init -p
 
 ### 12.2 Development Environment
 ```bash
+# Ensure .env.example template exists (should be committed to repository)
+# If missing, create it with required environment variables
+ls .env.example || echo "Create .env.example with required environment variables"
+
+# Copy environment template to local development file
+cp .env.example .env.local
+
+# Edit .env.local with your values
+# Required: VITE_GA_MEASUREMENT_ID, VITE_EMAIL_API_KEY
+# Optional: PUBLIC_SITE_URL (defaults to production URL)
+
 # Start development server
 npm run dev
 
@@ -1287,7 +1298,13 @@ npm run dev
 npx tsc --watch
 ```
 
-### 12.3 Production Build
+### 12.3 Environment Variables
+- **VITE_GA_MEASUREMENT_ID**: Google Analytics 4 Measurement ID (required for analytics)
+- **PUBLIC_SITE_URL**: Public site URL for canonical links (optional, defaults to https://lbsunrise.com)
+- **VITE_EMAIL_API_KEY**: Email service API key (required for contact form email delivery; e.g., SendGrid, Mailgun, or AWS SES API key)
+- **VITE_ENABLE_***: Feature flags to enable/disable sections (all default to true)
+
+For production deployment, set these variables in your hosting platform (Vercel/Netlify).
 ```bash
 # Build for production
 npm run build
@@ -1313,8 +1330,8 @@ npm run preview
 - ✅ Canonical URLs
 
 ### 13.2 Technical SEO
-- ✅ XML Sitemap generation
-- ✅ Robots.txt configuration
+- ✅ XML Sitemap generation and robots.txt Sitemap directive
+- ✅ Robots.txt configuration with Disallow rules for admin/internal routes
 - ✅ SSL/HTTPS (required)
 - ✅ 301 redirects setup
 - ✅ robots meta tags
@@ -1429,6 +1446,7 @@ vercel list
 - Generate new content/blog posts
 - Monitor keyword rankings
 - Track competitor activity
+- **Review and update robots.txt when adding admin, internal, or API routes**
 
 ---
 
@@ -1565,15 +1583,924 @@ vercel list
 
 ---
 
-## 22. VERSION HISTORY
+## 22. COMPREHENSIVE TWO-WEEK IMPLEMENTATION ROADMAP
+
+### Timeline Overview
+- **Start Date:** Tuesday, January 6, 2026
+- **Launch Date:** Friday, January 16, 2026
+- **Total Days:** 9 business days (Tue-Fri Jan 6-9, then Mon-Fri Jan 12-16)
+- **Calendar Duration:** 11 calendar days (Jan 6-16, excluding weekends Jan 10-11)
+- **Daily Commitment:** 8 hours minimum (working days only)
+- **Day Count Method:** Business days only (Tuesday-Friday Week 1, then Monday-Friday Week 2); weekends excluded
+- **Contingency Buffer:** 15-20% debugging/iteration time included daily (1-2 hrs per day allocated within 8-hr blocks)
+
+**Note:** Timeline assumes continuous work Tuesday-Friday (Week 1) and Monday-Friday (Week 2) with integrated debugging/iteration. Days 1-4 (Week 1 Tue-Fri) cover foundation and core components; Days 5-9 (Week 2 Mon-Fri) cover routes, SEO, assets, testing, and launch. Debug & Iteration time is explicitly allocated as 1-2 hour blocks in each day's schedule.
+
+---
+
+### WEEK 1: FOUNDATION & DEVELOPMENT (Jan 6-9)
+
+#### **Day 1 - Tuesday, January 6** | PROJECT SETUP
+**Theme:** Initialize project and establish development environment
+
+**Morning Tasks (4 hours):**
+1. Create Git repository
+   - Initialize git repo locally
+   - Create `.gitignore` for Node.js/Svelte
+   - Create initial commit
+   
+2. Set up project structure
+   - Clone/create SvelteKit project: `npm create svelte@latest lb-sunrise`
+   - Install initial dependencies
+   - Configure npm package.json scripts
+   
+3. Install core dependencies
+   ```bash
+   npm install @sveltejs/adapter-vercel tailwindcss postcss autoprefixer
+   npm install -D typescript vite-plugin-svgo eslint prettier
+   ```
+
+**Afternoon Tasks (4 hours):**
+4. Initialize configuration files
+   - Copy `svelte.config.js` (from spec)
+   - Copy `vite.config.ts` (from spec)
+   - Copy `tsconfig.json` (from spec)
+   - Copy `tailwind.config.js` (from spec)
+   
+5. Set up Tailwind CSS
+   - Run `npx tailwindcss init -p`
+   - Configure content paths
+   - Add custom color variables
+   
+6. Create directory structure
+   - Create all directories per spec (src/lib/*, src/routes/*, static/*)
+   - Create empty placeholder files
+
+7. Select and configure email service provider
+   - **CRITICAL PATH ITEM**: Choose email provider (SendGrid/Mailgun/AWS SES)
+   - Create test/production accounts and obtain API keys
+   - Document credentials securely (password manager/vault, NOT in git)
+   - Test API key access and basic functionality
+   - Identify fallback provider for redundancy
+   - Update `.env.example` with `VITE_EMAIL_API_KEY` placeholder
+
+**Deliverables:**
+- ✅ Git repository initialized and remote configured
+- ✅ All npm dependencies installed
+- ✅ All configuration files in place
+- ✅ Complete directory structure created
+- ✅ Email service provider selected and credentials secured
+- ✅ Development server runs without errors: `npm run dev`
+
+**Verification:**
+- Run `npm run dev` and verify http://localhost:5173 loads
+
+**Debug & Iteration (1-2 hours):**
+7. Review and fix issues from morning/afternoon tasks
+   - Verify all dependencies installed correctly
+   - Test development server startup
+   - Check for any configuration errors
+   - Fix any issues found during setup
+   - Document issues and solutions
+
+---
+
+#### **Day 2 - Wednesday, January 7** | TYPESCRIPT & DATA SETUP
+**Theme:** Create type definitions and data files
+
+**Morning Tasks (4 hours):**
+1. Create TypeScript type files
+   - Create `src/lib/types/index.ts` with all interfaces
+   - Create `src/lib/types/seo.ts` with schema interfaces
+   - Test TypeScript compilation: `npx tsc --noEmit`
+
+2. Create data files
+   - Create `src/lib/data/services.ts` with 3 services
+   - Create `src/lib/data/serviceAreas.ts` with service areas
+   - Create `src/lib/data/testimonials.ts` with sample testimonials
+   - Create `src/lib/data/faq.ts` with FAQ items
+
+**Afternoon Tasks (4 hours):**
+3. Create utility files
+   - Create `src/lib/utils/seo.ts` with all SEO functions
+   - Create `src/lib/utils/validation.ts` with validation functions
+   - Create `src/lib/utils/analytics.ts` (stub for future use)
+   - Create `src/lib/utils/constants.ts` with BUSINESS_INFO
+
+4. Create config file
+   - Create `src/lib/config/siteConfig.ts` with site-wide settings
+   
+5. Create global styles
+   - Create `src/app.css` with Tailwind directives
+   - Add custom CSS classes from spec
+
+**Deliverables:**
+- ✅ All type definitions complete and validated
+- ✅ All data files created with sample content
+- ✅ All utility functions implemented
+- ✅ Global styles configured
+- ✅ TypeScript compilation passes
+
+**Verification:**
+- TypeScript check passes: `npx tsc --noEmit`
+- All imports resolve without errors
+
+**Debug & Iteration (1-2 hours):**
+6. Review and fix issues from morning/afternoon tasks
+   - Re-run TypeScript compilation after all files created
+   - Verify all imports work correctly
+   - Check for any type errors
+   - Fix any issues found during data/utility creation
+   - Document issues and solutions
+
+---
+
+#### **Day 3 - Thursday, January 8** | CORE COMPONENTS
+**Theme:** Build reusable UI components
+
+**Morning Tasks (4 hours):**
+1. Create layout components
+   - Create `src/lib/components/Navigation.svelte`
+   - Create `src/lib/components/Footer.svelte`
+   - Create `src/lib/components/Hero.svelte`
+   - Create `src/lib/components/CTA.svelte`
+
+2. Create content components
+   - Create `src/lib/components/ServiceCard.svelte`
+   - Create `src/lib/components/TestimonialCard.svelte`
+
+**Afternoon Tasks (4 hours):**
+3. Create form & utility components
+   - Create `src/lib/components/ContactForm.svelte`
+   - Create `src/lib/components/SchemaMarkup.svelte`
+   
+4. Create root layout and HTML
+   - Create `src/routes/+layout.svelte` (root layout)
+   - Create `src/app.html` (root HTML)
+   - Integrate Navigation and Footer in layout
+
+5. Test component rendering
+   - Create basic home page to test all components
+   - Verify all components render without errors
+
+**Deliverables:**
+- ✅ All 8 core components created and functional
+- ✅ Components accept proper props and typescript types
+- ✅ Root layout with Navigation/Footer in place
+- ✅ All components tested and rendering correctly
+
+**Verification:**
+- Dev server runs: `npm run dev`
+- No TypeScript errors
+- Components visible in browser
+
+**Debug & Iteration (1-2 hours):**
+6. Review and fix issues from morning/afternoon tasks
+   - Test all components render without console errors
+   - Verify TypeScript types are correct for all props
+   - Check layout integration works properly
+   - Fix any rendering or styling issues
+   - Document issues and solutions
+
+---
+
+#### **Day 4 - Friday, January 9** | PAGE ROUTES
+**Theme:** Build all page routes (core route structure)
+
+**Morning Tasks (4 hours):**
+1. Create main pages
+   - Create `src/routes/+page.svelte` (Home)
+   - Create `src/routes/about/+page.svelte`
+   - Create `src/routes/contact/+page.svelte`
+
+2. Create service pages
+   - Create `src/routes/services/+page.svelte`
+   - Create `src/routes/services/roof-repair/+page.svelte`
+   - Create `src/routes/services/roof-replacement/+page.svelte`
+   - Create `src/routes/services/roof-inspection/+page.svelte`
+
+**Afternoon Tasks (4 hours):**
+3. Create service area pages
+   - Create `src/routes/service-areas/+page.svelte`
+   - Create `src/routes/service-areas/[city]/+page.svelte` (dynamic)
+   - Create static city pages:
+     - `src/routes/service-areas/portland/+page.svelte`
+     - `src/routes/service-areas/westbrook/+page.svelte`
+
+4. Create API routes
+   - Create `src/routes/api/contact/+server.ts` (contact form handler)
+   - Create `src/routes/api/analytics/+server.ts` (analytics stub)
+   - Implement email service integration:
+     - **PROVIDER ALREADY SELECTED ON DAY 1** - Use chosen email provider (SendGrid/Mailgun/SES)
+     - Create `src/lib/utils/email.ts` helper with sendEmail() function
+     - Add retry/fallback logic for email delivery
+     - Wire sendEmail() into contact API handler (uncomment existing call)
+     - Configure `VITE_EMAIL_API_KEY` environment variable
+     - Test email delivery end-to-end (send/receive verification)
+
+5. Error boundary implementation
+   - Create `src/routes/+error.svelte` (SvelteKit error boundary)
+     - Handle 404 errors: Show "Page Not Found" with navigation back to home
+     - Handle 500 errors: Show "Server Error" with contact information
+     - Include proper SEO meta tags for error pages
+   - Wire error handling in `src/routes/+layout.svelte` if necessary
+     - Ensure error boundary catches all unhandled errors
+     - Add error logging for debugging (console.error in development)
+   - Manual testing:
+     - Navigate to nonexistent route (e.g., /nonexistent-page) → confirm 404 page shows
+     - Simulate server error (temporarily break API endpoint) → confirm 500 page shows
+     - Test error page navigation and styling on mobile/desktop
+
+6. Test ContactForm functionality
+   - Test ContactForm component functionality
+   - Test form validation (client-side)
+   - Test form submission to API endpoint
+   - Verify error handling and success messages
+   - Test email delivery end-to-end (send/receive verification)
+
+**Deliverables:**
+- ✅ All 11+ page routes created
+- ✅ Contact form API endpoint created
+- ✅ All pages render without errors
+- ✅ Navigation links work correctly
+- ✅ ContactForm fully tested and functional
+
+**Verification:**
+- Click through all navigation links
+- Test contact form API endpoint manually
+- Test ContactForm component functionality and validation
+- Verify email delivery works end-to-end
+- All routes accessible and rendering
+
+**Debug & Iteration (1-2 hours):**
+5. Review and fix issues from morning/afternoon tasks
+   - Test all page routes load without errors
+   - Verify navigation links work correctly
+   - Check API endpoints function properly
+   - Fix any routing or API issues
+   - Document issues and solutions
+
+---
+
+#### **Day 5 - Monday, January 12** | SEO & SCHEMA MARKUP
+**Theme:** Implement SEO meta tags and structured data
+
+**Morning Tasks (4 hours):**
+1. Add SEO meta tags to all pages
+   - Add proper meta titles to all routes
+   - Add proper meta descriptions to all routes
+   - Add Open Graph tags (og:title, og:description, og:image)
+   - Ensure canonical URLs configured
+
+**Afternoon Tasks (4 hours):**
+2. Create special files for SEO
+   - Create `src/routes/sitemap.xml/+server.ts` (dynamic sitemap)
+   - Create `src/routes/robots.txt/+server.ts` (robots.txt)
+   - Test dynamic generation
+
+3. Add schema markup
+   - Implement LocalBusiness schema on home page
+   - Implement Service schemas on service pages
+   - Implement BreadcrumbList on nested pages
+   - Add structured data validation
+
+**Deliverables:**
+- ✅ All pages have proper SEO meta tags
+- ✅ Sitemap.xml generates correctly
+- ✅ Robots.txt configured
+- ✅ All schema markup implemented and validated
+- ✅ Open Graph tags on all pages
+- ✅ Canonical URLs configured
+
+**Verification:**
+- Visit `/sitemap.xml` and verify XML is valid
+- Visit `/robots.txt` and verify content
+- Test with Google's Rich Results Test for schema
+- Verify schema markup on production pages
+- All pages have unique meta titles/descriptions
+
+**Debug & Iteration (1-2 hours):**
+4. Review and fix issues from morning/afternoon tasks
+   - Re-test sitemap and robots.txt generation
+   - Re-validate schema markup with Rich Results Test
+   - Fix any SEO meta tag issues
+   - Verify all pages have proper SEO setup
+   - Document issues and solutions
+
+---
+
+### ANALYTICS IMPLEMENTATION DECISION
+
+**Chosen Approach: Manual Google Analytics 4 (GA4)**
+
+**Rationale:**
+- **GA4 provides superior conversion tracking** for contact forms and service requests (critical for a roofing contractor business)
+- **Event-based data model** gives detailed insights into user behavior and service inquiry patterns
+- **Service area performance tracking** to measure which locations drive the most leads
+- **Form abandonment tracking** to optimize contact conversion rates
+- **Mobile vs desktop performance comparison** by region
+- **Free tier sufficient** for startup local business needs
+
+**Why not Vercel Analytics?**
+- Vercel Analytics is page-view focused and lacks conversion/event tracking
+- Cannot track contact form submissions or service inquiry events
+- Limited to basic traffic metrics; doesn't provide service-level insights
+- Insufficient for SEO and conversion optimization goals
+
+**GA4 Implementation Summary:**
+- **Setup Phase (Day 7 AM):** Create GA4 property, obtain Measurement ID, configure environment variables
+- **Integration Phase (Day 7 AM):** Wire GA4 initialization into root layout via `initializeGA()` helper
+- **Verification Phase (Day 8 AM & Day 9 AM):** Confirm tracking fires in browser DevTools, validate events in GA4 dashboard
+- **Environment:** 
+  - Development: Load ID from `.env.local` (git-ignored, local-only)
+  - Production: Load ID from Vercel environment dashboard
+
+**Note:** The core GA4 functions (`initializeGA`, `trackEvent`, `trackPageView`, `trackFormSubmission`, `trackContactRequest`) are already implemented in `src/lib/utils/analytics.ts`. This task focuses on configuration and integration.
+
+---
+
+### WEEK 2: TESTING & DEPLOYMENT (Jan 13-16)
+
+
+#### **Day 6 - Tuesday, January 13** | STATIC ASSETS & OPTIMIZATION
+**Theme:** Add images, optimize performance
+
+**Morning Tasks (4 hours):**
+1. Create static assets directory structure
+   - Create `static/images/` folders:
+     - `static/images/services/`
+     - `static/images/testimonials/`
+   
+2. Add placeholder images
+   - Create/download hero image (1200x600px)
+   - Create service images (400x300px each)
+   - Create OG image (1200x630px)
+   - Add favicon.svg
+
+3. Update image references
+   - Update all `imageUrl` paths in data files to point to static images
+   - Update `og:image` meta tags
+   - Verify all images load in browser
+
+**Afternoon Tasks (4 hours):**
+4. Optimize performance
+   - Minify CSS (Tailwind handles this)
+   - Verify JavaScript bundle size (< 200KB target)
+   - Optimize images for web (compress, resize, WebP format)
+   - Enable gzip compression
+   - Run Lighthouse performance audit
+   - Optimize Core Web Vitals (LCP, FID, CLS)
+   - Implement lazy loading for images
+   - Minimize unused CSS/JS
+   - Test page load times on slow connections
+
+**Debug & Iteration (1-2 hours):**
+5. Review and fix issues from morning/afternoon tasks
+   - Re-run Lighthouse after performance optimizations
+   - Verify all images load correctly and are optimized
+   - Test performance improvements on mobile/desktop
+   - Fix any issues found during iteration
+   - Document issues and solutions
+
+**Deliverables:**
+- ✅ All images in place and optimized
+- ✅ All image URLs working correctly
+- ✅ Contact form fully functional
+- ✅ Form validation working
+- ✅ Accessibility score 90+
+- ✅ Mobile Lighthouse score 85+
+- ✅ Desktop Lighthouse score 90+
+- ✅ All performance optimizations verified
+- ✅ All accessibility fixes validated
+
+**Verification:**
+- Run Lighthouse on all major pages (post-optimization)
+- Submit test form and verify no errors
+- Test accessibility with axe DevTools (post-fix)
+- Confirm all images load correctly
+- Verify no regressions from Day 6 changes
+
+---
+
+#### **Day 7 - Wednesday, January 14** | GA4 ANALYTICS SETUP & PRODUCTION BUILD
+**Theme:** Configure Google Analytics 4 measurement ID and prepare for production
+
+**Morning Tasks (4 hours):**
+1. Create GA4 property and obtain Measurement ID
+   - Go to Google Analytics: https://analytics.google.com/
+   - Create new GA4 property named "LB Sunrise"
+   - Configure with website URL: `https://lbsunrise.com`
+   - Copy the Measurement ID (format: `G-XXXXXXXXXX`)
+   - Document ID for later steps
+   - Create `/.env.local` file in project root with: `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` (replace X's with actual ID)
+   - **Important:** `.env.local` is git-ignored; it's development-only and will NOT be committed
+
+2. Verify GA4 integration is properly wired
+   - Confirm `src/lib/utils/analytics.ts` has `initializeGA()`, `trackEvent()`, `trackPageView()`, `trackFormSubmission()`, `trackContactRequest()` functions
+   - Confirm `src/routes/+layout.svelte` imports and calls `initializeGA()` in `onMount()` hook
+   - Verify `.env.example` documents the `VITE_GA_MEASUREMENT_ID` variable
+   - Run `npm run dev` and test that no errors appear in console regarding GA4
+
+**Afternoon Tasks (4 hours):**
+3. Production build & Vercel setup
+   ```bash
+   npm run build
+   npm run preview
+   ```
+   - Verify build completes without errors
+   - Check build output size (should be <2MB)
+   - Test all pages load correctly in preview
+   - Test contact form functionality
+   - Verify no broken images or links
+
+4. Deploy to Vercel
+   - Create Vercel account (if needed)
+   - Connect Git repository to Vercel: `vercel login` and `vercel link`
+   - Configure environment variable in Vercel dashboard:
+     - Go to Project Settings → Environment Variables
+     - Add: `VITE_GA_MEASUREMENT_ID` with your GA4 measurement ID value
+     - Add: `PUBLIC_SITE_URL` with `https://lbsunrise.com` (or your custom domain)
+     - Ensure variables are set for Production environment
+   - Trigger production deployment (or set to auto-deploy on git push)
+   - Test production preview URL works and is responsive
+
+5. Cross-browser & device testing
+   - Test on Chrome, Firefox, Safari (macOS/iOS)
+   - Test mobile: iPhone (Safari), Android (Chrome)
+   - Test tablet: iPad
+   - Test desktop: 1920x1080, 2560x1440 resolutions
+   - Verify responsive design at all breakpoints
+   - Test all form submissions across browsers
+   - Validate all links work (internal navigation, external links)
+   - Confirm all images load and display correctly
+
+**Debug & Iteration (1-2 hours):**
+5. Verify GA4 initialization and fix issues
+   - Open preview URL in browser
+   - Open DevTools → Network tab
+   - Look for `gtag/js` request (confirms GA4 script loaded)
+   - Navigate through several pages (triggers pageview events)
+   - Check Google Analytics real-time dashboard: https://analytics.google.com/ → Real-time → Overview (should show 1 active user = you)
+   - Verify no TypeScript errors during build
+   - Check Vercel deployment logs for warnings
+   - Fix any configuration or deployment issues found
+
+**Deliverables:**
+- ✅ GA4 property created with Measurement ID obtained
+- ✅ `.env.local` configured locally with Measurement ID
+- ✅ Vercel environment variable configured in project dashboard (`VITE_GA_MEASUREMENT_ID` and `PUBLIC_SITE_URL`)
+- ✅ Root layout properly initializes GA4 on page load
+- ✅ Production build successful, <2MB bundle
+- ✅ Preview deployment live on Vercel
+- ✅ GA4 script tag verified firing in browser DevTools
+- ✅ GA4 real-time dashboard shows test traffic
+
+**Verification:**
+- `/.env.local` exists and contains correct Measurement ID
+- `npm run dev` starts without GA4-related errors
+- DevTools Network tab shows `gtag/js` request from gtag/js with ID
+- Google Analytics real-time dashboard shows 1+ active user when previewing
+- `npm run build` completes without TypeScript errors
+- Vercel project dashboard shows `VITE_GA_MEASUREMENT_ID` environment variable configured
+- Preview URL loads all pages without errors
+- Preview URL responsive on mobile (test with DevTools device emulation)
+
+---
+
+#### **Day 8 - Thursday, January 15** | ANALYTICS VERIFICATION & SEO VALIDATION
+**Theme:** Verify GA4 analytics tracking and validate SEO implementation
+
+**Morning Tasks (4 hours):**
+1. Analytics implementation verification
+   - **Confirm GA4 script injection:**
+     - Open dev site: `npm run dev` → http://localhost:5173
+     - Open DevTools → Network tab → Filter: `gtag`
+     - Reload page; should see `gtag/js?id=G-...` request with Status 200
+     - Confirms GA4 script successfully injected from `src/routes/+layout.svelte`
+   
+   - **Test GA4 event tracking:**
+     - Open DevTools → Console tab
+     - Navigate to different pages (triggers `trackPageView()`)
+     - Submit test contact form (triggers `trackFormSubmission()`)
+     - Click on services/service areas (triggers `trackContactRequest()`)
+     - Check Google Analytics real-time dashboard: https://analytics.google.com/
+     - Confirm events appear in real-time under Events section
+     - Look for: `page_view`, `form_submission`, `contact_request` events
+   
+   - **Validate environment variable handling:**
+     - Verify `VITE_GA_MEASUREMENT_ID` is loaded from `.env.local`
+     - Stop dev server and remove `.env.local` temporarily
+     - Run `npm run dev`
+     - Open DevTools → Console
+     - Should see warning: "Google Analytics 4 ID (VITE_GA_MEASUREMENT_ID) not configured. Analytics disabled."
+     - Restore `.env.local` and confirm warning disappears on reload
+   
+   - **Verify analytics functions are callable:**
+     - In browser DevTools Console, test: `window.gtag('event', 'test_event');`
+     - Event should appear in GA4 real-time dashboard within seconds
+     - Confirms `initializeGA()` properly exposed global `gtag` function
+
+2. SEO validation
+   - Use Google's Mobile-Friendly Test: https://search.google.com/test/mobile-friendly
+     - Paste production preview URL or localhost:5173
+     - Should pass with no mobile usability issues
+   - Use Google's Rich Results Test: https://search.google.com/test/rich-results
+     - Paste homepage URL
+     - Should detect Schema.org markup (LocalBusiness, BreadcrumbList, Service schemas)
+     - No errors or warnings
+   - Validate sitemap.xml:
+     - Visit: http://localhost:5173/sitemap.xml
+     - Should return valid XML with `<urlset>` and `<url>` entries
+     - All service pages, service areas, and core pages listed
+   - Validate robots.txt:
+     - Visit: http://localhost:5173/robots.txt
+     - Should return valid robots.txt with Allow/Disallow rules
+     - Sitemap reference included
+
+**Afternoon Tasks (4 hours):**
+3. Content & accessibility review
+   - Review all page content for typos and accuracy
+   - Verify business information (phone, email, address) is correct
+   - Confirm all CTAs are clear and functional
+   - Run Lighthouse audit: Desktop target 90+, Mobile target 85+
+   - Run axe DevTools accessibility check
+   - Test keyboard navigation (Tab through all interactive elements)
+   - Verify heading hierarchy (H1 → H2 → H3, no gaps)
+
+4. Performance & Core Web Vitals
+   - Run Lighthouse on critical pages (home, contact, services)
+   - Check metrics:
+     - **Largest Contentful Paint (LCP):** <2.5s (Good)
+     - **First Input Delay (FID):** <100ms (Good)
+     - **Cumulative Layout Shift (CLS):** <0.1 (Good)
+   - Verify no large JavaScript bundles blocking render
+   - Confirm images optimized (use WebP where possible)
+
+**Debug & Iteration (1-2 hours):**
+5. Fix and re-verify all issues
+   - Fix any failed analytics event tracking
+   - Correct any SEO validation issues
+   - Address accessibility or performance gaps
+   - Re-run Lighthouse after fixes (confirm scores still meet targets)
+   - Re-verify GA4 events still fire post-fix
+   - Final check: all deliverables completed
+
+**Deliverables:**
+- ✅ GA4 script successfully injected via `src/routes/+layout.svelte`
+- ✅ GA4 events firing in real-time dashboard (page_view, form_submission, contact_request)
+- ✅ Environment variable validation working (warning shown when GA4 ID missing)
+- ✅ Global `gtag` function accessible and functional
+- ✅ Mobile-Friendly Test passes
+- ✅ Rich Results Test shows valid schema markup
+- ✅ Sitemap.xml and robots.txt accessible and valid
+- ✅ Lighthouse Desktop: 90+, Mobile: 85+
+- ✅ Core Web Vitals: LCP <2.5s, FID <100ms, CLS <0.1
+- ✅ All links, images, forms functional
+- ✅ All accessibility issues resolved
+
+**Verification:**
+- DevTools Network tab shows successful gtag.js request
+- Google Analytics real-time dashboard displays events from test navigation
+- GA4 real-time shows form_submission event after contact form submit
+- GA4 real-time shows contact_request event after clicking services
+- Console warning appears when VITE_GA_MEASUREMENT_ID env var missing
+- Console warning disappears when .env.local restored
+- Mobile-Friendly Test: PASS
+- Rich Results Test: Valid schema detected, 0 errors
+- Lighthouse Desktop score ≥90
+- Lighthouse Mobile score ≥85
+- All pages load without console errors
+- All cross-browser tests passed
+- Core Web Vitals meet Good thresholds
+
+---
+
+#### **Day 9 - Friday, January 16** | DOMAIN, GA4 PRODUCTION VALIDATION & LAUNCH PREP
+**Theme:** Final launch preparation with GA4 verification and DNS propagation
+**Note:** This is a partial day; main launch is PM (see Launch Checklist below)
+
+**Morning Tasks (4 hours):**
+1. Create GA4 property for production domain (if not already created on Day 7)
+   - Go to Google Analytics: https://analytics.google.com/
+   - If not done on Day 7: Create new GA4 property named "LB Sunrise - Production"
+   - Configure with website URL: `https://lbsunrise.com` (the final production domain)
+   - Copy the Measurement ID (format: `G-XXXXXXXXXX`)
+   - If already done: Verify the property is set to track `https://lbsunrise.com`
+
+2. Verify GA4 production tracking setup
+   - Confirm `VITE_GA_MEASUREMENT_ID` is set in Vercel environment variables (from Day 7)
+   - Confirm Vercel preview deployment has the correct GA4 ID
+   - Test preview URL in browser:
+     - Open DevTools → Network tab
+     - Filter for `gtag`
+     - Should see successful gtag.js request
+     - Navigate through several pages
+     - Check Google Analytics real-time dashboard (should show active user)
+   - Verify all tracking functions work on preview:
+     - Page views tracked (each page load shows in GA4)
+     - Test contact form submission (should log form_submission event)
+     - Click services/service areas (should log contact_request events)
+   - **Critical:** Confirm production Measurement ID matches `.env.local` and Vercel dashboard
+
+3. Domain configuration
+   - Register domain `lbsunrise.com` (if not already done)
+   - Point domain nameservers to Vercel (Vercel will provide nameserver values)
+   - Configure custom domain in Vercel:
+     - Go to Vercel project → Settings → Domains
+     - Add domain: `lbsunrise.com`
+     - Vercel will prompt for DNS configuration
+     - Point nameservers or update A/CNAME records as instructed
+   - Note: DNS propagation can take up to 48 hours; proceed with launch while waiting
+
+4. Update all URLs to production domain
+   - Update `src/lib/config/siteConfig.ts` to use `https://lbsunrise.com` as baseUrl
+   - Update `src/routes/sitemap.xml/+server.ts` to use production domain in URLs
+   - Update `src/routes/robots.txt/+server.ts` to use production domain (if needed)
+   - Update canonical URLs to point to production domain
+   - Rebuild and re-deploy to Vercel:
+     ```bash
+     npm run build
+     vercel --prod
+     ```
+
+**Debug & Iteration (1-2 hours):**
+5. Verify production GA4 tracking (critical before launch)
+   - Once production domain is live (or use preview URL temporarily):
+     - Open DevTools → Network tab
+     - Confirm gtag.js loads with correct production GA4 ID
+     - Navigate multiple pages and check real-time dashboard
+     - Submit test contact form; confirm event fires
+     - If event doesn't fire: Check Vercel logs and env var configuration
+   - Verify Measurement ID is correctly passed from environment:
+     - Open DevTools → Sources
+     - Search for the Measurement ID (G-...) in page source
+     - Should be embedded in gtag.js script parameters
+   - Final check: Google Analytics real-time dashboard shows 1+ active user
+
+**Deliverables:**
+- ✅ GA4 property configured for production domain (or verified if created on Day 7)
+- ✅ Vercel environment variable correctly set with production Measurement ID
+- ✅ Production (preview) URL successfully tracks events in GA4
+- ✅ Page views, form submissions, and contact requests tracked in real-time
+- ✅ Domain registered and nameservers pointed to Vercel
+- ✅ All URLs updated to production domain (https://lbsunrise.com)
+- ✅ Production build deployed and accessible
+- ✅ GA4 real-time dashboard shows production traffic
+
+**Verification:**
+- DevTools confirms gtag.js loads with correct production GA4 ID
+- Google Analytics real-time shows active users from test navigation
+- form_submission event appears in GA4 after test form submit
+- contact_request events appear in GA4 after service/area clicks
+- Production domain registered in Vercel project
+- Nameservers updated (propagation in progress)
+- All pages load on production preview URL
+- Sitemap.xml and robots.txt use production domain
+- No TypeScript or build errors before final deployment
+- GA4 Measurement ID visible in page source (inspect gtag.js parameters)
+
+---
+
+### LAUNCH DAY CHECKLIST (January 16 PM)
+
+#### **Final Pre-Launch (2 hours before launch)**
+- [ ] All pages reviewed and tested
+- [ ] Contact form tested and working
+- [ ] All images loading correctly
+- [ ] Mobile responsive verified
+- [ ] Desktop responsive verified
+- [ ] All links working (internal and external)
+- [ ] No console errors
+- [ ] **Robots.txt reviewed and sitemap URL verified**
+- [ ] **Analytics: GA4 tracking confirmed firing (DevTools Network shows gtag.js)**
+- [ ] **Analytics: Real-time dashboard shows active users**
+- [ ] **Analytics: Test form submission produces form_submission event in GA4**
+- [ ] **Analytics: Test service clicks produce contact_request events in GA4**
+- [ ] **Analytics: Environment variable VITE_GA_MEASUREMENT_ID confirmed in Vercel**
+- [ ] **Analytics: Production GA4 Measurement ID is correct in all environments**
+- [ ] Google Business Profile updated with website URL
+- [ ] Business information consistent across all platforms
+
+#### **Launch (Day of)**
+- [ ] Announce on social media (Facebook, if applicable)
+- [ ] Send announcement email to existing contacts
+- [ ] Update Google Business Profile with website link
+- [ ] **Verify GA4 continues tracking production traffic (check real-time dashboard)**
+- [ ] **Confirm form submissions are logged as events in GA4**
+- [ ] Monitor analytics for initial traffic patterns
+- [ ] Monitor contact form submissions (both in app and GA4 events)
+- [ ] Check for any errors in first 24 hours
+- [ ] Respond promptly to any contact inquiries
+
+#### **Post-Launch (First Week)**
+**Ownership:** RCLabs (primary), Client (shared for customer inquiries)
+**Support Schedule:** 24/7 monitoring for first 7 days, then business hours (9 AM - 6 PM EST) handoff
+**SLAs:** <2 hours for critical issues (site down, contact form broken), <24 hours for non-critical issues
+**Monitoring Tools:** Vercel deployment alerts, Google Search Console notifications, uptime monitoring (UptimeRobot), GA4 analytics alerting, email alerts for contact form submissions
+
+- [ ] **Day 9 Action:** Configure all monitoring/alerting tools (Vercel alerts, Google Search Console notifications, uptime monitoring, GA4 alerts, email notifications)
+- [ ] **Email Notifications:** Configure email notifications in SendGrid/Mailgun/AWS SES dashboard to alert admin on new contact submissions and verify delivery
+- [ ] **GA4 Configuration:** Set up conversion goals for form submissions (track as conversions)
+- [ ] **GA4 Configuration:** Create custom alerts for contact_request and form_submission events
+- [ ] Monitor Google Search Console for crawl errors (RCLabs)
+- [ ] Monitor page speed metrics via Google Search Console (RCLabs)
+- [ ] Review analytics (GA4) for traffic patterns and conversion events (RCLabs)
+- [ ] Check for and fix any reported issues (<2hr SLA for critical) (RCLabs)
+- [ ] **Verify GA4 event data is accurate** (page paths match routing, form events include form_name) (RCLabs)
+- [ ] Ensure contact form emails being received and processed (RCLabs)
+- [ ] Respond to any customer inquiries (<2hr SLA) (Shared: RCLabs monitors, Client responds)
+- [ ] Monitor keyword rankings in Google Search Console (RCLabs)
+
+---
+
+## 23. DAILY TASK CHECKLIST & TIME TRACKING
+
+### Week 1 Summary
+| Day | Date | Focus | Duration | Status |
+|-----|------|-------|----------|--------|
+| 1 | Jan 6 (Tue) | Project Setup | 8h | ✅ Complete |
+| 2 | Jan 7 (Wed) | TypeScript & Data | 8h | ⏳ In Progress |
+| 3 | Jan 8 (Thu) | Core Components | 8h | ✅ Complete |
+| 4 | Jan 9 (Fri) | Page Routes | 8h | ⏱️ Pending |
+| — | Jan 10-11 | Weekend | — | — |
+
+### Week 2 Summary
+| Day | Date | Focus | Duration | Status |
+|-----|------|-------|----------|--------|
+| 5 | Jan 12 (Mon) | SEO & Special Files | 8h | ⏱️ Pending |
+| 6 | Jan 13 (Tue) | Assets & Optimization | 8h | ⏱️ Pending |
+| 7 | Jan 14 (Wed) | GA4 & Production Build | 8h | ⏱️ Pending |
+| 8 | Jan 15 (Thu) | Analytics & SEO Validation | 8h | ⏱️ Pending |
+| 9 | Jan 16 (Fri) | Domain & Launch Prep | 4h | ⏱️ Pending |
+| — | Jan 16 (Fri) PM | LAUNCH DAY | — | 🚀 Launch |
+
+**Total Development Hours:** 60 hours (7.5 days × 8 hours)
+
+### Task Completion Summary
+- **Day 1 (Tue, Jan 6):** ✅ Project Setup - Git repo, dependencies, config files
+- **Day 3 (Thu, Jan 8):** ✅ Core Components - 8 reusable components (Navigation, Footer, Hero, CTA, ServiceCard, TestimonialCard, ContactForm, SchemaMarkup)
+- **Day 2 (Wed, Jan 7):** ⏳ TypeScript & Data - Types, data files (services, areas, testimonials, FAQ), utilities, constants, styles
+- **Day 4 (Fri, Jan 9):** ⏳ Page Routes - Home, about, contact, services (main + 3 sub), service areas (main + dynamic), API endpoints, error boundaries, ContactForm testing
+- **Day 5 (Mon, Jan 12):** ⏳ SEO & Schema - Meta tags, sitemap.xml, robots.txt, schema markup (LocalBusiness, Service, BreadcrumbList)
+- **Day 6 (Tue, Jan 13):** ⏳ Assets & Optimization - Images, performance tuning (Lighthouse, Core Web Vitals, bundle optimization)
+- **Day 7 (Wed, Jan 14):** ⏳ GA4 Setup - Create GA4 property, configure env vars, deploy to Vercel
+- **Day 8 (Thu, Jan 15):** ⏳ Testing & Validation - Analytics verification, SEO validation, accessibility testing, cross-browser testing, Lighthouse audits
+- **Day 9 (Fri, Jan 16 AM):** ⏳ Domain & Launch Prep - Domain registration, GA4 production setup, final verification
+- **Fri, Jan 16 PM:** 🚀 **LAUNCH DAY** - Go live with lbsunrise.com
+
+---
+
+## 24. CRITICAL SUCCESS FACTORS
+
+### Must-Have (MVP - Minimum Viable Product)
+1. ✅ Home page with hero and CTA
+2. ✅ Services page with service listings
+3. ✅ Contact form that works
+4. ✅ Contact page with business info
+5. ✅ Mobile responsive design
+6. ✅ HTTPS/SSL certificate
+7. ✅ Basic SEO (meta tags, sitemap, robots.txt)
+8. ✅ Google Business Profile link
+
+### Should-Have (Quality)
+1. ✅ Schema markup (LocalBusiness, Service)
+2. ✅ Service area pages for local SEO
+3. ✅ Testimonials/reviews section
+4. ✅ Form validation
+5. ✅ Lighthouse score 85+
+6. ✅ Accessibility WCAG compliance
+7. ✅ Analytics setup
+8. ✅ Error pages (404, 500)
+
+### Nice-to-Have (Enhancement)
+1. ⏳ Blog section
+2. ⏳ Photo gallery
+3. ⏳ Video integration
+4. ⏳ Live chat
+5. ⏳ Advanced analytics dashboard
+6. ⏳ Multi-language support
+7. ⏳ CRM integration
+
+---
+
+## 25. RISK MITIGATION & BACKUP PLANS
+
+### Potential Risks & Mitigation
+
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| Image sourcing delays | High | Use placeholder images, update after launch |
+| Domain registration delays | High | Have backup domain ready, use Vercel URL temporarily |
+| Email service not integrated | High | Select and integrate email provider by Day 1, test sending end-to-end early, configure retry/fallback (e.g., alternate SMTP or transactional provider) and monitor delivery |
+| Git/deployment issues | Medium | Test deployment daily, have rollback plan |
+| TypeScript errors | Medium | Test compilation daily, fix immediately |
+| Performance bottlenecks | Medium | Optimize incrementally, profile with Lighthouse |
+| SEO issues | Low | Use automated tools (GSC, Rich Results Test) |
+| Form email delivery | Medium | Test email config early, have fallback email |
+
+### Rollback Plan
+- Keep previous stable commits in Git
+- Have Vercel rollback available (automatic)
+- Keep backup of all content and configuration
+- Document all credentials securely
+- **Email Service:** Have fallback email provider credentials and SMTP settings ready for immediate use if primary service fails (test by Day 2)
+
+---
+
+## 26. ACCEPTANCE CRITERIA & LAUNCH VALIDATION
+
+### Homepage
+- [ ] Hero section displays correctly
+- [ ] Main CTA button visible and functional
+- [ ] Navigation menu works
+- [ ] Footer displays all links and info
+- [ ] Mobile responsive (320px+)
+- [ ] Lighthouse score 85+
+- [ ] Schema markup present and valid
+- [ ] Meta tags correct (title, description)
+
+### Services Page
+- [ ] All 3+ services display as cards
+- [ ] Service links work
+- [ ] Images load correctly
+- [ ] Mobile layout stacks properly
+- [ ] SEO meta tags present
+
+### Contact Page
+- [ ] Contact form displays all fields
+- [ ] Form validation works (email, phone)
+- [ ] Form submission succeeds
+- [ ] Confirmation message displays
+- [ ] Business info displays correctly
+- [ ] Phone number is clickable (tel: link)
+- [ ] Map integration (optional, can add later)
+
+### Service Area Pages
+- [ ] Portland page loads correctly
+- [ ] Westbrook page loads correctly
+- [ ] Cumberland page loads correctly
+- [ ] Dynamic [city] route works
+- [ ] Local keywords present
+- [ ] Canonical URLs correct
+
+### Technical
+- [ ] Site loads in <3 seconds
+- [ ] HTTPS working
+- [ ] Mobile friendly (Google test)
+- [ ] Rich results valid (schema test)
+- [ ] Sitemap.xml accessible
+- [ ] Robots.txt accessible
+- [ ] 404 page shows correctly
+- [ ] No console errors in production
+- [ ] Analytics tracking working
+- [ ] Google Search Console can crawl
+
+---
+
+## 27. POST-LAUNCH MONITORING & OPTIMIZATION
+
+### Week 1 After Launch
+- Daily traffic monitoring
+- Daily contact form check
+- Daily error log review
+- Weekly keyword tracking
+- Customer inquiry response time < 2 hours
+
+### Month 1 After Launch
+- Analyze traffic patterns
+- Identify top performing pages
+- Identify bounce rate issues
+- Test and optimize CTAs
+- Gather initial customer feedback
+- Plan content additions
+
+### Ongoing (Monthly)
+**Ownership:** RCLabs (first 3 months), then Client (with RCLabs quarterly reviews for 1 year)
+**Cadence:** Monthly reviews on the 1st of each month, RCLabs provides support for 3 months post-launch, then quarterly check-ins for 1 year
+**Included Tasks:** SEO ranking tracking, traffic trend analysis, mobile usability monitoring, Core Web Vitals monitoring, backup verification, security updates, content updates, review monitoring
+- SEO ranking tracking (RCLabs/Client)
+- Traffic trend analysis (RCLabs/Client)
+- Mobile usability monitoring (RCLabs/Client)
+- Core Web Vitals monitoring (RCLabs/Client)
+- Backup verification (RCLabs)
+- Security updates (RCLabs)
+- Content updates and blog posts (Client with RCLabs guidance)
+- Review monitoring and response (Client)
+
+---
+
+## 28. VERSION HISTORY
 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | Jan 6, 2026 | Initial project specification |
 | 1.1 | Jan 6, 2026 | Complete documentation with all sections |
+| 2.0 | Jan 6, 2026 | Added comprehensive 2-week implementation roadmap |
 
 ---
 
-**Document Status:** ✅ Complete
+**Document Status:** ✅ Complete with Full Roadmap
 **Last Updated:** January 6, 2026
-**Next Review:** Post-Launch (January 17, 2026)
+**Ready for Implementation:** Yes
+**Estimated Completion:** January 16, 2026
+**Launch Target:** January 16, 2026 PM

@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-gray-900 bg-white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-gray-900;
+}
+
+a {
+  @apply text-blue-600 hover:text-blue-700 transition-colors;
+}
+
+.btn {
+  @apply px-6 py-2 rounded-lg font-semibold transition-colors cursor-pointer border border-transparent;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
+}
+
+.btn-outline {
+  @apply border-blue-600 text-blue-600 hover:bg-blue-50;
+}
+
+.content-container {
+  max-width: 1200px;
+}
+
+/* Form Styles */
+form input,
+form textarea,
+form select {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+form textarea {
+  @apply resize-y;
+}
+
+form label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+/* Card Styles */
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg;
+}
+
+.card-header {
+  @apply px-6 py-4 border-b border-gray-200;
+}
+
+.card-body {
+  @apply px-6 py-4;
+}
+
+.card-footer {
+  @apply px-6 py-4 border-t border-gray-200 bg-gray-50;
+}
+
+/* Badge Styles */
+.badge {
+  @apply inline-block px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+.badge-primary {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-800;
+}
+
+/* Alert Styles */
+.alert {
+  @apply px-4 py-3 rounded-lg text-sm font-medium mb-4;
+}
+
+.alert-info {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.alert-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.alert-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.alert-danger {
+  @apply bg-red-100 text-red-800;
+}
+
+/* Hero Section */
+.hero {
+  @apply relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 md:py-32;
+}
+
+.hero-content {
+  @apply container mx-auto px-4 text-center;
+}
+
+.hero-title {
+  @apply text-4xl md:text-5xl font-bold mb-4;
+}
+
+.hero-subtitle {
+  @apply text-lg md:text-xl text-blue-100 mb-8;
+}
+
+/* Section Spacing */
+section {
+  @apply py-12 md:py-16;
+}
+
+/* Grid Responsive */
+.grid-auto {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+}

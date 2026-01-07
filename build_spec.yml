@@ -1,0 +1,44 @@
+# OCI DevOps Build Pipeline Configuration
+# This file defines the build pipeline for Oracle Cloud DevOps
+
+version: 0.1
+
+phases:
+  build:
+    commands:
+      - echo "Starting SvelteKit build process"
+      - node --version
+      - npm --version
+
+      # Install dependencies
+      - npm ci
+
+      # Run linting and type checking
+      - npm run check
+
+      # Build the application
+      - npm run build
+
+      # Create deployment artifact
+      - mkdir -p dist
+      - cp -r .svelte-kit/output/* dist/
+      - cp package.json dist/
+      - cp package-lock.json dist/
+      - cd dist && npm ci --production
+
+  post_build:
+    commands:
+      - echo "Build completed successfully"
+      - ls -la dist/
+
+artifacts:
+  files:
+    - dist/**/*
+  discard-paths: no
+
+cache:
+  paths:
+    - node_modules/**/*
+
+environment_variables:
+  NODE_ENV: "production"
