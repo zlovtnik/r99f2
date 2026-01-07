@@ -69,11 +69,15 @@ jobs:
         chmod 600 ~/.oci/config
 
     - name: Login to OCIR
+      env:
+        OCI_AUTH_TOKEN: ${{ secrets.OCI_AUTH_TOKEN }}
+        OCI_REGION: ${{ secrets.OCI_REGION }}
+        OCI_NAMESPACE: ${{ secrets.OCI_NAMESPACE }}
+        OCI_USERNAME: ${{ secrets.OCI_USERNAME }}
       run: |
-        echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login \
-          ${{ secrets.OCI_REGION }}.ocir.io \
-          -u "${{ secrets.OCI_NAMESPACE }}/oracleidentitycloudservice/${{ secrets.OCI_USER_EMAIL }}" \
-          --password-stdin
+        docker login "${OCI_REGION}.ocir.io" \
+          -u "${OCI_NAMESPACE}/${OCI_USERNAME}" \
+          -p "${OCI_AUTH_TOKEN}"
 
     - name: Build and push Docker image
       run: |
