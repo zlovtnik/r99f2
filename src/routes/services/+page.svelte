@@ -9,7 +9,7 @@
     title: `Roofing Services | ${siteConfig.businessName}`,
     description: 'Professional roofing services including repair, replacement, and inspection. Expert roofers serving Portland, Maine and surrounding areas.',
     url: `${siteConfig.siteUrl}/services`,
-    image: `${siteConfig.siteUrl}/images/og-image.jpg`
+    image: services.length > 0 ? `${siteConfig.siteUrl}${services[0].imageUrl}` : `${siteConfig.siteUrl}/images/og-image.jpg`
   };
 </script>
 
@@ -42,14 +42,14 @@
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        {#each services as service (service.id)}
+        {#each services || [] as service (service.id)}
           <ServiceCard {service} />
         {/each}
       </div>
 
       <div class="text-center">
         <p class="text-lg text-gray-700 mb-8">
-          Need a specific service? Contact us for a free consultation and quote.
+          Need help with your roofing project? Contact us for expert advice and a free quote.
         </p>
       </div>
     </div>

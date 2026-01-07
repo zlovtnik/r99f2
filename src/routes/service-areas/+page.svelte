@@ -2,6 +2,7 @@
   import { siteConfig } from '$config/siteConfig';
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
+  import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
 
   // SEO metadata
   const seo = {
@@ -10,6 +11,30 @@
     keywords: 'roofing service areas, Portland Maine roofing, Westbrook Maine roofing',
     url: `${siteConfig.siteUrl}/service-areas`,
     image: `${siteConfig.siteUrl}/images/og-service-areas.jpg`
+  };
+
+  // JSON-LD schema for service areas list
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Service Areas',
+    description: 'Professional roofing service areas in Maine',
+    numberOfItems: serviceAreas.length,
+    itemListElement: serviceAreas.map((area, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Place',
+        name: `${area.name}, ${area.state}`,
+        description: area.description,
+        url: `${siteConfig.siteUrl}/service-areas/${area.slug}`,
+        address: {
+          '@type': 'PostalAddress',
+          addressRegion: area.state,
+          postalCode: area.zipCodes.join(', ')
+        }
+      }
+    }))
   };
 </script>
 
@@ -33,6 +58,8 @@
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
 
+<SchemaMarkup {schema} />
+
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
@@ -44,9 +71,9 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         {#if serviceAreas && serviceAreas.length > 0}
           {#each serviceAreas as area (area.id)}
-            <a href="/service-areas/{area.slug}" class="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow group" aria-label="View roofing services in {area.name}, Maine">
+            <a href="/service-areas/{area.slug}" class="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow group" aria-label="View roofing services in {area.name}, {area.state}">
               <h2 class="text-2xl font-semibold mb-4 text-gray-900 group-hover:text-blue-600 transition-colors">
-                {area.name}, Maine
+                {area.name}, {area.state}
               </h2>
               <p class="text-gray-700 mb-4">{area.description}</p>
               <div class="mb-4">

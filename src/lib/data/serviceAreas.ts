@@ -1,4 +1,5 @@
 import type { ServiceArea } from '../types';
+import { BUSINESS_INFO } from '../utils/constants';
 
 export const serviceAreas = [
   {
@@ -9,7 +10,7 @@ export const serviceAreas = [
     zipCodes: ['04101', '04102', '04103'],
     keywords: ['roof repair Portland Maine', 'roofing Portland Maine'],
     state: 'Maine',
-    emergencyResponseTime: 'Emergency repairs within 2 hours'
+    emergencyResponseTime: BUSINESS_INFO.emergencyResponseTime
   },
   {
     id: 'westbrook',
@@ -19,7 +20,7 @@ export const serviceAreas = [
     zipCodes: ['04092'],
     keywords: ['roof repair Westbrook Maine', 'roofing Westbrook Maine'],
     state: 'Maine',
-    emergencyResponseTime: 'Emergency repairs within 2 hours'
+    emergencyResponseTime: BUSINESS_INFO.emergencyResponseTime
   },
   {
     id: 'cumberland',
@@ -29,7 +30,7 @@ export const serviceAreas = [
     zipCodes: ['04021'],
     keywords: ['roof repair Cumberland Maine', 'roofing Cumberland Maine'],
     state: 'Maine',
-    emergencyResponseTime: 'Emergency repairs within 2 hours'
+    emergencyResponseTime: BUSINESS_INFO.emergencyResponseTime
   },
   {
     id: 'cape-elizabeth',
@@ -39,7 +40,7 @@ export const serviceAreas = [
     zipCodes: ['04107'],
     keywords: ['roof repair Cape Elizabeth Maine', 'roofing Cape Elizabeth Maine'],
     state: 'Maine',
-    emergencyResponseTime: 'Emergency repairs within 2 hours'
+    emergencyResponseTime: BUSINESS_INFO.emergencyResponseTime
   },
   {
     id: 'falmouth',
@@ -49,6 +50,6 @@ export const serviceAreas = [
     zipCodes: ['04105'],
     keywords: ['roof repair Falmouth Maine', 'roofing Falmouth Maine'],
     state: 'Maine',
-    emergencyResponseTime: 'Emergency repairs within 2 hours'
+    emergencyResponseTime: BUSINESS_INFO.emergencyResponseTime
   }
 ] as const satisfies readonly ServiceArea[];

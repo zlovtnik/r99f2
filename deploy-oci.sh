@@ -5,17 +5,17 @@
 
 set -e
 
-# Configuration - Update these variables according to your OCI setup
-OCI_REGION="${OCI_REGION:-us-chicago-1}"
-COMPARTMENT_ID="${COMPARTMENT_ID:-ocid1.tenancy.oc1..aaaaaaaa6j5cbx7otaftfvt3gois7qjjgwfxs6qp3zum2mq2mcpotcn3citq}"
-NAMESPACE="${NAMESPACE:-axye6mel1l0n}"
-REPO_NAME="${REPO_NAME:-sveltekit-app}"
-IMAGE_TAG="${IMAGE_TAG:-latest}"
+# Configuration - All variables must be set via environment variables
+OCI_REGION="${OCI_REGION}"
+COMPARTMENT_ID="${COMPARTMENT_ID}"
+NAMESPACE="${NAMESPACE}"
+REPO_NAME="${REPO_NAME}"
+IMAGE_TAG="${IMAGE_TAG}"
 
 # Environment variables for the application
-VITE_SITE_URL="${VITE_SITE_URL:-https://lbsunrise.com}"
-VITE_BUSINESS_EMAIL="${VITE_BUSINESS_EMAIL:-LEMADILAN5@gmail.com}"
-VITE_BUSINESS_PHONE="${VITE_BUSINESS_PHONE:-(978) 519-9774}"
+VITE_SITE_URL="${VITE_SITE_URL}"
+VITE_BUSINESS_EMAIL="${VITE_BUSINESS_EMAIL}"
+VITE_BUSINESS_PHONE="${VITE_BUSINESS_PHONE}"
 VITE_GA_MEASUREMENT_ID="${VITE_GA_MEASUREMENT_ID}"
 
 # Colors for output
@@ -56,6 +56,11 @@ check_prerequisites() {
     fi
 
     # Validate required environment variables
+    if [ -z "$OCI_REGION" ]; then
+        log_error "OCI_REGION environment variable is not set. Please set it to your OCI region."
+        exit 1
+    fi
+
     if [ -z "$COMPARTMENT_ID" ]; then
         log_error "COMPARTMENT_ID environment variable is not set. Please set it to your OCI compartment ID."
         exit 1
@@ -66,19 +71,44 @@ check_prerequisites() {
         exit 1
     fi
 
-    if [ "$NAMESPACE" = "your-namespace" ]; then
-        log_error "NAMESPACE is still set to the placeholder 'your-namespace'. Please set it to your actual OCI namespace."
+    if [ -z "$NAMESPACE" ]; then
+        log_error "NAMESPACE environment variable is not set. Please set it to your OCI namespace."
+        exit 1
+    fi
+
+    if [ -z "$REPO_NAME" ]; then
+        log_error "REPO_NAME environment variable is not set. Please set it to your OCI repository name."
+        exit 1
+    fi
+
+    if [ -z "$IMAGE_TAG" ]; then
+        log_error "IMAGE_TAG environment variable is not set. Please set it to your desired image tag."
         exit 1
     fi
 
     if [ -z "$AVAILABILITY_DOMAIN" ]; then
-        AVAILABILITY_DOMAIN="ocid1.availabilitydomain.oc1..aaaaaaaaag25rxkuwv76f77a57wz5h4a4pkm545dam4ndohfge25sffw5p3a"
-        log_warn "AVAILABILITY_DOMAIN not set, using default: $AVAILABILITY_DOMAIN"
+        log_error "AVAILABILITY_DOMAIN environment variable is not set. Please set it to your OCI availability domain OCID."
+        exit 1
     fi
 
     if [ -z "$SUBNET_ID" ]; then
-        SUBNET_ID="ocid1.subnet.oc1.us-chicago-1.aaaaaaaav5rea7aafzmw4wetqjexre6m65hs63e5x2ve7wjlock6okgtnxtq"
-        log_warn "SUBNET_ID not set, using default: $SUBNET_ID"
+        log_error "SUBNET_ID environment variable is not set. Please set it to your OCI subnet OCID."
+        exit 1
+    fi
+
+    if [ -z "$VITE_SITE_URL" ]; then
+        log_error "VITE_SITE_URL environment variable is not set. Please set it to your production site URL."
+        exit 1
+    fi
+
+    if [ -z "$VITE_BUSINESS_EMAIL" ]; then
+        log_error "VITE_BUSINESS_EMAIL environment variable is not set. Please set it to your business email."
+        exit 1
+    fi
+
+    if [ -z "$VITE_BUSINESS_PHONE" ]; then
+        log_error "VITE_BUSINESS_PHONE environment variable is not set. Please set it to your business phone."
+        exit 1
     fi
 
     log_info "Prerequisites check passed."

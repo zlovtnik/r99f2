@@ -1,10 +1,9 @@
-import { SITE_URL } from '$lib/utils/constants';
 import { services } from '$lib/data/services';
 import { serviceAreas } from '$lib/data/serviceAreas';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
-  const baseUrl = SITE_URL;
+  const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://lbsunrise.com';
 
   // Static pages
   const staticPages = [

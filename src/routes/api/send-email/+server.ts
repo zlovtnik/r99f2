@@ -1,11 +1,15 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-// HTML escaping utility
+// Server-safe HTML escaping utility
 function escapeHtml(text: string): string {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 }
 
 // PII sanitization utility
@@ -29,6 +33,9 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const { to, subject, html, from } = body;
 
+    // Validate email format with more robust regex
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
     // Validate required fields
     if (!to || typeof to !== 'string' || !to.trim()) {
       return json({
@@ -51,14 +58,18 @@ export const POST: RequestHandler = async ({ request }) => {
       }, { status: 400 });
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(to)) {
-      return json({
-        success: false,
-        error: 'Invalid recipient email format'
-      }, { status: 400 });
+    // Validate from email if provided
+    if (from && typeof from === 'string') {
+      if (!emailRegex.test(from)) {
+        return json({
+          success: false,
+          error: 'Invalid sender email format'
+        }, { status: 400 });
+      }
     }
+
+    // Sanitize HTML content to prevent XSS
+    const sanitizedHtml = escapeHtml(html);
 
     // Get API key from server environment
     const apiKey = process.env.SENDGRID_API_KEY;
@@ -70,8 +81,8 @@ export const POST: RequestHandler = async ({ request }) => {
       }, { status: 500 });
     }
 
-    // Note: HTML escaping should be handled by the client before sending
-    const emailHtml = html;
+    // Note: HTML content is sanitized server-side for security
+    const emailHtml = sanitizedHtml;
 
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',

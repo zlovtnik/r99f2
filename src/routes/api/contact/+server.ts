@@ -3,8 +3,15 @@ import type { RequestHandler } from './$types';
 import { validateContactForm } from '$lib/utils/validation';
 import { sendEmail } from '$lib/utils/email';
 
-const RATE_LIMIT_WINDOW_SECONDS = Number(process.env.RATE_LIMIT_WINDOW_SECONDS ?? 60);
-const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX ?? 10);
+// Parse and validate rate limit environment variables
+const parseRateLimitEnv = (envVar: string | undefined, defaultValue: number, minValue: number = 1): number => {
+  if (!envVar) return defaultValue;
+  const parsed = parseInt(envVar, 10);
+  return isNaN(parsed) || parsed < minValue ? defaultValue : parsed;
+};
+
+const RATE_LIMIT_WINDOW_SECONDS = parseRateLimitEnv(process.env.RATE_LIMIT_WINDOW_SECONDS, 60, 10);
+const RATE_LIMIT_MAX = parseRateLimitEnv(process.env.RATE_LIMIT_MAX, 10, 1);
 
 type RateLimitRecord = {
   count: number;
@@ -14,18 +21,21 @@ type RateLimitRecord = {
 const rateLimitStore = new Map<string, RateLimitRecord>();
 
 function getClientKey(request: Request, getClientAddress: () => string): string {
+  // Try to get IP from forwarded headers first (more secure)
   const forwardedHeader = request.headers.get('x-forwarded-for');
   if (forwardedHeader) {
     const ip = forwardedHeader.split(',')[0]?.trim();
-    if (ip) {
+    if (ip && ip !== 'unknown') {
       return ip;
     }
   }
 
+  // Fallback to client address, but sanitize it
   try {
-    return getClientAddress();
+    const addr = getClientAddress();
+    return addr && addr !== 'unknown' ? addr : 'anonymous';
   } catch {
-    return 'unknown';
+    return 'anonymous';
   }
 }
 
@@ -33,6 +43,13 @@ function checkRateLimit(key: string): { allowed: boolean; retryAfter?: number } 
   const now = Date.now();
   const windowMs = RATE_LIMIT_WINDOW_SECONDS * 1000;
   const record = rateLimitStore.get(key);
+
+  // Clean up expired entries to prevent memory leaks
+  for (const [k, r] of rateLimitStore.entries()) {
+    if (r.expiresAt <= now) {
+      rateLimitStore.delete(k);
+    }
+  }
 
   if (!record || record.expiresAt <= now) {
     rateLimitStore.set(key, { count: 1, expiresAt: now + windowMs });
@@ -47,11 +64,15 @@ function checkRateLimit(key: string): { allowed: boolean; retryAfter?: number } 
   return { allowed: true };
 }
 
-// HTML escaping utility
+// Server-safe HTML escaping utility
 function escapeHtml(text: string): string {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 }
 
 export const POST: RequestHandler = async ({ request, getClientAddress }) => {

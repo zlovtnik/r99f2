@@ -1,7 +1,6 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import CTA from '$lib/components/CTA.svelte';
-  import { BUSINESS_INFO } from '$lib/utils/constants';
   import type { Service } from '$lib/types';
 
   export let data;
@@ -75,7 +74,7 @@
 
           {#if service.warranty}
             <div class="mt-8 p-4 bg-blue-50 rounded-lg">
-              <p class="text-lg font-semibold text-blue-900">Warranty: {service.warranty!}</p>
+              <p class="text-lg font-semibold text-blue-900">Warranty: {service.warranty}</p>
             </div>
           {/if}
         </div>

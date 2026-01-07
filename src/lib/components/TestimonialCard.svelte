@@ -18,8 +18,18 @@
   <blockquote class="text-gray-700 mb-4">
     <p>"{testimonial.text}"</p>
   </blockquote>
-  <footer>
-    <p id="testimonial-{testimonial.id}" class="font-semibold text-gray-900">{testimonial.name}</p>
-    <p class="text-sm text-gray-600">{testimonial.service}</p>
+  <footer class="flex items-center gap-3">
+    {#if testimonial.imageUrl}
+      <img 
+        src={testimonial.imageUrl} 
+        alt={testimonial.name}
+        loading="lazy"
+        class="w-12 h-12 rounded-full object-cover"
+      />
+    {/if}
+    <div>
+      <p id="testimonial-{testimonial.id}" class="font-semibold text-gray-900">{testimonial.name}</p>
+      <p class="text-sm text-gray-600">{testimonial.service}</p>
+    </div>
   </footer>
 </div>

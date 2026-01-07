@@ -5,7 +5,6 @@ const envSiteUrl = import.meta.env.VITE_SITE_URL;
 export const BUSINESS_INFO = {
   name: 'LB Sunrise',
   telephone: envPhone || '(978) 519-9774',
-  phone: envPhone || '(978) 519-9774',
   email: envEmail || 'LEMADILAN5@gmail.com',
   address: '44 Veranda St',
   city: 'Portland',

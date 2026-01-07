@@ -11,9 +11,9 @@
     });
   }
 
-  const sanitizedPhone = BUSINESS_INFO.telephone.replace(/[^+\d]/g, '');
-  const telHref = `tel:${sanitizedPhone || BUSINESS_INFO.telephone}`;
-  const emailHref = `mailto:${BUSINESS_INFO.email.trim()}`;
+  const sanitizedPhone = (BUSINESS_INFO?.telephone || '').replace(/[^+\d]/g, '');
+  const telHref = `tel:${sanitizedPhone || (BUSINESS_INFO?.telephone || '')}`;
+  const emailHref = `mailto:${BUSINESS_INFO?.email?.trim() || ''}`;
 
   function goBack() {
     if (typeof window !== 'undefined') {
@@ -26,11 +26,11 @@
 
 <svelte:head>
   {#if $page.status === 404}
-    <title>Page Not Found | {BUSINESS_INFO.name}</title>
-    <meta name="description" content={`The page you're looking for doesn't exist. Contact ${BUSINESS_INFO.name} for professional roofing services.`} />
+    <title>Page Not Found | {BUSINESS_INFO?.name || 'LB Sunrise'}</title>
+    <meta name="description" content={`The page you're looking for doesn't exist. Contact ${BUSINESS_INFO?.name || 'LB Sunrise'} for professional roofing services.`} />
   {:else}
-    <title>Server Error | {BUSINESS_INFO.name}</title>
-    <meta name="description" content={`We're experiencing technical difficulties. Please contact ${BUSINESS_INFO.name} directly.`} />
+    <title>Server Error | {BUSINESS_INFO?.name || 'LB Sunrise'}</title>
+    <meta name="description" content={`We're experiencing technical difficulties. Please contact ${BUSINESS_INFO?.name || 'LB Sunrise'} directly.`} />
   {/if}
 </svelte:head>
 
@@ -70,25 +70,25 @@
           <h3 class="text-xl font-semibold mb-4 text-gray-900">Contact Us Directly</h3>
           <div class="space-y-4">
             <div class="flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Phone icon">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
               </svg>
               <div>
                 <p class="font-medium text-gray-900">Phone</p>
                 <p class="text-gray-600">
-                  <a href={telHref} class="hover:underline">{BUSINESS_INFO.telephone}</a>
+                  <a href={telHref} class="hover:underline">{BUSINESS_INFO?.telephone || 'Call us'}</a>
                 </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Email icon">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
               </svg>
               <div>
                 <p class="font-medium text-gray-900">Email</p>
                 <p class="text-gray-600">
-                  <a href={emailHref} class="hover:underline">{BUSINESS_INFO.email}</a>
+                  <a href={emailHref} class="hover:underline">{BUSINESS_INFO?.email || 'contact@lbsunrise.com'}</a>
                 </p>
               </div>
             </div>
