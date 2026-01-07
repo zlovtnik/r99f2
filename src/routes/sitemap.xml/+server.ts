@@ -1,4 +1,6 @@
 import { SITE_URL } from '$lib/utils/constants';
+import { services } from '$lib/data/services';
+import { serviceAreas } from '$lib/data/serviceAreas';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
@@ -13,18 +15,19 @@ export const GET: RequestHandler = async () => {
     { path: '/contact', priority: '0.7', changefreq: 'monthly' },
   ];
 
-  // Service pages
-  const servicePages = [
-    { path: '/services/roof-repair', priority: '0.7', changefreq: 'monthly' },
-    { path: '/services/roof-replacement', priority: '0.7', changefreq: 'monthly' },
-    { path: '/services/roof-inspection', priority: '0.7', changefreq: 'monthly' },
-  ];
+  // Generate service pages dynamically from data
+  const servicePages = services.map(service => ({
+    path: `/services/${service.slug}`,
+    priority: '0.7',
+    changefreq: 'monthly'
+  }));
 
-  // Service area pages
-  const serviceAreaPages = [
-    { path: '/service-areas/portland', priority: '0.6', changefreq: 'monthly' },
-    { path: '/service-areas/westbrook', priority: '0.6', changefreq: 'monthly' },
-  ];
+  // Generate service area pages dynamically from data
+  const serviceAreaPages = serviceAreas.map(area => ({
+    path: `/service-areas/${area.slug}`,
+    priority: '0.6',
+    changefreq: 'monthly'
+  }));
 
   const allPages = [...staticPages, ...servicePages, ...serviceAreaPages];
 

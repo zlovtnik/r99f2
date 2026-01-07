@@ -103,15 +103,20 @@ if [ ! -d "node_modules" ]; then
         exit 1
     fi
 fi
-if npm run build 2>/dev/null; then
+if build_output=$(npm run build 2>&1); then
     log_success "Build process completed successfully"
-    if [ -d ".svelte-kit/output" ]; then
-        log_success "Build output directory created"
+    # Check for adapter-node output (build/) or legacy output (.svelte-kit/output)
+    if [ -d "build" ]; then
+        log_success "Build output directory created (build/)"
+    elif [ -d ".svelte-kit/output" ]; then
+        log_success "Build output directory created (.svelte-kit/output)"
     else
-        log_error "Build output directory not found"
+        log_error "Build output directory not found (expected build/ or .svelte-kit/output)"
     fi
 else
     log_error "Build process failed"
+    echo "Build output:"
+    echo "$build_output"
 fi
 
 # Test 8: Test Docker build (if Docker available and daemon running)

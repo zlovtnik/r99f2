@@ -25,15 +25,15 @@ FROM node:20-alpine AS production
 # Create app directory
 WORKDIR /app
 
-# Copy built application from builder stage
-COPY --from=builder /app/.svelte-kit/output ./
+# Copy built application from builder stage (adapter-node outputs to build/)
+COPY --from=builder /app/build ./
 
 # Expose port
 EXPOSE 3000
 
-# Health check
+# Health check (using wget since curl is not available in alpine)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+  CMD wget --quiet --spider http://localhost:3000/health || exit 1
 
 # Start the application
 CMD ["node", "server/index.js"]

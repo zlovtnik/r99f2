@@ -37,6 +37,13 @@ jobs:
     - name: Build application
       run: npm run build
 
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: build/
+        retention-days: 1
+
   build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -46,25 +53,41 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
       with:
-        node-version: '20'
-        cache: 'npm'
+        name: build-output
+        path: build/
 
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build application
-      run: npm run build
-
-    - name: Deploy to OCI
-      uses: oracle-actions/deploy-to-oci@v1.0.0
+    - name: Configure OCI CLI
+      uses: oracle-actions/configure-oci-credentials@v1
       with:
-        oci-cli-config: ${{ secrets.OCI_CLI_CONFIG }}
-        oci-cli-key: ${{ secrets.OCI_CLI_KEY }}
+        user: ${{ secrets.OCI_USER_OCID }}
+        fingerprint: ${{ secrets.OCI_FINGERPRINT }}
+        tenancy: ${{ secrets.OCI_TENANCY_OCID }}
         region: ${{ secrets.OCI_REGION }}
-        compartment-id: ${{ secrets.OCI_COMPARTMENT_ID }}
-        function-app-name: ${{ secrets.OCI_FUNCTION_APP }}
-        source-path: .svelte-kit/output
-        runtime: node
+        api_key: ${{ secrets.OCI_CLI_KEY }}
+
+    - name: Login to OCIR
+      uses: oracle-actions/login-ocir@v1.2.1
+      with:
+        auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+
+    - name: Build and push Docker image
+      run: |
+        IMAGE_TAG="${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}"
+        docker build -t "$IMAGE_TAG" .
+        docker push "$IMAGE_TAG"
+
+    - name: Deploy to OCI Container Instances
+      uses: oracle-actions/run-oci-cli-command@v1.3.2
+      with:
+        command: |
+          oci container-instances container-instance create \
+            --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
+            --display-name sveltekit-app-instance \
+            --availability-domain ${{ secrets.OCI_AVAILABILITY_DOMAIN }} \
+            --shape CI.Standard.E4.Flex \
+            --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
+            --containers '[{"displayName": "sveltekit-container", "imageUrl": "${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}", "environmentVariables": {"NODE_ENV": "production"}}]' \
+            --vnics '[{"subnetId": "${{ secrets.OCI_SUBNET_ID }}"}]'

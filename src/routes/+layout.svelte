@@ -8,7 +8,12 @@
 
 	onMount(() => {
 		// Initialize Google Analytics 4 on app load (browser only)
-		initializeGA();
+		try {
+			initializeGA();
+		} catch (error) {
+			const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'not configured';
+			console.error(`Failed to initialize Google Analytics (GA_ID: ${gaId}):`, error);
+		}
 	});
 </script>
 

@@ -138,7 +138,7 @@ deploy_to_oci() {
         --shape "CI.Standard.E4.Flex" \
         --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
         --containers '[{"displayName": "sveltekit-container", "imageUrl": "'"$image_url"'", "environmentVariables": {"NODE_ENV": "production"}}]' \
-        --vnics '[{"subnetId": "'"$SUBNET_ID"'"}]' \
+        --vnics '[{"subnetId": "'"$SUBNET_ID"'"}]'
 
     log_info "Deployment initiated. Check OCI console for status."
 }
