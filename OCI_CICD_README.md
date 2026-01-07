@@ -106,7 +106,7 @@ Use GitHub Actions for CI/CD with OCI integration.
    - `OCI_FUNCTION_APP`: Function app name (if using Functions)
 
 2. **GitHub Actions Workflow**
-   - The `.github/workflows/oci-cicd.yml` file provides:
+   - The GitHub workflow file (`.github/workflows/oci-cicd.yml`) provides:
      - Automated testing on PRs
      - Build validation
      - Deployment to OCI on main branch merges

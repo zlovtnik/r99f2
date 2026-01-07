@@ -2,7 +2,7 @@ import type { Service } from '../types';
 
 export const services = [
   {
-    id: 1,
+    id: '1',
     name: 'Roof Repair',
     slug: 'roof-repair',
     description: 'Professional roof repair services for all types of roofing materials. Quick response times for emergency repairs.',
@@ -26,7 +26,7 @@ export const services = [
     cta: 'Get Free Estimate'
   },
   {
-    id: 2,
+    id: '2',
     name: 'Roof Replacement',
     slug: 'roof-replacement',
     description: 'Complete roof replacement services with quality materials and expert installation.',
@@ -50,7 +50,7 @@ export const services = [
     cta: 'Schedule Inspection'
   },
   {
-    id: 3,
+    id: '3',
     name: 'Roof Inspection',
     slug: 'roof-inspection',
     description: 'Comprehensive roof inspection for damage detection and maintenance planning.',

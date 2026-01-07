@@ -6,6 +6,8 @@
 const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
 interface GtagConfig {
+  page_path?: string;
+  page_title?: string;
   [key: string]: any;
 }
 
@@ -16,11 +18,25 @@ interface GtagEvent {
   [key: string]: any;
 }
 
+// Track whether GA initialization failed
+let gaInitFailed = false;
+
 declare global {
   interface Window {
-    gtag: (command: 'config' | 'event' | 'js', targetId: string, config?: GtagConfig | GtagEvent) => void;
+    gtag: {
+      (command: 'js', timestamp: Date): void;
+      (command: 'config', targetId: string, config?: GtagConfig): void;
+      (command: 'event', eventName: string, params?: GtagEvent): void;
+    };
     dataLayer: any[];
   }
+}
+
+/**
+ * Check if GA initialization failed
+ */
+export function isGAInitFailed(): boolean {
+  return gaInitFailed;
 }
 
 /**
@@ -42,6 +58,13 @@ export function initializeGA(): void {
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    
+    // Add error handler for script loading failures
+    script.onerror = (error) => {
+      gaInitFailed = true;
+      console.error(`Failed to load Google Analytics script for GA_ID: ${GA_ID}`, error);
+    };
+    
     document.head.appendChild(script);
 
     // Initialize gtag function

@@ -1,7 +1,11 @@
+const envEmail = import.meta.env.VITE_BUSINESS_EMAIL;
+const envPhone = import.meta.env.VITE_BUSINESS_PHONE;
+const envSiteUrl = import.meta.env.VITE_SITE_URL;
+
 export const BUSINESS_INFO = {
   name: 'LB Sunrise',
-  telephone: '(978) 519-9774',
-  email: 'LEMADILAN5@gmail.com',
+  telephone: envPhone || '(978) 519-9774',
+  email: envEmail || 'LEMADILAN5@gmail.com',
   address: '44 Veranda St',
   city: 'Portland',
   state: 'ME',
@@ -36,7 +40,7 @@ export const SERVICE_OPTIONS: readonly string[] = [
   'Roof Inspection'
 ] as const;
 
-export const SITE_URL = 'https://lbsunrise.com' as const;
+export const SITE_URL = envSiteUrl || 'https://lbsunrise.com';
 export const LOGO_URL = '/images/logo.svg' as const;
 export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
 

@@ -1,6 +1,6 @@
 import type { SEOMetadata } from '../types';
 import type { LocalBusinessInfo, ServiceInfo } from '../types/seo';
-import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS } from './constants';
+import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS, OG_IMAGE_URL } from './constants';
 
 function toTitleCase(str: string): string {
   return str.replaceAll('-', ' ').split(' ').map(word => 
@@ -45,7 +45,7 @@ export function getSEOMetadata(
     title,
     description,
     keywords,
-    ogImage: options.ogImage || '/images/og-image.jpg',
+    ogImage: options.ogImage || OG_IMAGE_URL,
     canonical: options.canonical,
     schema: options.schema
   };

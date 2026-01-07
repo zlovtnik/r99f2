@@ -1,5 +1,5 @@
 export interface Service {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;
@@ -24,7 +24,7 @@ export interface ServiceArea {
 }
 
 export interface Testimonial {
-  id: number;
+  id: string;
   name: string;
   service: string;
   text: string;
@@ -33,7 +33,7 @@ export interface Testimonial {
 }
 
 export interface FAQ {
-  id: number;
+  id: string;
   question: string;
   answer: string;
   category: string;

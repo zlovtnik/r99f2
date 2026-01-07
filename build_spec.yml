@@ -21,7 +21,18 @@ phases:
 
       # Create deployment artifact
       - mkdir -p dist
-      - cp -r .svelte-kit/output/* dist/
+      # Check for adapter-node output (build/) or legacy output (.svelte-kit/output)
+      - |
+        if [ -d "build" ] && [ "$(ls -A build 2>/dev/null)" ]; then
+          echo "Using adapter-node output from build/"
+          cp -r build/. dist/
+        elif [ -d ".svelte-kit/output" ] && [ "$(ls -A .svelte-kit/output 2>/dev/null)" ]; then
+          echo "Using legacy output from .svelte-kit/output/"
+          cp -r .svelte-kit/output/. dist/
+        else
+          echo "ERROR: No build output found in build/ or .svelte-kit/output/"
+          exit 1
+        fi
       - cp package.json dist/
       - cp package-lock.json dist/
       - cd dist && npm ci --production

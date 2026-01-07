@@ -26,7 +26,7 @@
           <strong>Phone:</strong> <a href={`tel:${BUSINESS_INFO.telephone}`} class="hover:text-white">{BUSINESS_INFO.telephone}</a>
         </p>
         <p class="text-gray-300 mb-2">
-          <strong>Email:</strong> <a href="mailto:{BUSINESS_INFO.email}" class="hover:text-white">{BUSINESS_INFO.email}</a>
+          <strong>Email:</strong> <a href={`mailto:${BUSINESS_INFO.email}`} class="hover:text-white">{BUSINESS_INFO.email}</a>
         </p>
         <p class="text-gray-300">
           <strong>Address:</strong> {BUSINESS_INFO.address}, {BUSINESS_INFO.city}, {BUSINESS_INFO.state} {BUSINESS_INFO.zipCode}
