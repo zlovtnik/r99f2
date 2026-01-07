@@ -129,15 +129,39 @@ deploy_to_oci() {
 
     local oci_registry="${OCI_REGION}.ocir.io"
     local image_url="${oci_registry}/${NAMESPACE}/${REPO_NAME}:${IMAGE_TAG}"
+    local instance_name="sveltekit-app-instance"
 
-    # Create container instance (you may need to adjust these parameters)
+    # Delete existing container instance to avoid accumulating duplicates
+    log_info "Checking for existing container instance..."
+    local existing_instance_id
+    existing_instance_id=$(oci container-instances container-instance list \
+        --compartment-id "$COMPARTMENT_ID" \
+        --display-name "$instance_name" \
+        --lifecycle-state ACTIVE \
+        --query 'data[0].id' \
+        --raw-output 2>/dev/null || true)
+
+    if [ -n "$existing_instance_id" ] && [ "$existing_instance_id" != "null" ]; then
+        log_info "Deleting existing instance: $existing_instance_id"
+        oci container-instances container-instance delete \
+            --container-instance-id "$existing_instance_id" \
+            --force
+        # Wait for deletion to complete
+        log_info "Waiting for instance deletion..."
+        sleep 30
+    else
+        log_info "No existing instance found, proceeding with creation"
+    fi
+
+    # Create new container instance
+    log_info "Creating new container instance..."
     oci container-instances container-instance create \
         --compartment-id "$COMPARTMENT_ID" \
-        --display-name "sveltekit-app-instance" \
+        --display-name "$instance_name" \
         --availability-domain "$AVAILABILITY_DOMAIN" \
         --shape "CI.Standard.E4.Flex" \
         --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
-        --containers '[{"displayName": "sveltekit-container", "imageUrl": "'"$image_url"'", "environmentVariables": {"NODE_ENV": "production"}}]' \
+        --containers '[{"displayName": "sveltekit-container", "imageUrl": "'"$image_url"'", "environmentVariables": {"NODE_ENV": "production", "VITE_SITE_URL": "'"$VITE_SITE_URL"'", "VITE_BUSINESS_EMAIL": "'"$VITE_BUSINESS_EMAIL"'", "VITE_BUSINESS_PHONE": "'"$VITE_BUSINESS_PHONE"'", "VITE_GA_MEASUREMENT_ID": "'"$VITE_GA_MEASUREMENT_ID"'"}}]' \
         --vnics '[{"subnetId": "'"$SUBNET_ID"'"}]'
 
     log_info "Deployment initiated. Check OCI console for status."

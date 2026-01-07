@@ -37,13 +37,6 @@ jobs:
     - name: Build application
       run: npm run build
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-output
-        path: build/
-        retention-days: 1
-
   build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -52,12 +45,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-output
-        path: build/
 
     - name: Configure OCI CLI
       uses: oracle-actions/configure-oci-credentials@v1
@@ -79,6 +66,31 @@ jobs:
         docker build -t "$IMAGE_TAG" .
         docker push "$IMAGE_TAG"
 
+    - name: Delete existing container instance
+      uses: oracle-actions/run-oci-cli-command@v1.3.2
+      continue-on-error: true
+      with:
+        command: |
+          # Find existing instance by display name
+          INSTANCE_ID=$(oci container-instances container-instance list \
+            --compartment-id ${{ secrets.OCI_COMPARTMENT_ID }} \
+            --display-name sveltekit-app-instance \
+            --lifecycle-state ACTIVE \
+            --query 'data[0].id' \
+            --raw-output 2>/dev/null || true)
+          
+          if [ -n "$INSTANCE_ID" ] && [ "$INSTANCE_ID" != "null" ]; then
+            echo "Deleting existing instance: $INSTANCE_ID"
+            oci container-instances container-instance delete \
+              --container-instance-id "$INSTANCE_ID" \
+              --force
+            # Wait for deletion to complete
+            echo "Waiting for instance deletion..."
+            sleep 30
+          else
+            echo "No existing instance found, proceeding with creation"
+          fi
+
     - name: Deploy to OCI Container Instances
       uses: oracle-actions/run-oci-cli-command@v1.3.2
       with:
@@ -89,5 +101,5 @@ jobs:
             --availability-domain ${{ secrets.OCI_AVAILABILITY_DOMAIN }} \
             --shape CI.Standard.E4.Flex \
             --shape-config '{"ocpus": 1, "memoryInGBs": 8}' \
-            --containers '[{"displayName": "sveltekit-container", "imageUrl": "${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}", "environmentVariables": {"NODE_ENV": "production"}}]' \
+            --containers '[{"displayName": "sveltekit-container", "imageUrl": "${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_NAMESPACE }}/sveltekit-app:${{ github.sha }}", "environmentVariables": {"NODE_ENV": "production", "VITE_SITE_URL": "${{ secrets.VITE_SITE_URL }}", "VITE_BUSINESS_EMAIL": "${{ secrets.VITE_BUSINESS_EMAIL }}", "VITE_BUSINESS_PHONE": "${{ secrets.VITE_BUSINESS_PHONE }}", "VITE_GA_MEASUREMENT_ID": "${{ secrets.VITE_GA_MEASUREMENT_ID }}"}}]' \
             --vnics '[{"subnetId": "${{ secrets.OCI_SUBNET_ID }}"}]'
