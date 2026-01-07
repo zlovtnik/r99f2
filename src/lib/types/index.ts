@@ -21,6 +21,8 @@ export interface ServiceArea {
   description: string;
   zipCodes: string[];
   keywords: string[];
+  state: string;
+  emergencyResponseTime?: string;
 }
 
 export interface Testimonial {
@@ -59,6 +61,7 @@ export interface SEOMetadata {
 
 export interface BusinessInfo {
   name: string;
+  telephone: string;
   phone: string;
   email: string;
   address: string;
@@ -68,5 +71,9 @@ export interface BusinessInfo {
   lat: number;
   lng: number;
   hours: Record<string, string>;
+  businessHours?: string[];
+  serviceAreas?: string;
   serviceRadius: string;
+  foundedYear?: number;
+  emergencyResponseTime?: string;
 }
