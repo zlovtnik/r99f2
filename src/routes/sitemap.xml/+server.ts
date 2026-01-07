@@ -1,9 +1,10 @@
 import { services } from '$lib/data/services';
 import { serviceAreas } from '$lib/data/serviceAreas';
+import { SITE_URL } from '$lib/utils/constants';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
-  const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://lbsunrise.com';
+  const baseUrl = SITE_URL;
 
   // Static pages
   const staticPages = [
@@ -34,7 +35,6 @@ export const GET: RequestHandler = async () => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(page => `  <url>
     <loc>${baseUrl}${page.path}</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`).join('\n')}

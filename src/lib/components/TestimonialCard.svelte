@@ -22,7 +22,7 @@
     {#if testimonial.imageUrl}
       <img 
         src={testimonial.imageUrl} 
-        alt={testimonial.name}
+        alt=""
         loading="lazy"
         class="w-12 h-12 rounded-full object-cover"
       />
