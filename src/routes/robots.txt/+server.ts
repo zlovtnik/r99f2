@@ -1,7 +1,7 @@
-import { PUBLIC_SITE_URL } from '$env/static/public';
+import { SITE_URL } from '$lib/utils/constants';
 
-export async function GET() {
-	const siteUrl = PUBLIC_SITE_URL || 'https://lbsunrise.com';
+export function GET() {
+	const siteUrl = SITE_URL;
 
 	const robots = `# Robots.txt for LB Sunrise
 # Allow search engines to crawl all public pages
@@ -11,14 +11,6 @@ Allow: /
 Disallow: /api/
 Disallow: /.svelte-kit/
 Disallow: /build/
-
-# Specific rules for Google
-User-agent: Googlebot
-Allow: /
-
-# Specific rules for Bing
-User-agent: Bingbot
-Allow: /
 
 # Sitemap location
 Sitemap: ${siteUrl}/sitemap.xml
