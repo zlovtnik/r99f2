@@ -1,0 +1,21 @@
+# Copilot Instructions
+
+- **Stack & build**: SvelteKit 2 with Vite 7, Tailwind 3.4, PostCSS (autoprefixer), TypeScript. Vercel adapter targeting nodejs24.x; scripts: `npm run dev|build|preview|check` (see package.json).
+- **Path aliases**: `$components`, `$types`, `$utils`, `$data`, `$config` defined in svelte.config.js; prefer these over relative imports.
+- **Routing layout**: Root layout [src/routes/+layout.svelte](src/routes/+layout.svelte) loads global styles and favicon and calls `initializeGA()` on mount; avoid browser-only code during SSR unless guarded.
+- **Home page**: [src/routes/+page.svelte](src/routes/+page.svelte) renders schema JSON-LD, hero, services, testimonials, CTA; pulls `services`, `testimonials`, `BUSINESS_INFO`, and uses `createLocalBusinessSchema`.
+- **About page**: [src/routes/about/+page.svelte](src/routes/about/+page.svelte) sets manual SEO tags using `siteConfig.siteUrl`; follow this pattern for new static pages.
+- **Data sources**: Services/testimonials/FAQ/service areas live in [src/lib/data](src/lib/data) and use strong types from [src/lib/types/index.ts](src/lib/types/index.ts); update data here, not inline in components.
+- **Config**: Business/site constants live in [src/lib/utils/constants.ts](src/lib/utils/constants.ts); high-level flags (enableContactForm, etc.) in [src/lib/config/siteConfig.ts](src/lib/config/siteConfig.ts) read `VITE_ENABLE_*` envs; FAQ-specific values in [src/lib/config/faqConfig.ts](src/lib/config/faqConfig.ts).
+- **SEO utilities**: Use [src/lib/utils/seo.ts](src/lib/utils/seo.ts) for breadcrumbs, pricing formatting, and Schema.org objects (`createLocalBusinessSchema`, `createServiceSchema`). Render JSON-LD via [SchemaMarkup.svelte](src/lib/components/SchemaMarkup.svelte) instead of inlining scripts.
+- **Analytics**: [src/lib/utils/analytics.ts](src/lib/utils/analytics.ts) injects GA4 when `VITE_GA_MEASUREMENT_ID` is set; tracking helpers `trackEvent/trackPageView/trackFormSubmission/trackContactRequest` are no-ops when GA is absent. Call only in browser context.
+- **Forms & validation**: [ContactForm.svelte](src/lib/components/ContactForm.svelte) uses `validateContactForm` in [validation.ts](src/lib/utils/validation.ts) (checks name/email/phone ZIP/service/message). Service validation relies on `SERVICE_OPTIONS`; keep `<select>` values in sync with that list.
+- **UI components**: Hero/CTA/ServiceCard/TestimonialCard/Footer/Navigation live under [src/lib/components](src/lib/components). Navigation uses `$page` to highlight active routes; mobile menu controlled via `isOpen` state.
+- **Styling**: Tailwind config extends primary/secondary/accent and bg colors (tailwind.config.js). Components rely on global `btn` classes from app.css; keep utility-first style consistent.
+- **Environment expectations**: `VITE_GA_MEASUREMENT_ID`, `VITE_ENABLE_*` feature toggles, and `PUBLIC_SITE_URL` (default `https://lbsunrise.com`) used for canonical tags. Guard against SSR when touching `window/document`.
+- **Assets & static**: Public assets live in `static/` (robots.txt, sitemap.xml, images). Image paths in data files assume these locations.
+- **Deployment**: Adapter Vercel configured; if adding adapters or changing runtime, update svelte.config.js accordingly.
+- **Testing/checking**: Preferred quality loop is `npm run check` (svelte-check) plus a build. No dedicated test suite exists yet.
+- **Content updates**: Prefer updating structured data files/config instead of hardcoding copy in components to keep schema/SEO consistent and reusable.
+- **Schema patterns**: When adding services or locations, ensure `SERVICE_AREAS`, `SERVICE_OPTIONS`, and JSON-LD schemas stay aligned for SEO accuracy.
+- **Accessibility**: Components already include aria labels/ids (e.g., Testimonial star ratings, ContactForm errors); follow these conventions for new UI.

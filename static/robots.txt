@@ -1,5 +1,11 @@
-# Allow all crawlers to access everything - intentional for SEO
+# Disallow specific admin/internal routes to protect sensitive pages while allowing public SEO content
 # This business website relies on search engine visibility for local roofing services
-# No sensitive routes (admin panels, internal APIs) exist in this application
+# Disallowed routes: /admin (speculative/future), /internal (speculative/future), /api/internal (speculative/future)
+# IMPORTANT: Update this file when adding new admin, internal, or API routes
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /internal
+Disallow: /api/internal
+
+# Sitemap for search engines
+Sitemap: https://lbsunrise.com/sitemap.xml

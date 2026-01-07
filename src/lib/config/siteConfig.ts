@@ -12,7 +12,7 @@ export const siteConfig = {
   
   // Business information
   businessName: BUSINESS_INFO.name,
-  businessPhone: BUSINESS_INFO.phone,
+  businessPhone: BUSINESS_INFO.telephone,
   businessEmail: BUSINESS_INFO.email,
   businessAddress: `${BUSINESS_INFO.address}, ${BUSINESS_INFO.city}, ${BUSINESS_INFO.state} ${BUSINESS_INFO.zipCode}`,
   businessHours: BUSINESS_INFO.hours,
@@ -22,12 +22,12 @@ export const siteConfig = {
   twitterHandle: '@lbsunrise',
   
   // Features
-  enableContactForm: import.meta.env.VITE_ENABLE_CONTACT_FORM !== 'false',
-  enableServiceAreas: import.meta.env.VITE_ENABLE_SERVICE_AREAS !== 'false',
-  enableTestimonials: import.meta.env.VITE_ENABLE_TESTIMONIALS !== 'false',
-  enableFAQ: import.meta.env.VITE_ENABLE_FAQ !== 'false',
-  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS !== 'false',
-  enableSocialSharing: import.meta.env.VITE_ENABLE_SOCIAL_SHARING !== 'false',
+  enableContactForm: import.meta.env.VITE_ENABLE_CONTACT_FORM === 'true',
+  enableServiceAreas: import.meta.env.VITE_ENABLE_SERVICE_AREAS === 'true',
+  enableTestimonials: import.meta.env.VITE_ENABLE_TESTIMONIALS === 'true',
+  enableFAQ: import.meta.env.VITE_ENABLE_FAQ === 'true',
+  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+  enableSocialSharing: import.meta.env.VITE_ENABLE_SOCIAL_SHARING === 'true',
   
   // Pagination
   itemsPerPage: 12,

@@ -1,6 +1,6 @@
 export const BUSINESS_INFO = {
   name: 'LB Sunrise',
-  phone: '(978) 519-9774',
+  telephone: '(978) 519-9774',
   email: 'LEMADILAN5@gmail.com',
   address: '44 Veranda St',
   city: 'Portland',
@@ -30,6 +30,12 @@ export const SERVICE_AREAS = [
   'Falmouth'
 ] as const;
 
+export const SERVICE_OPTIONS: readonly string[] = [
+  'Roof Repair',
+  'Roof Replacement',
+  'Roof Inspection'
+] as const;
+
 export const SITE_URL = 'https://lbsunrise.com' as const;
 export const LOGO_URL = '/images/logo.svg' as const;
 export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
@@ -37,5 +43,5 @@ export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
 export const SOCIAL_LINKS = {
   facebook: 'https://facebook.com/lbsunrise',
   instagram: 'https://instagram.com/lbsunrise',
-  google: 'https://google.com/business/lbsunrise'
+  google: 'https://g.page/lbsunrise'
 } as const;

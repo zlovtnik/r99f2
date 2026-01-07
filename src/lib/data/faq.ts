@@ -1,5 +1,6 @@
 import type { FAQ } from '../types';
 import { faqConfig } from '../config/faqConfig';
+import { formatPricing } from '../utils/seo';
 
 export const faq: FAQ[] = [
   {
@@ -17,7 +18,7 @@ export const faq: FAQ[] = [
   {
     id: 3,
     question: 'What is your service area?',
-    answer: `We serve ${faqConfig.serviceArea}.`,
+    answer: `We serve ${faqConfig.serviceArea || 'Maine and surrounding communities'}.`,
     category: 'Service Areas'
   },
   {
@@ -35,7 +36,7 @@ export const faq: FAQ[] = [
   {
     id: 6,
     question: 'How much does a roof inspection cost?',
-    answer: `Roof inspections are typically ${faqConfig.inspectionPricing}. Contact us for a quote.`,
+    answer: `Roof inspections are typically ${formatPricing(faqConfig.inspectionPricing)}. Contact us for a quote.`,
     category: 'Pricing'
   }
 ];

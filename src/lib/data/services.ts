@@ -1,6 +1,6 @@
 import type { Service } from '../types';
 
-export const services: Service[] = [
+export const services = [
   {
     id: 1,
     name: 'Roof Repair',
@@ -8,7 +8,7 @@ export const services: Service[] = [
     description: 'Professional roof repair services for all types of roofing materials. Quick response times for emergency repairs.',
     shortDescription: 'Expert roof repair services',
     imageUrl: '/images/services/roof-repair.jpg',
-    imageAlt: 'Professional roof repair in Portland Maine',
+    imageAlt: 'Professional roof repair in Portland, Maine',
     benefits: [
       'Quick response times',
       'All materials handled',
@@ -32,7 +32,7 @@ export const services: Service[] = [
     description: 'Complete roof replacement services with quality materials and expert installation.',
     shortDescription: 'Full roof replacement',
     imageUrl: '/images/services/roof-replacement.jpg',
-    imageAlt: 'Roof replacement services Portland Maine',
+    imageAlt: 'Roof replacement services in Portland, Maine',
     benefits: [
       'New roof warranty',
       'Modern materials',
@@ -56,7 +56,7 @@ export const services: Service[] = [
     description: 'Comprehensive roof inspection for damage detection and maintenance planning.',
     shortDescription: 'Professional roof inspection',
     imageUrl: '/images/services/roof-inspection.jpg',
-    imageAlt: 'Roof inspection services',
+    imageAlt: 'Roof inspection services in Portland, Maine',
     benefits: [
       'Detailed report',
       'Photo documentation',
@@ -72,4 +72,4 @@ export const services: Service[] = [
     keywords: ['roof inspection', 'roof assessment', 'roof evaluation'],
     cta: 'Book Inspection'
   }
-];
+] as const satisfies readonly Service[];

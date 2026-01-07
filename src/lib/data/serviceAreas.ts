@@ -15,7 +15,7 @@ export const serviceAreas = [
     slug: 'westbrook',
     description: 'Roof repair and replacement services in Westbrook, Maine',
     zipCodes: ['04092'],
-    keywords: ['roof repair Westbrook', 'roofing Westbrook Maine']
+    keywords: ['roof repair Westbrook Maine', 'roofing Westbrook Maine']
   },
   {
     id: 'cumberland',
@@ -23,7 +23,7 @@ export const serviceAreas = [
     slug: 'cumberland',
     description: 'Roof repair and replacement services in Cumberland, Maine',
     zipCodes: ['04021'],
-    keywords: ['roof repair Cumberland', 'roofing Cumberland Maine']
+    keywords: ['roof repair Cumberland Maine', 'roofing Cumberland Maine']
   },
   {
     id: 'cape-elizabeth',
@@ -31,7 +31,7 @@ export const serviceAreas = [
     slug: 'cape-elizabeth',
     description: 'Roof repair and replacement services in Cape Elizabeth, Maine',
     zipCodes: ['04107'],
-    keywords: ['roof repair Cape Elizabeth', 'roofing Cape Elizabeth Maine']
+    keywords: ['roof repair Cape Elizabeth Maine', 'roofing Cape Elizabeth Maine']
   },
   {
     id: 'falmouth',
@@ -39,6 +39,6 @@ export const serviceAreas = [
     slug: 'falmouth',
     description: 'Roof repair and replacement services in Falmouth, Maine',
     zipCodes: ['04105'],
-    keywords: ['roof repair Falmouth', 'roofing Falmouth Maine']
+    keywords: ['roof repair Falmouth Maine', 'roofing Falmouth Maine']
   }
 ] as const satisfies readonly ServiceArea[];

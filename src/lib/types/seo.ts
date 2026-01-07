@@ -1,12 +1,12 @@
 export interface SchemaMarkup {
   '@context': string;
   '@type': string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface LocalBusinessInfo {
   name: string;
-  phone: string;
+  telephone: string;
   email: string;
   address: string;
   city: string;
@@ -21,7 +21,7 @@ export interface LocalBusinessInfo {
 }
 
 export interface LocalBusinessSchema extends SchemaMarkup {
-  '@type': 'LocalBusiness' | 'Plumber' | 'HomeServiceBusiness';
+  '@type': 'LocalBusiness' | 'RoofingContractor' | 'HomeAndConstructionBusiness' | 'GeneralContractor' | 'HomeServiceBusiness';
   name: string;
   telephone: string;
   address: {
@@ -45,7 +45,7 @@ export interface ServiceInfo {
   description: string;
   slug: string;
   providerName?: string;
-  areaServed?: string;
+  areaServed?: string[];
 }
 
 export interface BreadcrumbSchema extends SchemaMarkup {

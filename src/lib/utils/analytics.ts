@@ -9,9 +9,17 @@ interface GtagConfig {
   [key: string]: any;
 }
 
+interface GtagEvent {
+  event_category?: string;
+  event_label?: string;
+  value?: number;
+  [key: string]: any;
+}
+
 declare global {
   interface Window {
-    gtag: (command: string, id: string, config: GtagConfig) => void;
+    gtag: (command: 'config' | 'event' | 'js', targetId: string, config?: GtagConfig | GtagEvent) => void;
+    dataLayer: any[];
   }
 }
 
@@ -39,7 +47,7 @@ export function initializeGA(): void {
     // Initialize gtag function
     (globalThis as any).dataLayer = (globalThis as any).dataLayer || [];
     (globalThis as any).gtag = function (...args: any[]) {
-      (globalThis as any).dataLayer.push(arguments);
+      (globalThis as any).dataLayer.push(args);
     };
     (globalThis as any).gtag('js', new Date());
     (globalThis as any).gtag('config', GA_ID);

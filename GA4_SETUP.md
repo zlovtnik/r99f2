@@ -12,7 +12,8 @@
 
 **Development:**
 ```bash
-# Create .env.local file in project root
+# Create .env.local file in project root (backup existing file if present)
+[ -f .env.local ] && cp .env.local .env.local.backup
 echo "VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX" > .env.local
 ```
 
