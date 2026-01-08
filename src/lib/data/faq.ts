@@ -1,9 +1,9 @@
-import type { FAQ } from '../types';
-import { SERVICE_AREAS, BUSINESS_INFO } from '../utils/constants';
+import type { FAQ } from '$types';
+import { SERVICE_AREAS, BUSINESS_INFO } from '$utils/constants';
 
 const formatServiceAreaAnswer = (areas: readonly string[]): string => {
   const areaList = areas.join(', ');
-  return `We provide comprehensive services throughout our established service area, including ${areaList}. We serve clients within a 200-mile radius of Portland, ME.`;
+  return `We provide comprehensive services throughout our established service area, including ${areaList}. We serve clients within a ${BUSINESS_INFO.serviceRadius} radius of ${BUSINESS_INFO.city}, ${BUSINESS_INFO.state}.`;
 };
 
 export const faq: FAQ[] = [

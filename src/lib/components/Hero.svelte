@@ -1,12 +1,5 @@
 <script lang="ts">
-  import { BUSINESS_INFO } from '$lib/utils/constants';
-
-  const badges = [
-    { title: '10 Years', subtitle: 'Of Experience' },
-    { title: '15% Discount', subtitle: 'For Seniors' },
-    { title: '15% Discount', subtitle: 'For Military' },
-    { title: '15% Discount', subtitle: 'For New Customers' }
-  ];
+  import { BUSINESS_INFO, PROMOTIONAL_BADGES } from '$lib/utils/constants';
 </script>
 
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-20 relative overflow-hidden">
@@ -26,7 +19,7 @@
       
       <!-- Badges -->
       <div class="flex flex-wrap gap-4 mb-8 justify-center">
-        {#each badges as badge (`${badge.title}|${badge.subtitle}`)}
+        {#each PROMOTIONAL_BADGES as badge (`${badge.title}|${badge.subtitle}`)}
           <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
             <span class="font-bold">{badge.title}</span> {badge.subtitle}
           </div>
@@ -38,7 +31,7 @@
           Get Free Estimate
         </a>
         <a href={`tel:${BUSINESS_INFO.telephone}`} class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-8 py-3 rounded-lg text-center transition-colors">
-          Call Now: {BUSINESS_INFO.telephone}
+          Call Now: {BUSINESS_INFO.telephone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
         </a>
       </div>
     </div>

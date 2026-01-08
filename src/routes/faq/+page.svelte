@@ -28,7 +28,7 @@
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faq.map((item: FAQ) => ({
+    mainEntity: faq.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -95,14 +95,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            {#if openFaqId === item.id}
-              <div
-                id={`faq-answer-${item.id}`}
-                class="px-6 pb-5 text-gray-600 leading-relaxed border-t border-gray-100"
-              >
-                <p class="pt-4">{item.answer}</p>
-              </div>
-            {/if}
+            <div
+              id={`faq-answer-${item.id}`}
+              class="px-6 pb-5 text-gray-600 leading-relaxed border-t border-gray-100 overflow-hidden transition-all duration-300 {openFaqId === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pb-0'}"
+              aria-hidden={openFaqId !== item.id}
+            >
+              <p class="pt-4">{item.answer}</p>
+            </div>
           </div>
         {/each}
       </div>

@@ -1,5 +1,5 @@
 import type { ContactFormData } from '../types';
-import { SERVICE_OPTIONS } from './constants';
+import { services } from '../data/services';
 
 export function validateContactForm(data: ContactFormData): Record<string, string> {
   const errors: Record<string, string> = {};
@@ -16,7 +16,8 @@ export function validateContactForm(data: ContactFormData): Record<string, strin
     errors.phone = 'Please enter a valid 10-digit phone number';
   }
 
-  if (!data.service || !SERVICE_OPTIONS.includes(data.service)) {
+  const validServiceSlugs = services.map(service => service.slug);
+  if (!data.service || !validServiceSlugs.includes(data.service)) {
     errors.service = 'Please select a valid service';
   }
 

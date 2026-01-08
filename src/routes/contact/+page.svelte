@@ -1,7 +1,7 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import ContactForm from '$components/ContactForm.svelte';
-  import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { BUSINESS_INFO, BUSINESS_HOURS } from '$utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -99,7 +99,7 @@
           <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
             <h3 class="text-xl font-semibold mb-4 text-gray-900">Working Hours</h3>
             <div class="space-y-2 text-gray-600">
-              {#each BUSINESS_INFO.businessHours as hour}
+              {#each BUSINESS_HOURS as hour}
                 {@const parts = hour.split(': ')}
                 {@const day = parts[0]}
                 {@const time = parts.slice(1).join(': ')}

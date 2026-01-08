@@ -3,7 +3,7 @@
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import Hero from '$lib/components/Hero.svelte';
   import { BUSINESS_INFO, SITE_URL, SERVICE_AREAS } from '$lib/utils/constants';
-  import { services, featuredServices } from '$lib/data/services';
+  import { featuredServices } from '$lib/data/services';
   import { testimonials } from '$lib/data/testimonials';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import TestimonialCard from '$lib/components/TestimonialCard.svelte';

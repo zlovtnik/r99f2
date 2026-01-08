@@ -1,10 +1,4 @@
-export interface GalleryItem {
-  id: number;
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-}
+import type { GalleryItem } from '$types';
 
 export const galleryItems: GalleryItem[] = [
   {
@@ -33,21 +27,21 @@ export const galleryItems: GalleryItem[] = [
     title: 'House Framing Project',
     category: 'framing',
     description: 'New construction framing for a 2,500 sq ft home',
-    image: '/images/gallery/framing-1.jpg'
+    image: '/images/Carpentry-Services.webp'
   },
   {
     id: 5,
     title: 'Kitchen Remodel',
     category: 'remodeling',
     description: 'Complete kitchen renovation with modern finishes',
-    image: '/images/gallery/remodeling-1.jpg'
+    image: '/images/Professional-Construction-Service.webp'
   },
   {
     id: 6,
     title: 'Hardwood Floor Installation',
     category: 'flooring',
     description: 'Oak hardwood flooring throughout the main level',
-    image: '/images/gallery/flooring-1.jpg'
+    image: '/images/Quality-Construction-Service.webp'
   },
   {
     id: 7,
@@ -61,13 +55,13 @@ export const galleryItems: GalleryItem[] = [
     title: 'Cedar Shake Siding',
     category: 'siding',
     description: 'Natural cedar shake siding installation',
-    image: '/images/gallery/siding-2.jpg'
+    image: '/images/Siding-Installation.webp'
   },
   {
     id: 9,
     title: 'Custom Trim Work',
     category: 'carpentry',
     description: 'Detailed crown molding and trim carpentry',
-    image: '/images/gallery/carpentry-2.jpg'
+    image: '/images/Carpentry-Services.webp'
   }
 ];

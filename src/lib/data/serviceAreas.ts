@@ -1,5 +1,5 @@
-import type { ServiceArea } from '../types';
-import { BUSINESS_INFO } from '../utils/constants';
+import type { ServiceArea } from '$types';
+import { BUSINESS_INFO } from '$utils/constants';
 
 export const serviceAreas: ServiceArea[] = [
   {

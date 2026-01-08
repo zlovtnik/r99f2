@@ -6,15 +6,14 @@
 
   const baseUrl = siteConfig.siteUrl;
 
-  // Gallery categories based on services
-  const categories = [
+  // Gallery categories derived from gallery data
+  $: categories = [
     { id: 'all', name: 'All Projects' },
-    { id: 'roofing', name: 'Roofing' },
-    { id: 'siding', name: 'Siding' },
-    { id: 'carpentry', name: 'Carpentry' },
-    { id: 'framing', name: 'Framing' },
-    { id: 'remodeling', name: 'Remodeling' },
-    { id: 'flooring', name: 'Flooring' }
+    ...Array.from(new Set(galleryItems.map(item => item.category)))
+      .map(category => ({
+        id: category,
+        name: category.charAt(0).toUpperCase() + category.slice(1)
+      }))
   ];
 
   let activeCategory = 'all';
@@ -73,6 +72,7 @@
             ? 'bg-primary text-white' 
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
           on:click={() => activeCategory = category.id}
+          aria-pressed={activeCategory === category.id}
         >
           {category.name}
         </button>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { BUSINESS_INFO } from '$utils/constants';
   import { services } from '$data/services';
   import ContactCard from './ContactCard.svelte';
 </script>
@@ -55,7 +55,7 @@
         <p class="text-gray-300 mb-4">Professional general contractor services serving {BUSINESS_INFO.city}, {BUSINESS_INFO.state} and surrounding areas within {BUSINESS_INFO.serviceRadius}.</p>
         <div class="flex gap-2">
           <span class="bg-primary text-white text-xs px-2 py-1 rounded">{BUSINESS_INFO.yearsOfExperience}+ Years</span>
-          <span class="bg-green-600 text-white text-xs px-2 py-1 rounded">{BUSINESS_INFO.discounts.senior} Senior Discount</span>
+          <span class="bg-green-600 text-white text-xs px-2 py-1 rounded">{BUSINESS_INFO.discounts.senior}</span>
         </div>
       </div>
       

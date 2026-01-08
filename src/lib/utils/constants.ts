@@ -22,15 +22,6 @@ export const BUSINESS_INFO = {
     'Sunday': '7:00 AM - 5:00 PM'
   },
   hoursDisplay: 'Open 7 Days: 7:00 AM - 5:00 PM',
-  businessHours: [
-    'Monday: 7:00 AM - 5:00 PM',
-    'Tuesday: 7:00 AM - 5:00 PM',
-    'Wednesday: 7:00 AM - 5:00 PM',
-    'Thursday: 7:00 AM - 5:00 PM',
-    'Friday: 7:00 AM - 5:00 PM',
-    'Saturday: 7:00 AM - 5:00 PM',
-    'Sunday: 7:00 AM - 5:00 PM'
-  ],
   serviceAreas: 'Portland, ME and surrounding areas within 200 miles',
   serviceRadius: '200 miles',
   foundedYear: 2015,
@@ -43,6 +34,16 @@ export const BUSINESS_INFO = {
   },
   paymentMethods: ['Cash', 'Check']
 } as const;
+
+// Derive businessHours from hours for backward compatibility
+export const BUSINESS_HOURS = Object.entries(BUSINESS_INFO.hours).map(([day, hours]) => `${day}: ${hours}`);
+
+export const PROMOTIONAL_BADGES = [
+  { title: '10 Years', subtitle: 'Of Experience' },
+  { title: '15% Discount', subtitle: 'For Seniors' },
+  { title: '15% Discount', subtitle: 'For Military' },
+  { title: '15% Discount', subtitle: 'For New Customers' }
+] as const;
 
 export const STATS = {
   yearsOfExperience: BUSINESS_INFO.yearsOfExperience,
@@ -90,26 +91,13 @@ export const SERVICE_OPTIONS: readonly string[] = [
   'Exterior Remodeling',
   'Flooring Services',
   'Roof Replacement',
-  'Vinyl Siding',
   'Painting',
   'Emergency Repair',
-  'Gutters Services'
+  'Gutter Services',
+  'Reversal Siding'
 ] as const;
 
-export const STANDARD_SERVICES: readonly string[] = [
-  'Siding Installation',
-  'Carpentry Services',
-  'Shingle Repair',
-  'Roof Installation',
-  'House Framing',
-  'Exterior Remodeling',
-  'Flooring Services',
-  'Roof Replacement',
-  'Vinyl Siding',
-  'Painting',
-  'Emergency Repair',
-  'Gutters Services'
-] as const;
+export const STANDARD_SERVICES = SERVICE_OPTIONS;
 
 export const SITE_URL = envSiteUrl || 'https://constructioncompanyme.com';
 export const LOGO_URL = '/images/logo.svg' as const;

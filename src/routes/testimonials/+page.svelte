@@ -3,6 +3,7 @@
   import { testimonials } from '$data/testimonials';
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import CTA from '$components/CTA.svelte';
+  import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import { BUSINESS_INFO } from '$lib/utils/constants';
   import { STATS } from '$lib/utils/constants';
 
@@ -15,6 +16,24 @@
     keywords: 'construction reviews, contractor testimonials, customer feedback, Portland Maine contractor reviews',
     url: `${baseUrl}/testimonials`,
     image: `${baseUrl}/images/og-testimonials.jpg`
+  };
+
+  // Review schema for SEO
+  $: reviewSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: BUSINESS_INFO.name,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: STATS.starRating,
+      reviewCount: testimonials.length
+    },
+    review: testimonials.map(t => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: t.name },
+      reviewRating: { '@type': 'Rating', ratingValue: t.rating },
+      reviewBody: t.text
+    }))
   };
 </script>
 
@@ -43,6 +62,8 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+<SchemaMarkup schema={reviewSchema} />
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
