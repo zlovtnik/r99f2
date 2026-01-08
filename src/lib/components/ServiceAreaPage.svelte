@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
@@ -10,18 +11,21 @@
 
   $: area = serviceAreas.find(a => a.slug === areaSlug) ?? null;
 
+  $: baseUrl = $page.url.origin;
+
   // SEO metadata
   $: seo = area ? {
     title: `Roofing Services in ${area.name}, Maine | LB Sunrise Roofing`,
     description: `Professional ${area.description}. Emergency roof repair and replacement services available. Call ${BUSINESS_INFO.telephone} for a free quote.`,
     keywords: area.keywords.join(', '),
-    url: `${siteConfig.siteUrl}/service-areas/${area.slug}`,
-    image: `${siteConfig.siteUrl}/images/og-service-area.jpg`
+    url: `${baseUrl}/service-areas/${area.slug}`,
+    image: `${baseUrl}/images/og-service-area.jpg`
   } : null;
 
   // Schema markup for service area
   $: schema = area ? createLocalBusinessSchema({
     ...BUSINESS_INFO,
+    url: baseUrl,
     serviceArea: {
       '@type': 'City',
       name: `${area.name}, ${area.state}`

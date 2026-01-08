@@ -1,15 +1,18 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import ContactForm from '$components/ContactForm.svelte';
   import { BUSINESS_INFO } from '$lib/utils/constants';
 
+  $: baseUrl = $page.url.origin;
+
   // SEO metadata
-  const seo = {
+  $: seo = {
     title: 'Contact Us | LB Sunrise Roofing',
     description: 'Get in touch with LB Sunrise Roofing for professional roofing services. Call (978) 519-9774 or fill out our contact form for a free quote.',
     keywords: 'contact roofing, roofing quote, roofing services, Portland Maine',
-    url: `${siteConfig.siteUrl}/contact`,
-    image: `${siteConfig.siteUrl}/images/og-contact.jpg`
+    url: `${baseUrl}/contact`,
+    image: `${baseUrl}/images/og-contact.jpg`
   };
 </script>
 
