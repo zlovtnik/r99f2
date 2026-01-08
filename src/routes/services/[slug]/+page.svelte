@@ -66,7 +66,7 @@
               <ol class="space-y-2">
                 {#each service.process as step, i}
                   <li class="flex items-center text-gray-700">
-                    <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3">{i + 1}</span>
+                    <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3">{i + 1}</span>
                     {step}
                   </li>
                 {/each}
@@ -75,8 +75,8 @@
           </div>
 
           {#if service.warranty}
-            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
-              <p class="text-lg font-semibold text-blue-900">Warranty: {service.warranty}</p>
+            <div class="mt-8 p-4 bg-neutral-light rounded-lg">
+              <p class="text-lg font-semibold text-neutral-dark">Warranty: {service.warranty}</p>
             </div>
           {/if}
         </div>

@@ -93,9 +93,9 @@
         </div>
       </div>
 
-      <div class="bg-blue-50 rounded-lg p-8 mb-12">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-900">Get Your Free Quote Today</h2>
-        <p class="text-blue-800 mb-6">
+      <div class="bg-neutral-light rounded-lg p-8 mb-12">
+        <h2 class="text-2xl font-semibold mb-4 text-neutral-dark">Get Your Free Quote Today</h2>
+        <p class="text-neutral-dark mb-6">
           Call us at {BUSINESS_INFO.telephone} or fill out our contact form for a free, no-obligation quote
           for your roofing needs in {area.name}.
         </p>

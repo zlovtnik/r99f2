@@ -41,6 +41,14 @@ export interface FAQ {
   category: string;
 }
 
+export interface GalleryItem {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+}
+
 export interface ContactFormData {
   name: string;
   email: string;

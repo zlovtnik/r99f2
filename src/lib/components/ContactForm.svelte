@@ -1,5 +1,6 @@
 <script lang="ts">
   import { validateContactForm } from '$lib/utils/validation';
+  import { services } from '$data/services';
   import type { ContactFormData } from '$lib/types';
 
   let formData: ContactFormData = {
@@ -92,10 +93,9 @@
       aria-describedby={errors.service ? "service-error" : undefined}
     >
       <option value="">Select a Service</option>
-      <option value="roof-repair">Roof Repair</option>
-      <option value="roof-replacement">Roof Replacement</option>
-      <option value="inspection">Roof Inspection</option>
-      <option value="emergency">Emergency Service</option>
+      {#each services as service}
+        <option value={service.slug}>{service.name}</option>
+      {/each}
     </select>
     {#if errors.service}
       <p id="service-error" class="text-red-500 text-sm">{errors.service}</p>
