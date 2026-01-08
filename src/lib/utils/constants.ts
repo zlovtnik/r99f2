@@ -6,62 +6,109 @@ export const BUSINESS_INFO = {
   name: 'LR Sunrise Construction',
   telephone: envPhone || '(978) 519-9774',
   email: envEmail || 'LEMADILAN5@gmail.com',
-  address: '44 Veranda St',
+  address: '1234 SE Main St, Suite 100',
   city: 'Portland',
   state: 'ME',
-  zipCode: '04101',
+  zipCode: '04103',
   lat: 43.6612,
   lng: -70.2556,
   hours: {
-    'Monday-Friday': '8:00 AM - 6:00 PM',
-    'Saturday': '9:00 AM - 4:00 PM',
-    'Sunday': 'Closed'
+    'Monday': '7:00 AM - 5:00 PM',
+    'Tuesday': '7:00 AM - 5:00 PM',
+    'Wednesday': '7:00 AM - 5:00 PM',
+    'Thursday': '7:00 AM - 5:00 PM',
+    'Friday': '7:00 AM - 5:00 PM',
+    'Saturday': '7:00 AM - 5:00 PM',
+    'Sunday': '7:00 AM - 5:00 PM'
   },
   businessHours: [
-    'Monday - Friday: 8:00 AM - 6:00 PM',
-    'Saturday: 9:00 AM - 4:00 PM',
-    'Sunday: Closed'
+    'Monday: 7:00 AM - 5:00 PM',
+    'Tuesday: 7:00 AM - 5:00 PM',
+    'Wednesday: 7:00 AM - 5:00 PM',
+    'Thursday: 7:00 AM - 5:00 PM',
+    'Friday: 7:00 AM - 5:00 PM',
+    'Saturday: 7:00 AM - 5:00 PM',
+    'Sunday: 7:00 AM - 5:00 PM'
   ],
-  serviceAreas: 'Portland, Westbrook, and surrounding areas in Maine',
-  serviceRadius: 'Portland Metro Area and surrounding Maine communities',
-  foundedYear: 2010,
-  emergencyResponseTime: 'Emergency repairs within 2 hours'
+  serviceAreas: 'Portland, ME and surrounding areas within 200 miles',
+  serviceRadius: '200 miles',
+  foundedYear: 2015,
+  yearsOfExperience: 10,
+  emergencyResponseTime: 'Same-day emergency response available',
+  discounts: {
+    senior: '15% Discount for Seniors',
+    military: '15% Discount for Military',
+    newCustomers: '15% Discount for New Customers'
+  },
+  paymentMethods: ['Cash', 'Check']
 } as const;
 
 export const KEYWORDS = {
-  primary: ['roof repair', 'roof replacement', 'roofing contractor', 'roof inspection'],
-  location: ['Portland ME', 'Westbrook ME', 'Cumberland ME', 'Maine roofing'],
-  long_tail: ['emergency roof repair', 'commercial roofing', 'residential roofing', 'roof leak repair']
+  primary: ['general contractor', 'construction company', 'siding installation', 'carpentry services', 'roof installation', 'shingle repair'],
+  location: ['Portland ME', 'Brunswick ME', 'Biddeford ME', 'Westbrook ME', 'Falmouth ME', 'Kennebunk ME'],
+  long_tail: ['residential construction', 'commercial construction', 'exterior remodeling', 'house framing', 'emergency repair']
 } as const;
 
 export const SERVICE_AREAS = [
   'Portland',
+  'Brunswick',
+  'Biddeford',
   'Westbrook',
-  'Cumberland',
-  'Cape Elizabeth',
-  'Falmouth'
+  'Falmouth',
+  'Kennebunk',
+  'Standish',
+  'Yarmouth',
+  'Freeport',
+  'Buxton',
+  'Gray',
+  'Waterboro',
+  'Poland',
+  'New Gloucester',
+  'North Windham',
+  'Raymond',
+  'Lisbon Falls',
+  'Limington',
+  'Casco',
+  'Alfred',
+  'Lake Arrowhead'
 ] as const;
 
 export const SERVICE_OPTIONS: readonly string[] = [
-  'Roof Repair',
+  'Siding Installation',
+  'Carpentry Services',
+  'Shingle Repair',
+  'Roof Installation',
+  'House Framing',
+  'Exterior Remodeling',
+  'Flooring Services',
   'Roof Replacement',
-  'Roof Inspection'
+  'Vinyl Siding',
+  'Painting',
+  'Emergency Repair',
+  'Gutters Services'
 ] as const;
 
 export const STANDARD_SERVICES: readonly string[] = [
-  'Roof Repair',
+  'Siding Installation',
+  'Carpentry Services',
+  'Shingle Repair',
+  'Roof Installation',
+  'House Framing',
+  'Exterior Remodeling',
+  'Flooring Services',
   'Roof Replacement',
-  'Emergency Roof Repair',
-  'Roof Inspection',
-  'Maintenance Services'
+  'Vinyl Siding',
+  'Painting',
+  'Emergency Repair',
+  'Gutters Services'
 ] as const;
 
-export const SITE_URL = envSiteUrl || 'https://rclabs.uk';
+export const SITE_URL = envSiteUrl || 'https://constructioncompanyme.com';
 export const LOGO_URL = '/images/logo.svg' as const;
 export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
 
 export const SOCIAL_LINKS = {
-  facebook: 'https://facebook.com/lbsunrise',
-  instagram: 'https://instagram.com/lbsunrise',
-  google: 'https://g.page/lbsunrise'
+  facebook: 'https://facebook.com/lrsunriseconstruction',
+  instagram: 'https://instagram.com/lrsunriseconstruction',
+  google: 'https://g.page/lrsunriseconstruction'
 } as const;

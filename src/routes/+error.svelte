@@ -50,10 +50,10 @@
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h3 class="text-xl font-semibold mb-4 text-gray-900">What can you do?</h3>
           <div class="space-y-4 text-left max-w-md mx-auto">
-            <p class="text-gray-700">• Go back to our <a href="/" class="text-blue-600 hover:underline">home page</a></p>
-            <p class="text-gray-700">• Browse our <a href="/services" class="text-blue-600 hover:underline">services</a></p>
-            <p class="text-gray-700">• Check our <a href="/service-areas" class="text-blue-600 hover:underline">service areas</a></p>
-            <p class="text-gray-700">• <a href="/contact" class="text-blue-600 hover:underline">Contact us</a> for roofing services</p>
+            <p class="text-gray-700">• Go back to our <a href="/" class="text-primary hover:underline">home page</a></p>
+            <p class="text-gray-700">• Browse our <a href="/services" class="text-primary hover:underline">services</a></p>
+            <p class="text-gray-700">• Check our <a href="/service-areas" class="text-primary hover:underline">service areas</a></p>
+            <p class="text-gray-700">• <a href="/contact" class="text-primary hover:underline">Contact us</a> for roofing services</p>
           </div>
         </div>
       {:else}
@@ -70,7 +70,7 @@
           <h3 class="text-xl font-semibold mb-4 text-gray-900">Contact Us Directly</h3>
           <div class="space-y-4">
             <div class="flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Phone icon">
+              <svg class="w-6 h-6 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Phone icon">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
               </svg>
               <div>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Email icon">
+              <svg class="w-6 h-6 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Email icon">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
               </svg>
               <div>
