@@ -23,6 +23,7 @@
   <link rel="canonical" href={siteUrl} />
   <meta property="og:title" content="LR Sunrise Construction - General Contractor Portland, ME" />
   <meta property="og:description" content="Exceptional general contractor solutions for your projects. Siding, carpentry, roofing, and more." />
+  <meta property="og:url" content={siteUrl} />
   <meta property="og:image" content={`${siteUrl}/images/og-image.jpg`} />
   <meta property="og:image:alt" content="LR Sunrise Construction professional services in Portland, Maine" />
   <meta property="og:type" content="website" />
