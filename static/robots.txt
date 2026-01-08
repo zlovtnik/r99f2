@@ -8,4 +8,4 @@ Disallow: /internal
 Disallow: /api/internal
 
 # Sitemap for search engines
-Sitemap: https://lbsunrise.com/sitemap.xml
+Sitemap: https://rclabs.uk/sitemap.xml

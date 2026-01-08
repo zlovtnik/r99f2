@@ -1,6 +1,7 @@
 import { SITE_URL } from '$lib/utils/constants';
+import type { RequestHandler } from './$types';
 
-export function GET() {
+export const GET: RequestHandler = () => {
 	const siteUrl = SITE_URL;
 
 	const robots = `# Robots.txt for LB Sunrise
@@ -21,4 +22,4 @@ Sitemap: ${siteUrl}/sitemap.xml
 			'Content-Type': 'text/plain'
 		}
 	});
-}
+};

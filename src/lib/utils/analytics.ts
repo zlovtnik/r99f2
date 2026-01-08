@@ -3,7 +3,17 @@
  * Requires VITE_GA_MEASUREMENT_ID environment variable
  */
 
-const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+function isValidGAMeasurementId(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  // Avoid shipping the placeholder measurement id
+  if (trimmed === 'G-XXXXXXXXXX') return false;
+  return /^G-[A-Z0-9]+$/i.test(trimmed);
+}
+
+const GA_ID_RAW = import.meta.env.VITE_GA_MEASUREMENT_ID;
+const GA_ID = isValidGAMeasurementId(GA_ID_RAW) ? GA_ID_RAW.trim() : undefined;
 
 interface GtagConfig {
   page_path?: string;
@@ -47,14 +57,16 @@ export function isGAInitFailed(): boolean {
 export function initializeGA(): void {
   // Validate GA ID exists
   if (!GA_ID) {
-    if (typeof globalThis !== 'undefined' && !('__SVELTEKIT_ADAPTER__' in globalThis)) {
-      console.warn('Google Analytics 4 ID (VITE_GA_MEASUREMENT_ID) not configured. Analytics disabled.');
+    if (typeof window !== 'undefined') {
+      console.warn(
+        'Google Analytics disabled: set VITE_GA_MEASUREMENT_ID (e.g. G-4SZN0VFKVC) in your environment.'
+      );
     }
     return;
   }
 
   // Inject GA4 script
-  if (typeof globalThis !== 'undefined' && 'document' in globalThis) {
+  if (typeof window !== 'undefined') {
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
@@ -68,12 +80,12 @@ export function initializeGA(): void {
     document.head.appendChild(script);
 
     // Initialize gtag function
-    (globalThis as any).dataLayer = (globalThis as any).dataLayer || [];
-    (globalThis as any).gtag = function (...args: any[]) {
-      (globalThis as any).dataLayer.push(args);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function (...args: any[]) {
+      window.dataLayer.push(args);
     };
-    (globalThis as any).gtag('js', new Date());
-    (globalThis as any).gtag('config', GA_ID);
+    window.gtag('js', new Date());
+    window.gtag('config', GA_ID);
   }
 }
 
@@ -81,20 +93,20 @@ export function initializeGA(): void {
  * Track a custom event in Google Analytics 4
  */
 export function trackEvent(eventName: string, eventData?: Record<string, any>): void {
-  if (!GA_ID || typeof globalThis === 'undefined' || !(globalThis as any).gtag) {
+  if (!GA_ID || typeof window === 'undefined' || !window.gtag) {
     return;
   }
-  (globalThis as any).gtag('event', eventName, eventData);
+  window.gtag('event', eventName, eventData);
 }
 
 /**
  * Track a page view (called when route changes)
  */
 export function trackPageView(path: string, title?: string): void {
-  if (!GA_ID || typeof globalThis === 'undefined' || !(globalThis as any).gtag) {
+  if (!GA_ID || typeof window === 'undefined' || !window.gtag) {
     return;
   }
-  (globalThis as any).gtag('config', GA_ID, {
+  window.gtag('config', GA_ID, {
     page_path: path,
     page_title: title
   });

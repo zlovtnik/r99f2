@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { SITE_URL } from '$lib/utils/constants';
 
-  $: baseUrl = $page.url.origin;
+  const baseUrl = SITE_URL;
 
   // SEO metadata
   $: seo = {
