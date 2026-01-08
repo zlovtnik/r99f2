@@ -6,12 +6,12 @@
 
 <footer class="bg-gray-900 text-white">
   <!-- Large Contact Section -->
-  <div class="bg-gradient-to-r from-primary to-secondary py-16">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Start Your Project?</h2>
-      <p class="text-xl md:text-2xl mb-8 text-neutral-light">Contact us today for a free consultation and estimate</p>
+  <div class="bg-gradient-to-r from-primary to-secondary py-10 sm:py-16">
+    <div class="container mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Ready to Start Your Project?</h2>
+      <p class="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-neutral-light">Contact us today for a free consultation and estimate</p>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 max-w-4xl mx-auto">
         <!-- Phone -->
         <ContactCard
           type="Call Us"
@@ -40,16 +40,16 @@
       </div>
 
       <!-- Hours -->
-      <div class="mt-8 text-center">
-        <p class="text-lg font-semibold text-white mb-2">Business Hours</p>
-        <p class="text-xl font-bold text-white">{BUSINESS_INFO.hoursDisplay}</p>
+      <div class="mt-6 sm:mt-8 text-center">
+        <p class="text-base sm:text-lg font-semibold text-white mb-2">Business Hours</p>
+        <p class="text-lg sm:text-xl font-bold text-white">{BUSINESS_INFO.hoursDisplay}</p>
       </div>
     </div>
   </div>
 
   <!-- Existing Footer Content -->
-  <div class="py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+  <div class="py-8 sm:py-12 px-4 sm:px-6">
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-8">
       <div>
         <h3 class="text-2xl font-bold mb-4">{BUSINESS_INFO.name}</h3>
         <p class="text-gray-300 mb-4">Professional general contractor services serving {BUSINESS_INFO.city}, {BUSINESS_INFO.state} and surrounding areas within {BUSINESS_INFO.serviceRadius}.</p>
@@ -61,22 +61,22 @@
       
       <div>
         <h4 class="text-lg font-bold mb-4">Quick Links</h4>
-        <ul class="space-y-2 text-gray-300">
-          <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
-          <li><a href="/service-areas" class="hover:text-white transition-colors">Service Areas</a></li>
-          <li><a href="/gallery" class="hover:text-white transition-colors">Gallery</a></li>
-          <li><a href="/testimonials" class="hover:text-white transition-colors">Testimonials</a></li>
-          <li><a href="/faq" class="hover:text-white transition-colors">FAQ</a></li>
-          <li><a href="/about" class="hover:text-white transition-colors">About</a></li>
-          <li><a href="/contact" class="hover:text-white transition-colors">Contact</a></li>
+        <ul class="space-y-1 text-gray-300">
+          <li><a href="/services" class="hover:text-white transition-colors block py-2 sm:py-1">Services</a></li>
+          <li><a href="/service-areas" class="hover:text-white transition-colors block py-2 sm:py-1">Service Areas</a></li>
+          <li><a href="/gallery" class="hover:text-white transition-colors block py-2 sm:py-1">Gallery</a></li>
+          <li><a href="/testimonials" class="hover:text-white transition-colors block py-2 sm:py-1">Testimonials</a></li>
+          <li><a href="/faq" class="hover:text-white transition-colors block py-2 sm:py-1">FAQ</a></li>
+          <li><a href="/about" class="hover:text-white transition-colors block py-2 sm:py-1">About</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors block py-2 sm:py-1">Contact</a></li>
         </ul>
       </div>
 
       <div>
         <h4 class="text-lg font-bold mb-4">Our Services</h4>
-        <ul class="space-y-2 text-gray-300">
+        <ul class="space-y-1 text-gray-300">
           {#each services.slice(0, 6) as service}
-            <li><a href={`/services/${service.slug}`} class="hover:text-white transition-colors">{service.name}</a></li>
+            <li><a href={`/services/${service.slug}`} class="hover:text-white transition-colors block py-2 sm:py-1">{service.name}</a></li>
           {/each}
         </ul>
       </div>

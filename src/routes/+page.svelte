@@ -35,37 +35,37 @@
 <Hero />
 
 <!-- Services Section -->
-<section class="container mx-auto px-4 py-16">
-  <div class="text-center mb-12">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">We Specialize In The Following Services</h2>
-    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+<section class="container mx-auto px-4 sm:px-6 py-10 sm:py-16">
+  <div class="text-center mb-8 sm:mb-12">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">We Specialize In The Following Services</h2>
+    <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
       From siding installation to emergency repairs, our team delivers quality craftsmanship and reliable service for all your construction needs.
     </p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8">
     {#each featuredServices as service (service.id)}
       <ServiceCard {service} />
     {/each}
   </div>
 
   <div class="text-center">
-    <a href="/services" class="inline-block bg-primary hover:bg-secondary text-white font-semibold px-8 py-3 rounded-lg transition-colors">
+    <a href="/services" class="inline-block bg-primary hover:bg-secondary active:bg-secondary/90 text-white font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg">
       View All Services
     </a>
   </div>
 </section>
 
 <!-- Why Choose Us Section -->
-<section class="bg-gray-50 py-16">
-  <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<section class="bg-gray-50 py-10 sm:py-16">
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <div>
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">Why Choose Us? Here's What's in It for You!</h2>
-        <p class="text-gray-600 mb-6">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Why Choose Us? Here's What's in It for You!</h2>
+        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
           Hiring a trusted general contractor isn't just about getting the job done—it's about transforming how you feel about your space. We believe in delivering services that resonate emotionally and strategically with our clients' needs.
         </p>
-        <p class="text-gray-600 mb-8">
+        <p class="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">
           Working with us means gaining access to a team who listens closely, prioritizes communication at every step, and values meticulous craftsmanship as much as you do.
         </p>
         
@@ -74,60 +74,60 @@
             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-gray-700">Increased property value</span>
+            <span class="text-gray-700 text-sm sm:text-base">Increased property value</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-gray-700">Enhanced energy efficiency</span>
+            <span class="text-gray-700 text-sm sm:text-base">Enhanced energy efficiency</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-gray-700">Improved safety features</span>
+            <span class="text-gray-700 text-sm sm:text-base">Improved safety features</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-gray-700">Customizable design options</span>
+            <span class="text-gray-700 text-sm sm:text-base">Customizable design options</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-gray-700">Streamlined project timelines</span>
+            <span class="text-gray-700 text-sm sm:text-base">Streamlined project timelines</span>
           </li>
         </ul>
       </div>
       
-      <div class="bg-white rounded-lg shadow-lg p-8">
-        <h3 class="text-2xl font-bold mb-6">How Does Our Process Work?</h3>
-        <p class="text-gray-600 mb-6">
+      <div class="bg-white rounded-lg shadow-lg p-5 sm:p-8">
+        <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">How Does Our Process Work?</h3>
+        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
           Our approach revolves around transparency, precision, and customer partnership—a philosophy designed to ensure satisfaction at every stage.
         </p>
         <ol class="space-y-4">
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">1</span>
-            <span class="text-gray-700">Conduct a detailed consultation for personalized recommendations</span>
+          <li class="flex gap-3 sm:gap-4">
+            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+            <span class="text-gray-700 text-sm sm:text-base">Conduct a detailed consultation for personalized recommendations</span>
           </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">2</span>
-            <span class="text-gray-700">Create a transparent estimate outlining scope and cost</span>
+          <li class="flex gap-3 sm:gap-4">
+            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+            <span class="text-gray-700 text-sm sm:text-base">Create a transparent estimate outlining scope and cost</span>
           </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">3</span>
-            <span class="text-gray-700">Select materials based on durability and style preferences</span>
+          <li class="flex gap-3 sm:gap-4">
+            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+            <span class="text-gray-700 text-sm sm:text-base">Select materials based on durability and style preferences</span>
           </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">4</span>
-            <span class="text-gray-700">Execute projects with precision-focused craftsmanship</span>
+          <li class="flex gap-3 sm:gap-4">
+            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+            <span class="text-gray-700 text-sm sm:text-base">Execute projects with precision-focused craftsmanship</span>
           </li>
-          <li class="flex gap-4">
-            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">5</span>
-            <span class="text-gray-700">Perform final walkthroughs ensuring every detail is addressed</span>
+          <li class="flex gap-3 sm:gap-4">
+            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
+            <span class="text-gray-700 text-sm sm:text-base">Perform final walkthroughs ensuring every detail is addressed</span>
           </li>
         </ol>
       </div>
@@ -136,18 +136,18 @@
 </section>
 
 <!-- Service Areas Section -->
-<section class="py-16">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">We Serve the Surrounding Areas!</h2>
-      <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+<section class="py-10 sm:py-16">
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="text-center mb-8 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">We Serve the Surrounding Areas!</h2>
+      <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
         No matter where you're located within Portland, ME, we've got you covered! We proudly extend our services to surrounding communities as part of our commitment to accessibility and convenience.
       </p>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-4xl mx-auto">
       {#each SERVICE_AREAS as area}
-        <a href={`/service-areas/${area.toLowerCase().replace(/ /g, '-')}`} class="bg-gray-100 hover:bg-neutral-light text-gray-700 hover:text-primary px-4 py-2 rounded-full transition-colors">
+        <a href={`/service-areas/${area.toLowerCase().replace(/ /g, '-')}`} class="bg-gray-100 hover:bg-neutral-light active:bg-neutral-light/80 text-gray-700 hover:text-primary px-3 sm:px-4 py-2 rounded-full transition-colors text-sm sm:text-base">
           {area}, ME
         </a>
       {/each}
@@ -156,21 +156,21 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="bg-gray-50 py-16">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">Client Testimonials</h2>
-      <p class="text-lg text-gray-600">See what our satisfied customers have to say about our work.</p>
+<section class="bg-gray-50 py-10 sm:py-16">
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="text-center mb-8 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Client Testimonials</h2>
+      <p class="text-base sm:text-lg text-gray-600">See what our satisfied customers have to say about our work.</p>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
       {#each testimonials.slice(0, 3) as testimonial (testimonial.id)}
         <TestimonialCard {testimonial} />
       {/each}
     </div>
 
-    <div class="text-center mt-8">
-      <a href="/testimonials" class="inline-block border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-8 py-3 rounded-lg transition-colors">
+    <div class="text-center mt-6 sm:mt-8">
+      <a href="/testimonials" class="inline-block border-2 border-primary text-primary hover:bg-primary hover:text-white active:bg-primary/90 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg">
         View All Testimonials
       </a>
     </div>
@@ -178,18 +178,18 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-16">
-  <div class="container mx-auto px-4">
-    <div class="bg-primary rounded-2xl p-8 md:p-12 text-white text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">Your Trusted General Contractor for Total Property Transformation</h2>
-      <p class="text-xl text-neutral-light mb-8 max-w-3xl mx-auto">
+<section class="py-10 sm:py-16">
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="bg-primary rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Your Trusted General Contractor for Total Property Transformation</h2>
+      <p class="text-base sm:text-xl text-neutral-light mb-6 sm:mb-8 max-w-3xl mx-auto">
         LR Sunrise Construction specializes in delivering comprehensive construction services including siding installation across Portland, ME. Whether you're seeking enhanced curb appeal or structural improvements, we're here to turn your vision into reality.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/contact" class="inline-block bg-white text-primary hover:bg-gray-100 font-semibold px-8 py-3 rounded-lg transition-colors">
+      <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
+        <a href="/contact" class="inline-block bg-white text-primary hover:bg-gray-100 active:bg-gray-200 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg">
           Contact Us Today
         </a>
-        <a href={`tel:${BUSINESS_INFO.telephone}`} class="inline-block border-2 border-white text-white hover:bg-white/10 font-semibold px-8 py-3 rounded-lg transition-colors">
+        <a href={`tel:${BUSINESS_INFO.telephone}`} class="inline-block border-2 border-white text-white hover:bg-white/10 active:bg-white/20 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg">
           Call: {BUSINESS_INFO.telephone}
         </a>
       </div>
