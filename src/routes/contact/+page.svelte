@@ -7,8 +7,8 @@
 
   // SEO metadata
   $: seo = {
-    title: 'Contact Us | LB Sunrise Roofing',
-    description: 'Get in touch with LB Sunrise Roofing for professional roofing services. Call (978) 519-9774 or fill out our contact form for a free quote.',
+    title: 'Contact Us | LR Sunrise Construction',
+    description: 'Get in touch with LR Sunrise Construction for professional roofing services. Call (978) 519-9774 or fill out our contact form for a free quote.',
     keywords: 'contact roofing, roofing quote, roofing services, Portland Maine',
     url: `${baseUrl}/contact`,
     image: `${baseUrl}/images/og-contact.jpg`
@@ -38,7 +38,7 @@
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Contact LB Sunrise Roofing</h1>
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Contact LR Sunrise Construction</h1>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <!-- Contact Information -->

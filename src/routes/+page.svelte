@@ -17,14 +17,14 @@
 </script>
 
 <svelte:head>
-  <title>LB Sunrise - Professional Roofing Services in Portland, Maine</title>
+  <title>LR Sunrise Construction - Professional Roofing Services in Portland, Maine</title>
   <meta name="description" content="Expert roof repair, replacement, and inspection services in Portland, Maine. Emergency roofing services available. Call (978) 519-9774 for a free quote." />
   <meta name="keywords" content="roof repair, roof replacement, roofing contractor, Portland Maine" />
   <link rel="canonical" href={siteUrl} />
-  <meta property="og:title" content="LB Sunrise - Professional Roofing Services" />
+  <meta property="og:title" content="LR Sunrise Construction - Professional Roofing Services" />
   <meta property="og:description" content="Expert roof repair and replacement in Portland, Maine" />
   <meta property="og:image" content={`${siteUrl}/images/og-image.jpg`} />
-  <meta property="og:image:alt" content="LB Sunrise professional roofing services in Portland, Maine" />
+  <meta property="og:image:alt" content="LR Sunrise Construction professional roofing services in Portland, Maine" />
   <meta property="og:type" content="website" />
   <meta name="twitter:image" content={`${siteUrl}/images/og-image.jpg`} />
 </svelte:head>
@@ -36,7 +36,7 @@
 <section class="container mx-auto px-4 py-12">
   <h1 class="text-4xl font-bold mb-6">Professional Roofing Services in Portland, Maine</h1>
   <p class="text-lg text-gray-600 mb-12">
-    LB Sunrise provides top-quality roof repair, replacement, and inspection services.
+    LR Sunrise Construction provides top-quality roof repair, replacement, and inspection services.
     Call us today at {BUSINESS_INFO.telephone} for a free estimate.
   </p>
 

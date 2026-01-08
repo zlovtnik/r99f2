@@ -5,8 +5,8 @@
 
   // SEO metadata
   $: seo = {
-    title: 'About Us | LB Sunrise Roofing',
-    description: 'Learn about LB Sunrise Roofing, your trusted roofing experts serving the community with quality craftsmanship and reliable service.',
+    title: 'About Us | LR Sunrise Construction',
+    description: 'Learn about LR Sunrise Construction, your trusted roofing experts serving the community with quality craftsmanship and reliable service.',
     keywords: 'roofing company, about us, roofing experts, quality craftsmanship',
     url: `${baseUrl}/about`,
     image: `${baseUrl}/images/og-about.jpg`
@@ -34,12 +34,12 @@
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">About LB Sunrise Roofing</h1>
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">About LR Sunrise Construction</h1>
 
       <div class="bg-white rounded-lg shadow-lg p-8">
         <div class="prose prose-lg max-w-none">
           <p class="text-xl text-gray-700 mb-6">
-            Welcome to LB Sunrise Roofing, your trusted partner for all your roofing needs. With years of experience
+            Welcome to LR Sunrise Construction, your trusted partner for all your roofing needs. With years of experience
             in the roofing industry, we pride ourselves on delivering exceptional quality and service to our valued customers.
           </p>
 
@@ -61,7 +61,7 @@
 
           <h2 class="text-2xl font-semibold text-gray-900 mb-4">Our Commitment</h2>
           <p class="text-gray-700 mb-6">
-            At LB Sunrise Roofing, we're committed to excellence in everything we do. From initial consultation
+            At LR Sunrise Construction, we're committed to excellence in everything we do. From initial consultation
             to project completion, we work closely with you to ensure your roofing project meets your expectations
             and exceeds industry standards.
           </p>

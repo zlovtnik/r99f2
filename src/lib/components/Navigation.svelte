@@ -13,7 +13,7 @@
 <nav class="sticky top-0 z-50 bg-white shadow">
   <div class="container mx-auto px-4">
     <div class="flex justify-between items-center h-16">
-      <a href="/" class="text-2xl font-bold text-blue-600">LB Sunrise</a>
+      <a href="/" class="text-2xl font-bold text-blue-600">LR Sunrise Construction</a>
       
       <button on:click={toggleMenu} class="md:hidden" aria-label="Toggle menu" aria-expanded={isOpen}>
         {#if isOpen}

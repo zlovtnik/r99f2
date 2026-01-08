@@ -5,7 +5,7 @@ export const testimonials: Testimonial[] = [
     id: '1',
     name: 'John Smith',
     service: 'Roof Replacement',
-    text: 'LB Sunrise did an excellent job replacing our roof. Professional, on-time, and great price. Highly recommend!',
+    text: 'LR Sunrise Construction did an excellent job replacing our roof. Professional, on-time, and great price. Highly recommend!',
     rating: 5,
     imageUrl: '/images/testimonials/john-smith.svg'
   },

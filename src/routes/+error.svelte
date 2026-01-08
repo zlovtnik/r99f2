@@ -26,11 +26,11 @@
 
 <svelte:head>
   {#if $page.status === 404}
-    <title>Page Not Found | {BUSINESS_INFO?.name || 'LB Sunrise'}</title>
-    <meta name="description" content={`The page you're looking for doesn't exist. Contact ${BUSINESS_INFO?.name || 'LB Sunrise'} for professional roofing services.`} />
+    <title>Page Not Found | {BUSINESS_INFO?.name || 'LR Sunrise Construction'}</title>
+    <meta name="description" content={`The page you're looking for doesn't exist. Contact ${BUSINESS_INFO?.name || 'LR Sunrise Construction'} for professional roofing services.`} />
   {:else}
-    <title>Server Error | {BUSINESS_INFO?.name || 'LB Sunrise'}</title>
-    <meta name="description" content={`We're experiencing technical difficulties. Please contact ${BUSINESS_INFO?.name || 'LB Sunrise'} directly.`} />
+    <title>Server Error | {BUSINESS_INFO?.name || 'LR Sunrise Construction'}</title>
+    <meta name="description" content={`We're experiencing technical difficulties. Please contact ${BUSINESS_INFO?.name || 'LR Sunrise Construction'} directly.`} />
   {/if}
 </svelte:head>
 
