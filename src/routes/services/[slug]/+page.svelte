@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import CTA from '$lib/components/CTA.svelte';
   import type { Service } from '$lib/types';
@@ -8,7 +7,7 @@
 
   $: service = data.service as Service;
 
-  $: baseUrl = $page.url.origin;
+  const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = {

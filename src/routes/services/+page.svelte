@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import { services } from '$lib/data/services';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
 
-  $: baseUrl = $page.url.origin;
+  const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = {

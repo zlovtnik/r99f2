@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
@@ -11,7 +10,7 @@
 
   $: area = serviceAreas.find(a => a.slug === areaSlug) ?? null;
 
-  $: baseUrl = $page.url.origin;
+  const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = area ? {

@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
 
-  $: baseUrl = $page.url.origin;
+  import { SITE_URL } from '$lib/utils/constants';
+
+  const baseUrl = SITE_URL;
 
   // SEO metadata
   $: seo = {

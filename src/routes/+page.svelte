@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { createLocalBusinessSchema } from '$lib/utils/seo';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import Hero from '$lib/components/Hero.svelte';
-  import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { BUSINESS_INFO, SITE_URL } from '$lib/utils/constants';
   import { services } from '$lib/data/services';
   import { testimonials } from '$lib/data/testimonials';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import TestimonialCard from '$lib/components/TestimonialCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
 
-  $: siteUrl = $page.url.origin;
+  const siteUrl = SITE_URL;
   $: schema = createLocalBusinessSchema({
     ...BUSINESS_INFO,
     url: siteUrl

@@ -56,7 +56,7 @@ export const STANDARD_SERVICES: readonly string[] = [
   'Maintenance Services'
 ] as const;
 
-export const SITE_URL = envSiteUrl || 'https://lbsunrise.com';
+export const SITE_URL = envSiteUrl || 'https://rclabs.uk';
 export const LOGO_URL = '/images/logo.svg' as const;
 export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
 

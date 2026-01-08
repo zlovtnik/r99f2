@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import ContactForm from '$components/ContactForm.svelte';
   import { BUSINESS_INFO } from '$lib/utils/constants';
 
-  $: baseUrl = $page.url.origin;
+  const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = {
