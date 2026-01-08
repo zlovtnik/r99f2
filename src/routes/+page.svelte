@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { createLocalBusinessSchema } from '$lib/utils/seo';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import Hero from '$lib/components/Hero.svelte';
@@ -9,8 +10,11 @@
   import TestimonialCard from '$lib/components/TestimonialCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
 
-  const schema = createLocalBusinessSchema(BUSINESS_INFO);
-  const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://lbsunrise.com';
+  $: siteUrl = $page.url.origin;
+  $: schema = createLocalBusinessSchema({
+    ...BUSINESS_INFO,
+    url: siteUrl
+  });
 </script>
 
 <svelte:head>
@@ -20,10 +24,10 @@
   <link rel="canonical" href={siteUrl} />
   <meta property="og:title" content="LB Sunrise - Professional Roofing Services" />
   <meta property="og:description" content="Expert roof repair and replacement in Portland, Maine" />
-  <meta property="og:image" content="{siteUrl}/images/og-image.jpg" />
+  <meta property="og:image" content={`${siteUrl}/images/og-image.jpg`} />
   <meta property="og:image:alt" content="LB Sunrise professional roofing services in Portland, Maine" />
   <meta property="og:type" content="website" />
-  <meta name="twitter:image" content="{siteUrl}/images/og-image.jpg" />
+  <meta name="twitter:image" content={`${siteUrl}/images/og-image.jpg`} />
 </svelte:head>
 
 <SchemaMarkup {schema} />

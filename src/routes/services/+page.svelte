@@ -1,15 +1,18 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import { services } from '$lib/data/services';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
 
+  $: baseUrl = $page.url.origin;
+
   // SEO metadata
-  const seo = {
+  $: seo = {
     title: `Roofing Services | ${siteConfig.businessName}`,
     description: 'Professional roofing services including repair, replacement, and inspection. Expert roofers serving Portland, Maine and surrounding areas.',
-    url: `${siteConfig.siteUrl}/services`,
-    image: services.length > 0 ? `${siteConfig.siteUrl}${services[0].imageUrl}` : `${siteConfig.siteUrl}/images/og-image.jpg`
+    url: `${baseUrl}/services`,
+    image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.jpg`
   };
 </script>
 

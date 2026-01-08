@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { siteConfig } from '$config/siteConfig';
+  import { page } from '$app/stores';
+
+  $: baseUrl = $page.url.origin;
 
   // SEO metadata
-  const seo = {
+  $: seo = {
     title: 'About Us | LB Sunrise Roofing',
     description: 'Learn about LB Sunrise Roofing, your trusted roofing experts serving the community with quality craftsmanship and reliable service.',
     keywords: 'roofing company, about us, roofing experts, quality craftsmanship',
-    url: `${siteConfig.siteUrl}/about`,
-    image: `${siteConfig.siteUrl}/images/og-about.jpg`
+    url: `${baseUrl}/about`,
+    image: `${baseUrl}/images/og-about.jpg`
   };
 </script>
 

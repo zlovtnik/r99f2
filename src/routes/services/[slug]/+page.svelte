@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { siteConfig } from '$config/siteConfig';
   import CTA from '$lib/components/CTA.svelte';
   import type { Service } from '$lib/types';
@@ -7,12 +8,14 @@
 
   $: service = data.service as Service;
 
+  $: baseUrl = $page.url.origin;
+
   // SEO metadata
   $: seo = {
     title: `${service.name} | ${siteConfig.businessName}`,
     description: service.description,
-    url: `${siteConfig.siteUrl}/services/${service.slug}`,
-    image: `${siteConfig.siteUrl}${service.imageUrl}`
+    url: `${baseUrl}/services/${service.slug}`,
+    image: `${baseUrl}${service.imageUrl}`
   };
 </script>
 

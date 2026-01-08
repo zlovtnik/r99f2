@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { siteConfig } from '$config/siteConfig';
+  import { page } from '$app/stores';
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
 
+  $: baseUrl = $page.url.origin;
+
   // SEO metadata
-  const seo = {
+  $: seo = {
     title: 'Service Areas | LB Sunrise Roofing',
     description: 'Professional roofing services in Portland, Westbrook, and surrounding areas in Maine. Emergency roof repair available.',
     keywords: 'roofing service areas, Portland Maine roofing, Westbrook Maine roofing',
-    url: `${siteConfig.siteUrl}/service-areas`,
-    image: `${siteConfig.siteUrl}/images/og-service-areas.jpg`
+    url: `${baseUrl}/service-areas`,
+    image: `${baseUrl}/images/og-service-areas.jpg`
   };
 
   // JSON-LD schema for service areas list
-  const schema = {
+  $: schema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Service Areas',
@@ -27,7 +29,7 @@
         '@type': 'Place',
         name: `${area.name}, ${area.state}`,
         description: area.description,
-        url: `${siteConfig.siteUrl}/service-areas/${area.slug}`,
+        url: `${baseUrl}/service-areas/${area.slug}`,
         address: {
           '@type': 'PostalAddress',
           addressRegion: area.state,
