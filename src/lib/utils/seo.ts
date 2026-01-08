@@ -68,11 +68,21 @@ export function generateBreadcrumbs(path: string): Array<{ name: string; url: st
 }
 
 export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
+  const baseUrl = businessInfo.url || SITE_URL;
+  const imageUrl = businessInfo.image || LOGO_URL;
+  const absoluteImageUrl = (() => {
+    try {
+      return new URL(imageUrl, baseUrl).toString();
+    } catch {
+      return imageUrl;
+    }
+  })();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: businessInfo.name,
-    image: businessInfo.image || LOGO_URL,
+    image: absoluteImageUrl,
     description: businessInfo.description || 'Professional roofing services in Maine',
     telephone: businessInfo.telephone,
     email: businessInfo.email,
@@ -84,7 +94,7 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
       postalCode: businessInfo.zipCode,
       addressCountry: 'US'
     },
-    url: businessInfo.url || SITE_URL,
+    url: baseUrl,
     serviceArea: businessInfo.serviceArea || {
       '@type': 'City',
       name: 'Portland, Maine'
