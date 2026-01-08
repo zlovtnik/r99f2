@@ -15,7 +15,7 @@ export const siteConfig = {
   businessPhone: BUSINESS_INFO.telephone,
   businessEmail: BUSINESS_INFO.email,
   businessAddress: `${BUSINESS_INFO.address}, ${BUSINESS_INFO.city}, ${BUSINESS_INFO.state} ${BUSINESS_INFO.zipCode}`,
-  businessHours: BUSINESS_INFO.businessHours,
+  businessHours: BUSINESS_INFO.hoursDisplay,
   
   // SEO
   defaultOgImage: '/images/og-image.jpg',
