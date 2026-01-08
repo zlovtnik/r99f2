@@ -8,6 +8,25 @@
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import TestimonialCard from '$lib/components/TestimonialCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
+  import BenefitIcon from '$lib/components/BenefitIcon.svelte';
+  import { fade, slide } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing';
+
+  const benefits = [
+    { text: 'Increased property value', icon: 'trending-up' },
+    { text: 'Enhanced energy efficiency', icon: 'zap' },
+    { text: 'Improved safety features', icon: 'shield' },
+    { text: 'Customizable design options', icon: 'palette' },
+    { text: 'Streamlined project timelines', icon: 'clock' }
+  ];
+
+  const steps = [
+    'Conduct a detailed consultation for personalized recommendations',
+    'Create a transparent estimate outlining scope and cost',
+    'Select materials based on durability and style preferences',
+    'Execute projects with precision-focused craftsmanship',
+    'Perform final walkthroughs ensuring every detail is addressed'
+  ];
 
   const siteUrl = SITE_URL;
   $: schema = createLocalBusinessSchema({
@@ -17,8 +36,8 @@
 </script>
 
 <svelte:head>
-  <title>LR Sunrise Construction - General Contractor in Portland, Maine</title>
-  <meta name="description" content="LR Sunrise Construction - Your trusted general contractor in Portland, ME. Expert siding installation, carpentry, roofing, and remodeling services. 10 years of experience. Call (978) 519-9774 for a free estimate." />
+  <title>LR Sunrise Construction | General Contractor Portland ME</title>
+  <meta name="description" content="Trusted general contractor in Portland, ME. Expert siding, carpentry, roofing & remodeling. 10+ years experience. Free estimates. Call (978) 519-9774." />
   <meta name="keywords" content="general contractor, construction company, siding installation, carpentry services, roof installation, Portland Maine" />
   <link rel="canonical" href={siteUrl} />
   <meta property="og:title" content="LR Sunrise Construction - General Contractor Portland, ME" />
@@ -35,7 +54,7 @@
 <Hero />
 
 <!-- Services Section -->
-<section class="container mx-auto px-4 sm:px-6 py-10 sm:py-16">
+<section class="container mx-auto px-4 sm:px-6 py-10 sm:py-16" transition:fade={{ duration: 600, easing: quintOut }}>
   <div class="text-center mb-8 sm:mb-12">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">We Specialize In The Following Services</h2>
     <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
@@ -44,8 +63,10 @@
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8">
-    {#each featuredServices as service (service.id)}
-      <ServiceCard {service} />
+    {#each featuredServices as service, i (service.id)}
+      <div transition:slide={{ duration: 400, delay: i * 100, easing: quintOut }}>
+        <ServiceCard {service} />
+      </div>
     {/each}
   </div>
 
@@ -57,7 +78,7 @@
 </section>
 
 <!-- Why Choose Us Section -->
-<section class="bg-gray-50 py-10 sm:py-16">
+<section class="bg-gray-50 py-10 sm:py-16" transition:fade={{ duration: 600, delay: 100, easing: quintOut }}>
   <div class="container mx-auto px-4 sm:px-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <div>
@@ -70,36 +91,14 @@
         </p>
         
         <ul class="space-y-3">
-          <li class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-sm sm:text-base">Increased property value</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-sm sm:text-base">Enhanced energy efficiency</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-sm sm:text-base">Improved safety features</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-sm sm:text-base">Customizable design options</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-sm sm:text-base">Streamlined project timelines</span>
-          </li>
+          {#each benefits as benefit, i}
+            <li class="flex items-center gap-3" transition:fade={{ duration: 600, delay: i * 100 }}>
+              <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <BenefitIcon icon={benefit.icon}/>
+              </div>
+              <span class="text-gray-700 text-sm sm:text-base">{benefit.text}</span>
+            </li>
+          {/each}
         </ul>
       </div>
       
@@ -109,26 +108,12 @@
           Our approach revolves around transparency, precision, and customer partnership—a philosophy designed to ensure satisfaction at every stage.
         </p>
         <ol class="space-y-4">
-          <li class="flex gap-3 sm:gap-4">
-            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
-            <span class="text-gray-700 text-sm sm:text-base">Conduct a detailed consultation for personalized recommendations</span>
-          </li>
-          <li class="flex gap-3 sm:gap-4">
-            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
-            <span class="text-gray-700 text-sm sm:text-base">Create a transparent estimate outlining scope and cost</span>
-          </li>
-          <li class="flex gap-3 sm:gap-4">
-            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
-            <span class="text-gray-700 text-sm sm:text-base">Select materials based on durability and style preferences</span>
-          </li>
-          <li class="flex gap-3 sm:gap-4">
-            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
-            <span class="text-gray-700 text-sm sm:text-base">Execute projects with precision-focused craftsmanship</span>
-          </li>
-          <li class="flex gap-3 sm:gap-4">
-            <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
-            <span class="text-gray-700 text-sm sm:text-base">Perform final walkthroughs ensuring every detail is addressed</span>
-          </li>
+          {#each steps as step, i}
+            <li class="flex gap-3 sm:gap-4" in:fade={{ duration: 500, delay: i * 150 }}>
+              <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm transition-transform hover:scale-110">{i + 1}</span>
+              <span class="text-gray-700 text-sm sm:text-base">{step}</span>
+            </li>
+          {/each}
         </ol>
       </div>
     </div>
@@ -156,7 +141,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="bg-gray-50 py-10 sm:py-16">
+<section class="bg-gray-50 py-10 sm:py-16" transition:fade={{ duration: 600, delay: 200, easing: quintOut }}>
   <div class="container mx-auto px-4 sm:px-6">
     <div class="text-center mb-8 sm:mb-12">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Client Testimonials</h2>
@@ -164,8 +149,10 @@
     </div>
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-      {#each testimonials.slice(0, 3) as testimonial (testimonial.id)}
-        <TestimonialCard {testimonial} />
+      {#each testimonials.slice(0, 3) as testimonial, i (testimonial.id)}
+        <div transition:slide={{ duration: 400, delay: 300 + i * 100, easing: quintOut }}>
+          <TestimonialCard {testimonial} />
+        </div>
       {/each}
     </div>
 
