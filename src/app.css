@@ -5,6 +5,10 @@
 body {
   @apply text-gray-900 bg-white;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -15,31 +19,39 @@ a {
   @apply text-blue-600 hover:text-blue-700 transition-colors;
 }
 
+/* Touch-friendly minimum tap target size */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 .btn {
-  @apply px-6 py-2 rounded-lg font-semibold transition-colors cursor-pointer border border-transparent;
+  @apply px-6 py-3 rounded-lg font-semibold transition-colors cursor-pointer border border-transparent text-base;
+  min-height: 44px;
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white hover:bg-blue-700;
+  @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800;
 }
 
 .btn-secondary {
-  @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
+  @apply bg-gray-200 text-gray-900 hover:bg-gray-300 active:bg-gray-400;
 }
 
 .btn-outline {
-  @apply border-blue-600 text-blue-600 hover:bg-blue-50;
+  @apply border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100;
 }
 
 .content-container {
   max-width: 1200px;
+  @apply px-4 sm:px-6;
 }
 
-/* Form Styles */
+/* Form Styles - Mobile optimized */
 form input,
 form textarea,
 form select {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  @apply w-full px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base;
 }
 
 form textarea {
@@ -47,7 +59,7 @@ form textarea {
 }
 
 form label {
-  @apply block text-sm font-semibold text-gray-700 mb-2;
+  @apply block text-sm sm:text-base font-semibold text-gray-700 mb-2;
 }
 
 /* Card Styles */
@@ -111,27 +123,60 @@ form label {
 
 /* Hero Section */
 .hero {
-  @apply relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 md:py-32;
+  @apply relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 sm:py-20 md:py-32;
 }
 
 .hero-content {
-  @apply container mx-auto px-4 text-center;
+  @apply container mx-auto px-4 sm:px-6 text-center;
 }
 
 .hero-title {
-  @apply text-4xl md:text-5xl font-bold mb-4;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight;
 }
 
 .hero-subtitle {
-  @apply text-lg md:text-xl text-blue-100 mb-8;
+  @apply text-base sm:text-lg md:text-xl text-blue-100 mb-6 sm:mb-8;
 }
 
-/* Section Spacing */
+/* Section Spacing - Mobile-first */
 section {
-  @apply py-12 md:py-16;
+  @apply py-8 sm:py-12 md:py-16;
 }
 
 /* Grid Responsive */
 .grid-auto {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8;
+}
+
+/* Mobile-specific utilities */
+@media (max-width: 639px) {
+  /* Ensure text doesn't get too small on mobile */
+  .container {
+    @apply px-4;
+  }
+  
+  /* Better line heights for mobile reading */
+  p {
+    line-height: 1.6;
+  }
+  
+  /* Scrollable horizontal containers */
+  .scroll-x-mobile {
+    @apply overflow-x-auto -mx-4 px-4;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .scroll-x-mobile > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: max(0px)) {
+  .safe-area-padding {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
 }
