@@ -1,4 +1,12 @@
-export const galleryItems = [
+export interface GalleryItem {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+}
+
+export const galleryItems: GalleryItem[] = [
   {
     id: 1,
     title: 'Complete Roof Replacement',

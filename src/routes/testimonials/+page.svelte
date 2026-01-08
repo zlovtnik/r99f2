@@ -4,6 +4,7 @@
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import CTA from '$components/CTA.svelte';
   import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { STATS } from '$lib/utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -16,6 +17,12 @@
     image: `${baseUrl}/images/og-testimonials.jpg`
   };
 </script>
+
+<style>
+  .hero-bg {
+    background-image: url('/images/Construction-Company.webp');
+  }
+</style>
 
 <svelte:head>
   <title>{seo.title}</title>
@@ -40,7 +47,7 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
   <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('/images/Construction-Company.webp')"></div>
+  <div class="absolute inset-0 bg-cover bg-center opacity-20 hero-bg"></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">What Our Clients Say</h1>
     <p class="text-xl text-neutral-light max-w-3xl mx-auto">
@@ -83,15 +90,15 @@
           <div class="text-gray-600">Years Experience</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">500+</div>
+          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">{STATS.projectsCompleted}+</div>
           <div class="text-gray-600">Projects Completed</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">100%</div>
+          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">{STATS.satisfactionRate}%</div>
           <div class="text-gray-600">Satisfaction Rate</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">5.0</div>
+          <div class="text-4xl md:text-5xl font-bold text-primary mb-2">{STATS.starRating}</div>
           <div class="text-gray-600">Star Rating</div>
         </div>
       </div>

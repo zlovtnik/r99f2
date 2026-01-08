@@ -21,6 +21,7 @@ export const BUSINESS_INFO = {
     'Saturday': '7:00 AM - 5:00 PM',
     'Sunday': '7:00 AM - 5:00 PM'
   },
+  hoursDisplay: 'Open 7 Days: 7:00 AM - 5:00 PM',
   businessHours: [
     'Monday: 7:00 AM - 5:00 PM',
     'Tuesday: 7:00 AM - 5:00 PM',
@@ -41,6 +42,13 @@ export const BUSINESS_INFO = {
     newCustomers: '15% Discount for New Customers'
   },
   paymentMethods: ['Cash', 'Check']
+} as const;
+
+export const STATS = {
+  yearsOfExperience: BUSINESS_INFO.yearsOfExperience,
+  projectsCompleted: 500,
+  satisfactionRate: 100,
+  starRating: 5.0
 } as const;
 
 export const KEYWORDS = {

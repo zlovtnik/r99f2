@@ -100,9 +100,12 @@
             <h3 class="text-xl font-semibold mb-4 text-gray-900">Working Hours</h3>
             <div class="space-y-2 text-gray-600">
               {#each BUSINESS_INFO.businessHours as hour}
+                {@const parts = hour.split(': ')}
+                {@const day = parts[0]}
+                {@const time = parts.slice(1).join(': ')}
                 <p class="flex justify-between">
-                  <span>{hour.split(':')[0]}</span>
-                  <span class="font-medium">{hour.split(': ')[1]}</span>
+                  <span>{day}</span>
+                  <span class="font-medium">{time}</span>
                 </p>
               {/each}
             </div>
@@ -112,8 +115,9 @@
           <div class="bg-white rounded-lg shadow-lg p-8">
             <h3 class="text-xl font-semibold mb-4 text-gray-900">Payment Accepted</h3>
             <div class="flex gap-4">
-              <div class="bg-gray-100 px-4 py-2 rounded">Cash</div>
-              <div class="bg-gray-100 px-4 py-2 rounded">Check</div>
+              {#each BUSINESS_INFO.paymentMethods || ['Cash', 'Check'] as method}
+                <div class="bg-gray-100 px-4 py-2 rounded">{method}</div>
+              {/each}
             </div>
           </div>
         </div>

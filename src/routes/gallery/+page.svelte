@@ -27,7 +27,6 @@
   $: seo = {
     title: 'Project Gallery | LR Sunrise Construction',
     description: 'Browse our portfolio of completed construction projects including roofing, siding, carpentry, and remodeling work in Portland, ME and surrounding areas.',
-    keywords: 'construction gallery, project portfolio, roofing photos, siding installation, Portland Maine contractor',
     url: `${baseUrl}/gallery`,
     image: `${baseUrl}/images/og-gallery.jpg`
   };
@@ -55,7 +54,7 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
   <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('/images/LR-Sunrise-Constructions-other-services.webp')"></div>
+  <div class="absolute inset-0 bg-cover bg-center opacity-20" style:background-image={`url('/images/LR-Sunrise-Constructions-other-services.webp')`}></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Project Gallery</h1>
     <p class="text-xl text-neutral-light max-w-3xl mx-auto">

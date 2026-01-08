@@ -3,13 +3,14 @@
   import { services } from '$lib/data/services';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
+  import qualityImg from '/images/Quality-Construction-Service.webp';
 
   const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = {
-    title: `Roofing Services | ${siteConfig.businessName}`,
-    description: 'Professional roofing services including repair, replacement, and inspection. Expert roofers serving Portland, Maine and surrounding areas.',
+    title: `Construction Services | ${siteConfig.businessName}`,
+    description: 'Professional construction services including siding, carpentry, roofing, and remodeling. Expert craftsmen serving Portland, Maine and surrounding areas.',
     url: `${baseUrl}/services`,
     image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.jpg`
   };
@@ -37,22 +38,18 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
   <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('/images/Quality-Construction-Service.webp')"></div>
+  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({qualityImg})"></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Construction Services</h1>
-    <p class="text-xl text-neutral-light max-w-3xl mx-auto">
-      Professional construction services with quality craftsmanship and reliable results.
-      Serving Portland, Maine and surrounding areas.
-    </p>
   </div>
 </section>
 
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Our Roofing Services</h1>
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Our Construction Services</h1>
       <p class="text-xl text-center text-gray-600 mb-12">
-        Professional roofing services with quality craftsmanship and reliable results.
+        Professional construction services with quality craftsmanship and reliable results.
         Serving Portland, Maine and surrounding areas.
       </p>
 

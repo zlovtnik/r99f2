@@ -248,7 +248,7 @@ export const services: Service[] = [
   {
     id: '11',
     name: 'Gutter Services',
-    slug: 'gutters-services',
+    slug: 'gutter-services',
     description: 'Comprehensive gutter installation, repair, and maintenance services to protect your property from water damage. Properly functioning gutters direct water away from your foundation and prevent erosion, basement flooding, and structural damage.',
     shortDescription: 'Complete gutter installation and maintenance',
     imageUrl: '/images/services/gutters-services.jpg',
