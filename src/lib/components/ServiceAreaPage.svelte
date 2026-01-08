@@ -14,7 +14,7 @@
 
   // SEO metadata
   $: seo = area ? {
-    title: `Roofing Services in ${area.name}, Maine | LB Sunrise Roofing`,
+    title: `Roofing Services in ${area.name}, Maine | LR Sunrise Construction`,
     description: `Professional ${area.description}. Emergency roof repair and replacement services available. Call ${BUSINESS_INFO.telephone} for a free quote.`,
     keywords: area.keywords.join(', '),
     url: `${baseUrl}/service-areas/${area.slug}`,
@@ -67,7 +67,7 @@
       <p class="text-xl text-center text-gray-600 mb-12">{area.description}</p>
 
       <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-900">Why Choose LB Sunrise in {area.name}?</h2>
+        <h2 class="text-2xl font-semibold mb-6 text-gray-900">Why Choose LR Sunrise Construction in {area.name}?</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
@@ -101,7 +101,7 @@
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
           <a href="/contact" class="btn btn-primary" aria-label="Get a free quote for roofing services in {area.name}">Get Free Quote</a>
-          <a href="tel:{BUSINESS_INFO.telephone}" class="btn btn-secondary" aria-label="Call LB Sunrise Roofing at {BUSINESS_INFO.telephone} for service in {area.name}">Call Now</a>
+          <a href="tel:{BUSINESS_INFO.telephone}" class="btn btn-secondary" aria-label="Call LR Sunrise Construction at {BUSINESS_INFO.telephone} for service in {area.name}">Call Now</a>
         </div>
       </div>
 

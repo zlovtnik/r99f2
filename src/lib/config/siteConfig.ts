@@ -2,10 +2,10 @@ import { BUSINESS_INFO, SITE_URL } from '../utils/constants';
 
 export const siteConfig = {
   // Site metadata
-  title: 'LB Sunrise - Professional Roofing Services',
+  title: 'LR Sunrise Construction - Professional Roofing Services',
   description: 'Expert roof repair, replacement, and inspection services in Portland, Maine. Emergency roofing services available.',
   keywords: ['roof repair', 'roof replacement', 'roofing contractor', 'Portland Maine'],
-  author: 'LB Sunrise',
+  author: 'LR Sunrise Construction',
   
   // URLs
   siteUrl: SITE_URL,

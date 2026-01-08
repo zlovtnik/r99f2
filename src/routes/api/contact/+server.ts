@@ -122,7 +122,7 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     // Send email
     const emailResult = await sendEmail({
       to: ADMIN_EMAIL,
-      subject: 'New Contact Form Submission - LB Sunrise Roofing',
+      subject: 'New Contact Form Submission - LR Sunrise Construction',
       html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${escapedName}</p>

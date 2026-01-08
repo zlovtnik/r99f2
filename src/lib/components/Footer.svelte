@@ -6,7 +6,7 @@
   <div class="container mx-auto px-4">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
       <div>
-        <h3 class="text-2xl font-bold mb-4">LB Sunrise</h3>
+        <h3 class="text-2xl font-bold mb-4">LR Sunrise Construction</h3>
         <p class="text-gray-300">Professional roofing services serving Portland, Maine and surrounding areas.</p>
       </div>
       
@@ -36,7 +36,7 @@
     
     <div class="border-t border-gray-700 pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400">&copy; 2026 LB Sunrise. All rights reserved.</p>
+        <p class="text-gray-400">&copy; 2026 LR Sunrise Construction. All rights reserved.</p>
         <div class="flex gap-4 mt-4 md:mt-0">
           <span class="text-gray-400 cursor-not-allowed" aria-disabled="true">Privacy Policy</span>
           <span class="text-gray-400 cursor-not-allowed" aria-disabled="true">Terms & Conditions</span>

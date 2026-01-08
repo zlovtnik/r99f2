@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = () => {
 	const siteUrl = SITE_URL;
 
-	const robots = `# Robots.txt for LB Sunrise
+	const robots = `# Robots.txt for LR Sunrise Construction
 # Allow search engines to crawl all public pages
 
 User-agent: *

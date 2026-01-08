@@ -9,7 +9,7 @@
 
   // SEO metadata
   $: seo = {
-    title: 'Service Areas | LB Sunrise Roofing',
+    title: 'Service Areas | LR Sunrise Construction',
     description: 'Professional roofing services in Portland, Westbrook, and surrounding areas in Maine. Emergency roof repair available.',
     keywords: 'roofing service areas, Portland Maine roofing, Westbrook Maine roofing',
     url: `${baseUrl}/service-areas`,
