@@ -36,8 +36,8 @@
 </script>
 
 <svelte:head>
-  <title>LR Sunrise Construction - General Contractor in Portland, Maine</title>
-  <meta name="description" content="LR Sunrise Construction - Your trusted general contractor in Portland, ME. Expert siding installation, carpentry, roofing, and remodeling services. 10 years of experience. Call (978) 519-9774 for a free estimate." />
+  <title>LR Sunrise Construction | General Contractor Portland ME</title>
+  <meta name="description" content="Trusted general contractor in Portland, ME. Expert siding, carpentry, roofing & remodeling. 10+ years experience. Free estimates. Call (978) 519-9774." />
   <meta name="keywords" content="general contractor, construction company, siding installation, carpentry services, roof installation, Portland Maine" />
   <link rel="canonical" href={siteUrl} />
   <meta property="og:title" content="LR Sunrise Construction - General Contractor Portland, ME" />
@@ -92,7 +92,7 @@
         
         <ul class="space-y-3">
           {#each benefits as benefit, i}
-            <li class="flex items-center gap-3" transition:fade={{ duration: 600, delay: i * 200 }}>
+            <li class="flex items-center gap-3" transition:fade={{ duration: 600, delay: i * 100 }}>
               <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <BenefitIcon icon={benefit.icon}/>
               </div>

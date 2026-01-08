@@ -228,6 +228,11 @@ section {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
 /* Respect users who prefer reduced motion for hover effects */
 @media (prefers-reduced-motion: reduce) {
   .hover-lift {
@@ -236,9 +241,4 @@ section {
   .hover-lift:hover {
     transform: none;
   }
-}
-
-.hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }

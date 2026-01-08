@@ -1,5 +1,6 @@
 <script lang="ts">
   export let icon: string;
+  export let colorClass: string = 'text-white';
 
   function getIconPath(iconName: string): string {
     switch (iconName) {
@@ -14,11 +15,11 @@
       case 'clock':
         return 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z';
       default:
-        return 'M9 12l2 2 4-4m6 10.5V7l-3-3H6a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2z'; // default checkmark icon
+        return 'M9 12l2 2 4-4m6 10.5V7l-3-3H6a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2z'; // document page with checkmark overlay
     }
   }
 </script>
 
-<svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<svg class="w-3 h-3 {colorClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={getIconPath(icon)}/>
 </svg>

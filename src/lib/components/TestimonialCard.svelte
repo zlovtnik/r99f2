@@ -21,7 +21,7 @@
     {#if testimonial.imageUrl}
       <img 
         src={testimonial.imageUrl} 
-        alt=""
+        alt="Photo of {testimonial.name}, {testimonial.service} customer"
         loading="lazy"
         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-gray-100 hover:ring-primary transition-colors duration-200"
       />
