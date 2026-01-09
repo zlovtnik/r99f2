@@ -1,61 +1,33 @@
 <script lang="ts">
   import { BUSINESS_INFO, PROMOTIONAL_BADGES, SERVICE_OPTIONS } from '$lib/utils/constants';
   import { formatPhoneNumber } from '$lib/utils/format';
+  import { validateContactForm } from '$lib/utils/validation';
   import { fade, slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
   import { goto } from '$app/navigation';
 
-  let selectedDateObj: Date | null = null;
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
+  let errors: Record<string, string> = {};
 
   let formData = {
     name: '',
     email: '',
     phone: '',
     service: '',
-    preferredDate: '',
     message: ''
   };
 
-  $: daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  $: firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-  function selectDate(day: number) {
-    const date = new Date(currentYear, currentMonth, day);
-    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
-    
-    selectedDateObj = date;
-    // Create local YYYY-MM-DD string to avoid timezone issues
-    const year = selectedDateObj.getFullYear();
-    const month = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
-    const dayStr = String(selectedDateObj.getDate()).padStart(2, '0');
-    const localDateString = `${year}-${month}-${dayStr}`;
-    
-    formData.preferredDate = localDateString;
-  }
-
-  function prevMonth() {
-    if (currentMonth === 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else {
-      currentMonth--;
-    }
-  }
-
-  function nextMonth() {
-    if (currentMonth === 11) {
-      currentMonth = 0;
-      currentYear++;
-    } else {
-      currentMonth++;
-    }
+  function handlePhoneInput(event: Event) {
+    const input = event.currentTarget as HTMLInputElement;
+    const formatted = formatPhoneNumber(input.value);
+    formData.phone = formatted;
   }
 
   function handleSubmit() {
+    errors = validateContactForm({ ...formData, zipCode: '' });
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     // Clean formData by omitting empty values
     const cleanedData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => value !== '' && value !== null && value !== undefined)
@@ -84,7 +56,7 @@
   <div class="container mx-auto px-4 sm:px-6 relative z-10">
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
       <!-- Left side: Hero text -->
-      <div class="text-center lg:text-left lg:flex-grow-[0.5]">
+      <div class="text-center lg:text-left lg:flex-1">
         <div in:fade={{ duration: 800, easing: quintOut }}>
           <p class="text-white/90 uppercase tracking-wider text-sm sm:text-base font-medium mb-3 sm:mb-4">
             General Contractor • {BUSINESS_INFO.city}, {BUSINESS_INFO.state}
@@ -132,123 +104,74 @@
         </div>
       </div>
 
-      <!-- Middle: Calendar Widget -->
-      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow-1">
-        <h3 class="text-lg font-bold mb-3 text-white text-center">Select Preferred Date</h3>
-        
-        <!-- Calendar Header -->
-        <div class="flex items-center justify-between mb-3">
-          <button 
-            on:click={prevMonth}
-            class="p-1.5 hover:bg-white/20 rounded transition-colors"
-            aria-label="Previous month"
-          >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          
-          <h4 class="text-white font-semibold text-base">
-            {monthNames[currentMonth]} {currentYear}
-          </h4>
-          
-          <button 
-            on:click={nextMonth}
-            class="p-1.5 hover:bg-white/20 rounded transition-colors"
-            aria-label="Next month"
-          >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Day Names -->
-        <div class="grid grid-cols-7 gap-1 mb-2">
-          {#each dayNames as dayName}
-            <div class="text-center text-white/70 text-sm font-medium py-1">
-              {dayName}
-            </div>
-          {/each}
-        </div>
-
-        <!-- Calendar Grid -->
-        <div class="grid grid-cols-7 gap-1">
-          <!-- Empty cells for days before the first day of the month -->
-          {#each Array(firstDayOfMonth) as _}
-            <div class="aspect-square"></div>
-          {/each}
-          
-          <!-- Days of the month -->
-          {#each Array(daysInMonth) as _, i}
-            {@const day = i + 1}
-            {@const date = new Date(currentYear, currentMonth, day)}
-            {@const isToday = new Date().toDateString() === date.toDateString()}
-            {@const isSelected = selectedDateObj && selectedDateObj.getFullYear() === currentYear && selectedDateObj.getMonth() === currentMonth && selectedDateObj.getDate() === day}
-            {@const isPast = date < new Date(new Date().setHours(0, 0, 0, 0))}
-            
-            <button
-              on:click={() => selectDate(day)}
-              disabled={isPast}
-              class="aspect-square flex items-center justify-center text-sm font-medium rounded-md transition-all duration-200 hover:bg-accent/80 hover:text-white {isSelected ? 'bg-accent text-white' : isToday ? 'bg-white/25 text-white' : 'text-white/80 hover:bg-white/15'} {isPast ? 'opacity-50 cursor-not-allowed' : ''}"
-              aria-label="Select {monthNames[currentMonth]} {day}, {currentYear}"
-            >
-              {day}
-            </button>
-          {/each}
-        </div>
-
-        {#if selectedDateObj}
-          <div class="mt-3 p-2 bg-accent/15 rounded text-center">
-            <p class="text-white text-sm">
-              {selectedDateObj.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric' 
-              })}
-            </p>
-          </div>
-        {/if}
-      </div>
-
-      <!-- Right: Combined Form -->
-      <div in:slide={{ duration: 600, delay: 1200, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow-1">
-        <h3 class="text-lg font-bold mb-3 text-white text-center">Get Free Estimate</h3>
+      <!-- Right: Form -->
+      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 mx-auto lg:mx-0 lg:shrink-0 lg:max-w-sm w-full flex flex-col justify-center">
+        <h3 class="text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
         <form on:submit|preventDefault={handleSubmit} class="space-y-3">
           <div>
+            <label for="name" class="sr-only">Name</label>
             <input
               type="text"
               id="name"
               bind:value={formData.name}
               required
+              autocomplete="name"
+              aria-invalid={errors.name ? 'true' : 'false'}
+              aria-describedby={errors.name ? 'name-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="Your name"
             />
+            {#if errors.name}
+              <p id="name-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.name}</p>
+            {/if}
           </div>
           <div>
+            <label for="email" class="sr-only">Email</label>
             <input
               type="email"
               id="email"
               bind:value={formData.email}
               required
+              autocomplete="email"
+              aria-invalid={errors.email ? 'true' : 'false'}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="your@email.com"
             />
+            {#if errors.email}
+              <p id="email-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.email}</p>
+            {/if}
           </div>
           <div>
+            <label for="phone" class="sr-only">Phone</label>
             <input
               type="tel"
               id="phone"
               bind:value={formData.phone}
+              on:input={handlePhoneInput}
               required
+              autocomplete="tel"
+              inputmode="tel"
+              pattern="[\d\s\(\)\-]+"
+              title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
+              aria-invalid={errors.phone ? 'true' : 'false'}
+              aria-describedby={errors.phone ? 'phone-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="(207) 123-4567"
             />
+            {#if errors.phone}
+              <p id="phone-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.phone}</p>
+            {/if}
           </div>
           <div>
+            <label for="service" class="sr-only">Service</label>
             <select
               id="service"
               bind:value={formData.service}
               required
+              autocomplete="off"
+              aria-invalid={errors.service ? 'true' : 'false'}
+              aria-describedby={errors.service ? 'service-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
             >
               <option value="" disabled>Choose service</option>
@@ -256,26 +179,28 @@
                 <option value={service}>{service}</option>
               {/each}
             </select>
+            {#if errors.service}
+              <p id="service-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.service}</p>
+            {/if}
           </div>
           <div>
+            <label for="message" class="sr-only">Message</label>
             <textarea
               id="message"
               bind:value={formData.message}
+              aria-invalid={errors.message ? 'true' : 'false'}
+              aria-describedby={errors.message ? 'message-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="Tell us about your project..."
               rows="3"
             ></textarea>
+            {#if errors.message}
+              <p id="message-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.message}</p>
+            {/if}
           </div>
-          {#if selectedDateObj}
-            <div aria-live="polite" id="selected-date-display" class="mt-2 p-2 bg-accent/15 rounded">
-              <p class="text-white text-sm font-medium">Selected Date: {selectedDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-            </div>
-          {/if}
-          <input type="hidden" name="preferredDate" value={selectedDateObj ? selectedDateObj.toISOString().split('T')[0] : ''} />
           <button
             type="submit"
             class="w-full bg-accent text-white font-semibold py-2 px-4 rounded transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-transparent text-sm"
-            aria-describedby={selectedDateObj ? 'selected-date-display' : undefined}
           >
             Get Free Estimate
           </button>

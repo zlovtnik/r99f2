@@ -14,7 +14,7 @@ export function formatPricing(pricing: { min: number; max: number; note: string 
     return 'Pricing unavailable';
   }
 
-  if (isNaN(pricing.min) || isNaN(pricing.max) || !isFinite(pricing.min) || !isFinite(pricing.max)) {
+  if (Number.isNaN(pricing.min) || Number.isNaN(pricing.max) || !Number.isFinite(pricing.min) || !Number.isFinite(pricing.max)) {
     return 'Pricing unavailable';
   }
 
@@ -55,14 +55,14 @@ export function generateBreadcrumbs(path: string): Array<{ name: string; url: st
   const segments = path.split('/').filter(Boolean);
   const breadcrumbs: Array<{ name: string; url: string }> = [{ name: 'Home', url: SITE_URL }];
 
-  segments.reduce((currentUrl, segment) => {
-    const nextUrl = `${currentUrl}/${segment}`;
+  let currentUrl = SITE_URL;
+  for (const segment of segments) {
+    currentUrl = `${currentUrl}/${segment}`;
     breadcrumbs.push({
       name: toTitleCase(segment),
-      url: nextUrl
+      url: currentUrl
     });
-    return nextUrl;
-  }, SITE_URL);
+  }
 
   return breadcrumbs;
 }
@@ -116,5 +116,22 @@ export function createServiceSchema(service: ServiceInfo) {
     },
     areaServed: service.areaServed || SERVICE_AREAS,
     url: `/services/${service.slug}`
+  };
+}
+
+export function createBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
+  if (!items || items.length === 0) {
+    return null;
+  }
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url
+    }))
   };
 }

@@ -106,7 +106,7 @@ export const services: Service[] = [
     slug: 'house-framing',
     description: 'Professional house framing services for residential and commercial projects. Our experienced team provides precision framing and finish work tailored to each space, coordinating design alignment, material selection, and phased execution while maintaining minimal disruption to your daily routine.',
     shortDescription: 'Precision framing for residential and commercial structures',
-    imageUrl: '/images/house-framing.jpg',
+    imageUrl: '/images/Construction-Company.webp', // Distinct from Carpentry-Services.webp - structural framing work
     imageAlt: 'House framing services in Portland, Maine',
     benefits: [
       'Structural integrity',
@@ -130,7 +130,7 @@ export const services: Service[] = [
     slug: 'exterior-remodeling',
     description: 'Transform the look and functionality of your property with our comprehensive exterior remodeling services. From updating facades to enhancing outdoor living spaces, we bring your vision to life with quality craftsmanship and attention to detail.',
     shortDescription: 'Complete exterior transformation services',
-    imageUrl: '/images/exterior-remodeling.jpg',
+    imageUrl: '/images/Construction-Company.webp',
     imageAlt: 'Exterior remodeling services in Portland, Maine',
     benefits: [
       'Increased property value',
@@ -154,7 +154,7 @@ export const services: Service[] = [
     slug: 'flooring-services',
     description: 'Professional flooring installation and repair services. Understanding subfloor readiness is key before installing new flooring materials. Our team performs surface inspections beforehand to verify flatness tolerance so adhesive bonds form correctly during installation for lasting results.',
     shortDescription: 'Quality flooring installation and repair',
-    imageUrl: '/images/flooring-services.jpg',
+    imageUrl: '/images/Professional-Construction-Service.webp',
     imageAlt: 'Flooring services in Portland, Maine',
     benefits: [
       'Expert installation',
@@ -203,7 +203,7 @@ export const services: Service[] = [
     slug: 'painting',
     description: 'Professional interior and exterior painting services to refresh and protect your property. Our skilled painters deliver flawless finishes using quality paints and proper preparation techniques for lasting results.',
     shortDescription: 'Professional interior and exterior painting',
-    imageUrl: '/images/painting.jpg',
+    imageUrl: '/images/Quality-Construction-Service.webp',
     imageAlt: 'Painting services in Portland, Maine',
     benefits: [
       'Fresh new look',
@@ -227,7 +227,7 @@ export const services: Service[] = [
     slug: 'emergency-repair',
     description: 'When emergencies occur—such as storm damage or structural compromise—our mobile response team prioritizes securing affected zones using temporary barriers or reinforcements before repair begins. We specialize in executing immediate stabilization strategies that reduce property loss while preparing for full restoration under controlled conditions.',
     shortDescription: 'Rapid response for urgent repair needs',
-    imageUrl: '/images/emergency-repair.jpg',
+    imageUrl: '/images/General-Contractor.webp',
     imageAlt: 'Emergency repair services in Portland, Maine',
     benefits: [
       'Rapid response time',
@@ -251,7 +251,7 @@ export const services: Service[] = [
     slug: 'gutter-services',
     description: 'Comprehensive gutter installation, repair, and maintenance services to protect your property from water damage. Properly functioning gutters direct water away from your foundation and prevent erosion, basement flooding, and structural damage.',
     shortDescription: 'Complete gutter installation and maintenance',
-    imageUrl: '/images/gutters-services.jpg',
+    imageUrl: '/images/Professional-construction-contractor.webp',
     imageAlt: 'Gutter services in Portland, Maine',
     benefits: [
       'Water damage prevention',
@@ -275,7 +275,7 @@ export const services: Service[] = [
     slug: 'reversal-siding',
     description: 'Specialized reversal siding services for unique architectural needs. Our team provides expert installation and repair of specialty siding materials to enhance your property\'s appearance and protection.',
     shortDescription: 'Specialty siding solutions for unique needs',
-    imageUrl: '/images/reversal-siding.jpg',
+    imageUrl: '/images/LR-Sunrise-Constructions-other-services.webp',
     imageAlt: 'Reversal siding services in Portland, Maine',
     benefits: [
       'Unique aesthetic appeal',

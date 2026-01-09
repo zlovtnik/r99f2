@@ -1,8 +1,10 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import CTA from '$components/CTA.svelte';
+  import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import { services } from '$data/services';
   import { galleryItems } from '$data/galleryItems';
+  import { createBreadcrumbSchema } from '$utils/seo';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -29,6 +31,12 @@
     url: `${baseUrl}/gallery`,
     image: `${baseUrl}/images/og-gallery.jpg`
   };
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Gallery', url: `${baseUrl}/gallery` }
+  ]);
 </script>
 
 <svelte:head>
@@ -49,6 +57,10 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">

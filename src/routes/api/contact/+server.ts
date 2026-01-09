@@ -6,8 +6,8 @@ import { sendEmail } from '$lib/utils/email';
 // Parse and validate rate limit environment variables
 const parseRateLimitEnv = (envVar: string | undefined, defaultValue: number, minValue: number = 1): number => {
   if (!envVar) return defaultValue;
-  const parsed = parseInt(envVar, 10);
-  return isNaN(parsed) || parsed < minValue ? defaultValue : parsed;
+  const parsed = Number.parseInt(envVar, 10);
+  return Number.isNaN(parsed) || parsed < minValue ? defaultValue : parsed;
 };
 
 const RATE_LIMIT_WINDOW_SECONDS = parseRateLimitEnv(process.env.RATE_LIMIT_WINDOW_SECONDS, 60, 10);
@@ -66,13 +66,18 @@ function checkRateLimit(key: string): { allowed: boolean; retryAfter?: number } 
 
 // Server-safe HTML escaping utility
 function escapeHtml(text: string): string {
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-    .replace(/\//g, '&#x2F;');
+  // Normalize line endings: convert CRLF and CR to LF before escaping
+  const normalized = String(text)
+    .replaceAll('\r\n', '\n')
+    .replaceAll('\r', '\n');
+  
+  return normalized
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#x27;')
+    .replaceAll('/', '&#x2F;');
 }
 
 export const POST: RequestHandler = async ({ request, getClientAddress }) => {

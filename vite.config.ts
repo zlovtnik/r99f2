@@ -10,4 +10,8 @@ export default defineConfig({
 			plugins: [tailwindcss(), autoprefixer()],
 		},
 	},
+	build: {
+		// Relying on SvelteKit and Vite defaults for cssCodeSplit and chunkSizeWarningLimit
+		// SvelteKit handles optimal code splitting automatically
+	}
 });

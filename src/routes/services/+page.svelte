@@ -2,10 +2,12 @@
   import { siteConfig } from '$config/siteConfig';
   import { services } from '$lib/data/services';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
+  import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import CTA from '$lib/components/CTA.svelte';
-  import servicesHeroImg from '/images/services-hero-background.webp';
+  import { createBreadcrumbSchema } from '$utils/seo';
 
   const baseUrl = siteConfig.siteUrl;
+  const servicesHeroImg = '/images/services-hero-background.webp';
 
   // SEO metadata
   $: seo = {
@@ -14,6 +16,12 @@
     url: `${baseUrl}/services`,
     image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.jpg`
   };
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Services', url: `${baseUrl}/services` }
+  ]);
 </script>
 
 <svelte:head>
@@ -34,6 +42,10 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
