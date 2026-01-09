@@ -20,6 +20,6 @@
   }
 </script>
 
-<svg class="w-3 h-3 {colorClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<svg class="w-3 h-3 {colorClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={getIconPath(icon)}/>
 </svg>

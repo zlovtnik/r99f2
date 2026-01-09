@@ -7,7 +7,7 @@ export const services: Service[] = [
     slug: 'siding-installation',
     description: 'Old or damaged siding can leave your home vulnerable to weather-related damage and reduced energy efficiency. Our siding installation services offer a durable solution tailored to improve both the aesthetics and protection of your property. Whether you\'re updating residential or commercial spaces, new siding enhances insulation, boosts curb appeal, and ensures long-lasting durability against nature\'s elements. With careful material selection and precision workmanship, we provide an upgrade that leaves you feeling secure and proud of your exterior.',
     shortDescription: 'Durable siding solutions for enhanced protection and curb appeal',
-    imageUrl: '/images/Siding-Installation.webp',
+    imageUrl: '/images/construction-work-hero.webp',
     imageAlt: 'Professional siding installation in Portland, Maine',
     benefits: [
       'Improved energy efficiency',
@@ -56,7 +56,7 @@ export const services: Service[] = [
     slug: 'shingle-repair',
     description: 'Damaged shingles on your roof can lead to leaks, energy inefficiencies, and escalating repair costs if left untreated. Our shingle repair services address these issues promptly by replacing broken or missing materials with expert care. Using proven techniques and top-grade products, we restore your roof\'s integrity while protecting your investment against further wear and tear. A well-maintained roof gives you peace of mind while improving your property\'s overall value.',
     shortDescription: 'Professional shingle repair to protect your investment',
-    imageUrl: '/images/Shingle-Repair.webp',
+    imageUrl: '/images/r-27.webp', // Shingle repair image
     imageAlt: 'Shingle repair services in Portland, Maine',
     benefits: [
       'Prevent water damage',
@@ -81,7 +81,7 @@ export const services: Service[] = [
     slug: 'roof-installation',
     description: 'A strong roof is critical to safeguarding any structure from external elements. Our roof installation service focuses on providing durable, weather-resistant roofing tailored to your specific needs and preferences. We guide you through material options, ensure precise installation processes, and focus on maximizing the lifespan of your new roof. By choosing professional installation, you gain confidence knowing that your property is protected for years to come—without compromising style or functionality.',
     shortDescription: 'Complete roof installation with quality materials',
-    imageUrl: '/images/Roof-Installation.webp',
+    imageUrl: '/images/r-29.webp', // Roof installation image
     imageAlt: 'Roof installation services in Portland, Maine',
     benefits: [
       'Weather-resistant protection',
@@ -178,7 +178,7 @@ export const services: Service[] = [
     slug: 'roof-replacement',
     description: 'Complete roof replacement services with quality materials and expert installation. When signs like curling shingles, granule loss, or water intrusion appear, professional assessment is crucial. We evaluate roof age, underlayment condition, and surface damage to determine whether replacement aligns better with structural longevity standards.',
     shortDescription: 'Full roof replacement with premium materials',
-    imageUrl: '/images/roof-replacement.jpg',
+    imageUrl: '/images/services-hero-background.webp', // Roof replacement image
     imageAlt: 'Roof replacement services in Portland, Maine',
     benefits: [
       'New roof warranty',
