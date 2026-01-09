@@ -1,7 +1,10 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import CTA from '$lib/components/CTA.svelte';
+  import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import type { Service } from '$lib/types';
+  import { createServiceSchema, createBreadcrumbSchema } from '$lib/utils/seo';
+  import { BUSINESS_INFO } from '$lib/utils/constants';
 
   export let data;
 
@@ -16,6 +19,21 @@
     url: `${baseUrl}/services/${service.slug}`,
     image: `${baseUrl}${service.imageUrl}`
   };
+
+  // Service schema
+  $: serviceSchema = createServiceSchema({
+    name: service.name,
+    description: service.description,
+    slug: service.slug,
+    providerName: BUSINESS_INFO.name
+  });
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Services', url: `${baseUrl}/services` },
+    { name: service.name, url: `${baseUrl}/services/${service.slug}` }
+  ]);
 </script>
 
 <svelte:head>
@@ -35,13 +53,26 @@
   <meta name="twitter:title" content={seo.title} />
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
+  
+  <!-- Structured Data -->
+  <SchemaMarkup schema={serviceSchema} />
+  {#if breadcrumbSchema}
+    <SchemaMarkup schema={breadcrumbSchema} />
+  {/if}
 </svelte:head>
 
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
       <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-12">
-        <img src={service.imageUrl} alt={service.imageAlt} class="w-full h-64 object-cover" />
+        <img 
+          src={service.imageUrl} 
+          alt={service.imageAlt} 
+          class="w-full h-64 object-cover" 
+          loading="lazy"
+          width="800"
+          height="256"
+        />
         <div class="p-8">
           <h1 class="text-4xl font-bold mb-4 text-gray-900">{service.name}</h1>
           <p class="text-xl text-gray-700 mb-8">{service.description}</p>

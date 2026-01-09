@@ -31,6 +31,32 @@
     },
     areaServed: area.zipCodes.map(zip => `${zip}, ${area.state}`)
   }) : null;
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = area ? {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Service Areas',
+        item: `${baseUrl}/service-areas`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: area.name,
+        item: `${baseUrl}/service-areas/${area.slug}`
+      }
+    ]
+  } : null;
 </script>
 
 <svelte:head>
@@ -59,10 +85,29 @@
   <SchemaMarkup {schema} />
 {/if}
 
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
+
 {#if area}
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
+      <!-- Breadcrumb navigation -->
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-600">
+          <li>
+            <a href={baseUrl} class="hover:text-primary">Home</a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <a href="{baseUrl}/service-areas" class="hover:text-primary">Service Areas</a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-gray-900 font-medium">{area.name}</li>
+        </ol>
+      </nav>
+
       <h1 class="text-4xl font-bold text-center mb-4 text-gray-900">Roofing Services in {area.name}, {area.state}</h1>
       <p class="text-xl text-center text-gray-600 mb-12">{area.description}</p>
 

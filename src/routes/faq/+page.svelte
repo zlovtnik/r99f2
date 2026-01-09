@@ -37,6 +37,26 @@
       }
     }))
   };
+
+  // BreadcrumbList schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'FAQ',
+        item: `${baseUrl}/faq`
+      }
+    ]
+  };
 </script>
 
 <svelte:head>
@@ -60,6 +80,7 @@
 </svelte:head>
 
 <SchemaMarkup schema={faqSchema} />
+<SchemaMarkup schema={breadcrumbSchema} />
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16">

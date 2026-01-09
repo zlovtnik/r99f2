@@ -1,6 +1,7 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import ContactForm from '$components/ContactForm.svelte';
+  import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import { BUSINESS_INFO, BUSINESS_HOURS } from '$utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
@@ -12,6 +13,26 @@
     keywords: 'contact general contractor, construction quote, Portland Maine contractor, free estimate',
     url: `${baseUrl}/contact`,
     image: `${baseUrl}/images/og-contact.jpg`
+  };
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Contact Us',
+        item: `${baseUrl}/contact`
+      }
+    ]
   };
 </script>
 
@@ -34,6 +55,8 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+<SchemaMarkup schema={breadcrumbSchema} />
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">

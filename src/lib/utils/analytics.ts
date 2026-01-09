@@ -57,7 +57,7 @@ export function isGAInitFailed(): boolean {
 export function initializeGA(): void {
   // Validate GA ID exists
   if (!GA_ID) {
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       console.warn(
         'Google Analytics disabled: set VITE_GA_MEASUREMENT_ID (e.g. G-4SZN0VFKVC) in your environment.'
       );
@@ -66,7 +66,7 @@ export function initializeGA(): void {
   }
 
   // Inject GA4 script
-  if (typeof window !== 'undefined') {
+  if (globalThis.window !== undefined) {
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
@@ -80,12 +80,12 @@ export function initializeGA(): void {
     document.head.appendChild(script);
 
     // Initialize gtag function
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function (...args: any[]) {
-      window.dataLayer.push(args);
+    globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+    globalThis.window.gtag = function (...args: any[]) {
+      globalThis.window.dataLayer.push(args);
     };
-    window.gtag('js', new Date());
-    window.gtag('config', GA_ID);
+    globalThis.window.gtag('js', new Date());
+    globalThis.window.gtag('config', GA_ID);
   }
 }
 
@@ -93,20 +93,20 @@ export function initializeGA(): void {
  * Track a custom event in Google Analytics 4
  */
 export function trackEvent(eventName: string, eventData?: Record<string, any>): void {
-  if (!GA_ID || typeof window === 'undefined' || !window.gtag) {
+  if (!GA_ID || !globalThis.window?.gtag) {
     return;
   }
-  window.gtag('event', eventName, eventData);
+  globalThis.window.gtag('event', eventName, eventData);
 }
 
 /**
  * Track a page view (called when route changes)
  */
 export function trackPageView(path: string, title?: string): void {
-  if (!GA_ID || typeof window === 'undefined' || !window.gtag) {
+  if (!GA_ID || !globalThis.window?.gtag) {
     return;
   }
-  window.gtag('config', GA_ID, {
+  globalThis.window.gtag('config', GA_ID, {
     page_path: path,
     page_title: title
   });

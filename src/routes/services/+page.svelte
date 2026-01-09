@@ -2,6 +2,7 @@
   import { siteConfig } from '$config/siteConfig';
   import { services } from '$lib/data/services';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
+  import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
   import CTA from '$lib/components/CTA.svelte';
   import servicesHeroImg from '/images/services-hero-background.webp';
 
@@ -13,6 +14,26 @@
     description: 'Professional construction services including siding, carpentry, roofing, and remodeling. Expert craftsmen serving Portland, Maine and surrounding areas.',
     url: `${baseUrl}/services`,
     image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.jpg`
+  };
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Services',
+        item: `${baseUrl}/services`
+      }
+    ]
   };
 </script>
 
@@ -34,6 +55,8 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+<SchemaMarkup schema={breadcrumbSchema} />
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">

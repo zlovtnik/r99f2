@@ -133,7 +133,7 @@
       </div>
 
       <!-- Middle: Calendar Widget -->
-      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow-1">
+      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow">
         <h3 class="text-lg font-bold mb-3 text-white text-center">Select Preferred Date</h3>
         
         <!-- Calendar Header -->
@@ -211,7 +211,7 @@
       </div>
 
       <!-- Right: Combined Form -->
-      <div in:slide={{ duration: 600, delay: 1200, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow-1">
+      <div in:slide={{ duration: 600, delay: 1200, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-lg mx-auto lg:flex-grow flex flex-col justify-center">
         <h3 class="text-lg font-bold mb-3 text-white text-center">Get Free Estimate</h3>
         <form on:submit|preventDefault={handleSubmit} class="space-y-3">
           <div>

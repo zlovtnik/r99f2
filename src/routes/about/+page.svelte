@@ -1,6 +1,7 @@
 <script lang="ts">
   import { SITE_URL, BUSINESS_INFO } from '$utils/constants';
   import { services } from '$data/services';
+  import SchemaMarkup from '$components/SchemaMarkup.svelte';
 
   const baseUrl = SITE_URL;
 
@@ -11,6 +12,26 @@
     keywords: 'construction company, about us, general contractor, Portland Maine, 10 years experience',
     url: `${baseUrl}/about`,
     image: `${baseUrl}/images/og-about.jpg`
+  };
+
+  // BreadcrumbList schema
+  $: breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About Us',
+        item: `${baseUrl}/about`
+      }
+    ]
   };
 </script>
 
@@ -31,6 +52,8 @@
   <meta name="twitter:description" content={seo.description} />
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
+
+<SchemaMarkup schema={breadcrumbSchema} />
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
@@ -60,7 +83,14 @@
             </p>
           </div>
           <div class="bg-gray-100 rounded-lg p-8">
-            <img src="/images/Professional-Construction-Service.webp" alt="Our general contractor at work in Portland, ME" class="rounded-lg w-full h-64 object-cover" />
+            <img 
+              src="/images/Professional-Construction-Service.webp" 
+              alt="Our general contractor at work in Portland, ME" 
+              class="rounded-lg w-full h-64 object-cover"
+              loading="lazy"
+              width="600"
+              height="256"
+            />
           </div>
         </div>
       </div>
