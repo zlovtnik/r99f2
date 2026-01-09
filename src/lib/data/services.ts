@@ -106,7 +106,7 @@ export const services: Service[] = [
     slug: 'house-framing',
     description: 'Professional house framing services for residential and commercial projects. Our experienced team provides precision framing and finish work tailored to each space, coordinating design alignment, material selection, and phased execution while maintaining minimal disruption to your daily routine.',
     shortDescription: 'Precision framing for residential and commercial structures',
-    imageUrl: '/images/Carpentry-Services.webp',
+    imageUrl: '/images/Construction-Company.webp', // Distinct from Carpentry-Services.webp - structural framing work
     imageAlt: 'House framing services in Portland, Maine',
     benefits: [
       'Structural integrity',

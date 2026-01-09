@@ -1,9 +1,12 @@
 <script lang="ts">
   import { BUSINESS_INFO, PROMOTIONAL_BADGES, SERVICE_OPTIONS } from '$lib/utils/constants';
   import { formatPhoneNumber } from '$lib/utils/format';
+  import { validateContactForm } from '$lib/utils/validation';
   import { fade, slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
   import { goto } from '$app/navigation';
+
+  let errors: Record<string, string> = {};
 
   let formData = {
     name: '',
@@ -14,16 +17,14 @@
   };
 
   function handlePhoneInput(event: Event) {
-    const input = event.target as HTMLInputElement;
+    const input = event.currentTarget as HTMLInputElement;
     const formatted = formatPhoneNumber(input.value);
     formData.phone = formatted;
   }
 
   function handleSubmit() {
-    // Validate phone number has enough digits
-    const phoneDigits = formData.phone.replace(/\D/g, '');
-    if (phoneDigits.length < 10) {
-      alert('Please enter a valid 10-digit phone number');
+    errors = validateContactForm({ ...formData, zipCode: '' });
+    if (Object.keys(errors).length > 0) {
       return;
     }
 
@@ -108,43 +109,69 @@
         <h3 class="text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
         <form on:submit|preventDefault={handleSubmit} class="space-y-3">
           <div>
+            <label for="name" class="sr-only">Name</label>
             <input
               type="text"
               id="name"
               bind:value={formData.name}
               required
+              autocomplete="name"
+              aria-invalid={errors.name ? 'true' : 'false'}
+              aria-describedby={errors.name ? 'name-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="Your name"
             />
+            {#if errors.name}
+              <p id="name-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.name}</p>
+            {/if}
           </div>
           <div>
+            <label for="email" class="sr-only">Email</label>
             <input
               type="email"
               id="email"
               bind:value={formData.email}
               required
+              autocomplete="email"
+              aria-invalid={errors.email ? 'true' : 'false'}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="your@email.com"
             />
+            {#if errors.email}
+              <p id="email-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.email}</p>
+            {/if}
           </div>
           <div>
+            <label for="phone" class="sr-only">Phone</label>
             <input
               type="tel"
               id="phone"
               bind:value={formData.phone}
               on:input={handlePhoneInput}
               required
+              autocomplete="tel"
+              inputmode="tel"
               pattern="[\d\s\(\)\-]+"
               title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
+              aria-invalid={errors.phone ? 'true' : 'false'}
+              aria-describedby={errors.phone ? 'phone-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="(207) 123-4567"
             />
+            {#if errors.phone}
+              <p id="phone-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.phone}</p>
+            {/if}
           </div>
           <div>
+            <label for="service" class="sr-only">Service</label>
             <select
               id="service"
               bind:value={formData.service}
               required
+              autocomplete="off"
+              aria-invalid={errors.service ? 'true' : 'false'}
+              aria-describedby={errors.service ? 'service-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
             >
               <option value="" disabled>Choose service</option>
@@ -152,15 +179,24 @@
                 <option value={service}>{service}</option>
               {/each}
             </select>
+            {#if errors.service}
+              <p id="service-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.service}</p>
+            {/if}
           </div>
           <div>
+            <label for="message" class="sr-only">Message</label>
             <textarea
               id="message"
               bind:value={formData.message}
+              aria-invalid={errors.message ? 'true' : 'false'}
+              aria-describedby={errors.message ? 'message-error' : undefined}
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="Tell us about your project..."
               rows="3"
             ></textarea>
+            {#if errors.message}
+              <p id="message-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.message}</p>
+            {/if}
           </div>
           <button
             type="submit"
