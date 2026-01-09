@@ -58,10 +58,31 @@ export const galleryItems: GalleryItem[] = [
     image: '/images/Siding-Installation.webp'
   },
   {
-    id: 9,
-    title: 'Custom Trim Work',
-    category: 'carpentry',
-    description: 'Detailed crown molding and trim carpentry',
-    image: '/images/Carpentry-Services.webp'
+    id: 10,
+    title: 'Modern Siding Upgrade',
+    category: 'siding',
+    description: 'Contemporary siding installation with enhanced durability',
+    image: '/images/construction-work-hero.webp'
+  },
+  {
+    id: 11,
+    title: 'Architectural Shingles Replacement',
+    category: 'roofing',
+    description: 'Full replacement of architectural shingles on a steep-pitch roof, including matching existing color and upgrading underlayment for enhanced waterproofing',
+    image: '/images/r-29.webp'
+  },
+  {
+    id: 12,
+    title: 'Metal Roofing Installation',
+    category: 'roofing',
+    description: 'New metal roofing installation with custom skylight flashing and ridge vents, designed for durability in Maine\'s harsh climate',
+    image: '/images/r-19.webp'
+  },
+  {
+    id: 13,
+    title: 'Tile Roof Storm Repair',
+    category: 'roofing',
+    description: 'Storm damage repair on clay tile roof, including re-securing loose tiles, replacing damaged ones, and reinforcing flashing around chimneys',
+    image: '/images/r-27.webp'
   }
 ];

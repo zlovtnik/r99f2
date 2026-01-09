@@ -5,28 +5,13 @@
   import { BUSINESS_INFO, SITE_URL, SERVICE_AREAS } from '$lib/utils/constants';
   import { featuredServices } from '$lib/data/services';
   import { testimonials } from '$lib/data/testimonials';
+  import { benefits, processSteps } from '$lib/data/benefits';
   import ServiceCard from '$lib/components/ServiceCard.svelte';
   import TestimonialCard from '$lib/components/TestimonialCard.svelte';
   import CTA from '$lib/components/CTA.svelte';
   import BenefitIcon from '$lib/components/BenefitIcon.svelte';
   import { fade, slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
-
-  const benefits = [
-    { text: 'Increased property value', icon: 'trending-up' },
-    { text: 'Enhanced energy efficiency', icon: 'zap' },
-    { text: 'Improved safety features', icon: 'shield' },
-    { text: 'Customizable design options', icon: 'palette' },
-    { text: 'Streamlined project timelines', icon: 'clock' }
-  ];
-
-  const steps = [
-    'Conduct a detailed consultation for personalized recommendations',
-    'Create a transparent estimate outlining scope and cost',
-    'Select materials based on durability and style preferences',
-    'Execute projects with precision-focused craftsmanship',
-    'Perform final walkthroughs ensuring every detail is addressed'
-  ];
 
   const siteUrl = SITE_URL;
   $: schema = createLocalBusinessSchema({
@@ -36,12 +21,12 @@
 </script>
 
 <svelte:head>
-  <title>LR Sunrise Construction | General Contractor Portland ME</title>
-  <meta name="description" content="Trusted general contractor in Portland, ME. Expert siding, carpentry, roofing & remodeling. 10+ years experience. Free estimates. Call (978) 519-9774." />
-  <meta name="keywords" content="general contractor, construction company, siding installation, carpentry services, roof installation, Portland Maine" />
+  <title>Siding Installation & Construction Services | LR Sunrise Construction Portland ME</title>
+  <meta name="description" content="Siding Installation & Construction Services in Portland, ME — Expert siding, carpentry, roofing & remodeling. 10+ years experience. Free estimates. Call (978) 519-9774." />
+  <meta name="keywords" content="siding installation, construction services, carpentry, roofing, remodeling, Portland Maine" />
   <link rel="canonical" href={siteUrl} />
-  <meta property="og:title" content="LR Sunrise Construction - General Contractor Portland, ME" />
-  <meta property="og:description" content="Exceptional general contractor solutions for your projects. Siding, carpentry, roofing, and more." />
+  <meta property="og:title" content="Siding Installation & Construction Services - LR Sunrise Construction Portland, ME" />
+  <meta property="og:description" content="Professional siding installation and construction services. Carpentry, roofing, remodeling in Portland, Maine." />
   <meta property="og:url" content={siteUrl} />
   <meta property="og:image" content={`${siteUrl}/images/og-image.jpg`} />
   <meta property="og:image:alt" content="LR Sunrise Construction professional services in Portland, Maine" />
@@ -56,9 +41,9 @@
 <!-- Services Section -->
 <section class="container mx-auto px-4 sm:px-6 py-10 sm:py-16" transition:fade={{ duration: 600, easing: quintOut }}>
   <div class="text-center mb-8 sm:mb-12">
-    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">We Specialize In The Following Services</h2>
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Siding, Roof Installation & Construction Services</h2>
     <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
-      From siding installation to emergency repairs, our team delivers quality craftsmanship and reliable service for all your construction needs.
+      From siding installation to roof replacement, our general contractor team delivers quality craftsmanship for all your property needs.
     </p>
   </div>
 
@@ -82,7 +67,7 @@
   <div class="container mx-auto px-4 sm:px-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Why Choose Us? Here's What's in It for You!</h2>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Why Choose Our General Contractor Services?</h2>
         <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
           Hiring a trusted general contractor isn't just about getting the job done—it's about transforming how you feel about your space. We believe in delivering services that resonate emotionally and strategically with our clients' needs.
         </p>
@@ -103,13 +88,13 @@
       </div>
       
       <div class="bg-white rounded-lg shadow-lg p-5 sm:p-8">
-        <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">How Does Our Process Work?</h3>
+        <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Our Installation & Construction Process</h3>
         <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
           Our approach revolves around transparency, precision, and customer partnership—a philosophy designed to ensure satisfaction at every stage.
         </p>
         <ol class="space-y-4">
-          {#each steps as step, i}
-            <li class="flex gap-3 sm:gap-4" in:fade={{ duration: 500, delay: i * 150 }}>
+          {#each processSteps as step, i}
+            <li class="flex gap-3 sm:gap-4" in:fade={{ duration: 500, delay: i * 100 }}>
               <span class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm transition-transform hover:scale-110">{i + 1}</span>
               <span class="text-gray-700 text-sm sm:text-base">{step}</span>
             </li>
@@ -124,7 +109,7 @@
 <section class="py-10 sm:py-16">
   <div class="container mx-auto px-4 sm:px-6">
     <div class="text-center mb-8 sm:mb-12">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">We Serve the Surrounding Areas!</h2>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Service Areas in Portland & Surrounding Communities</h2>
       <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
         No matter where you're located within Portland, ME, we've got you covered! We proudly extend our services to surrounding communities as part of our commitment to accessibility and convenience.
       </p>
@@ -168,7 +153,7 @@
 <section class="py-10 sm:py-16">
   <div class="container mx-auto px-4 sm:px-6">
     <div class="bg-primary rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Your Trusted General Contractor for Total Property Transformation</h2>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">LR Sunrise Construction: Siding Installation & General Contractor Services</h2>
       <p class="text-base sm:text-xl text-neutral-light mb-6 sm:mb-8 max-w-3xl mx-auto">
         LR Sunrise Construction specializes in delivering comprehensive construction services including siding installation across Portland, ME. Whether you're seeking enhanced curb appeal or structural improvements, we're here to turn your vision into reality.
       </p>

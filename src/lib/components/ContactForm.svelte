@@ -2,6 +2,8 @@
   import { validateContactForm } from '$lib/utils/validation';
   import { services } from '$data/services';
   import type { ContactFormData } from '$lib/types';
+  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
 
   let formData: ContactFormData = {
     name: '',
@@ -15,12 +17,57 @@
   let errors: Record<string, string> = {};
   let submitted = false;
 
+  onMount(() => {
+    // Try to read from sessionStorage first (from hero form)
+    const storedData = sessionStorage.getItem('contactFormData');
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        if (typeof parsedData === 'object' && parsedData !== null && !Array.isArray(parsedData)) {
+          const allowedKeys = ['name', 'email', 'phone', 'service', 'message', 'zipCode'];
+          const safeData: Partial<ContactFormData> = {};
+          for (const key of allowedKeys) {
+            if (key in parsedData && typeof parsedData[key] === 'string') {
+              safeData[key as keyof ContactFormData] = parsedData[key];
+            }
+          }
+          formData = { ...formData, ...safeData };
+        } else {
+          console.warn('Invalid sessionStorage data for contactFormData in onMount, skipping merge into formData');
+        }
+        // Clear the stored data after use
+        sessionStorage.removeItem('contactFormData');
+      } catch (error) {
+        console.error('Error parsing stored contact form data:', error);
+      }
+    } else {
+      // Fallback to URL params for backward compatibility
+      const urlParams = $page.url.searchParams;
+      const maxLength = 500; // Reasonable limit for form fields
+      formData.name = (urlParams.get('name') || '').slice(0, maxLength);
+      formData.email = (urlParams.get('email') || '').slice(0, maxLength);
+      formData.phone = (urlParams.get('phone') || '').slice(0, maxLength);
+      formData.service = (urlParams.get('service') || '').slice(0, maxLength);
+      formData.message = (urlParams.get('message') || '').slice(0, 1000);
+      formData.zipCode = (urlParams.get('zipCode') || '').slice(0, 10);
+      // Also check for preferredDate and append to message if present
+      const preferredDate = urlParams.get('preferredDate');
+      if (preferredDate && formData.message) {
+        formData.message = (formData.message + `\n\nPreferred Date: ${preferredDate}`).slice(0, 1000);
+      } else if (preferredDate) {
+        formData.message = `Preferred Date: ${preferredDate.slice(0, 100)}`;
+      }
+    }
+  });
+
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     errors = validateContactForm(formData);
     
     if (Object.keys(errors).length === 0) {
       submitted = true;
+      // Clear URL search params to prevent repopulation on reload
+      window.history.replaceState({}, '', window.location.pathname);
       // Reset form after successful submission
       formData = {
         name: '',
