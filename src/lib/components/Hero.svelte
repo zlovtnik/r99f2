@@ -5,57 +5,28 @@
   import { quintOut } from 'svelte/easing';
   import { goto } from '$app/navigation';
 
-  let selectedDateObj: Date | null = null;
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
-
   let formData = {
     name: '',
     email: '',
     phone: '',
     service: '',
-    preferredDate: '',
     message: ''
   };
 
-  $: daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  $: firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-  function selectDate(day: number) {
-    const date = new Date(currentYear, currentMonth, day);
-    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
-    
-    selectedDateObj = date;
-    // Create local YYYY-MM-DD string to avoid timezone issues
-    const year = selectedDateObj.getFullYear();
-    const month = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
-    const dayStr = String(selectedDateObj.getDate()).padStart(2, '0');
-    const localDateString = `${year}-${month}-${dayStr}`;
-    
-    formData.preferredDate = localDateString;
-  }
-
-  function prevMonth() {
-    if (currentMonth === 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else {
-      currentMonth--;
-    }
-  }
-
-  function nextMonth() {
-    if (currentMonth === 11) {
-      currentMonth = 0;
-      currentYear++;
-    } else {
-      currentMonth++;
-    }
+  function handlePhoneInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const formatted = formatPhoneNumber(input.value);
+    formData.phone = formatted;
   }
 
   function handleSubmit() {
+    // Validate phone number has enough digits
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
+      alert('Please enter a valid 10-digit phone number');
+      return;
+    }
+
     // Clean formData by omitting empty values
     const cleanedData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => value !== '' && value !== null && value !== undefined)
@@ -84,7 +55,7 @@
   <div class="container mx-auto px-4 sm:px-6 relative z-10">
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
       <!-- Left side: Hero text -->
-      <div class="text-center lg:text-left lg:flex-grow-[0.5]">
+      <div class="text-center lg:text-left lg:flex-1">
         <div in:fade={{ duration: 800, easing: quintOut }}>
           <p class="text-white/90 uppercase tracking-wider text-sm sm:text-base font-medium mb-3 sm:mb-4">
             General Contractor • {BUSINESS_INFO.city}, {BUSINESS_INFO.state}
@@ -132,87 +103,9 @@
         </div>
       </div>
 
-      <!-- Middle: Calendar Widget -->
-      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-sm mx-auto lg:flex-grow">
-        <h3 class="text-lg font-bold mb-3 text-white text-center">Select Preferred Date</h3>
-        
-        <!-- Calendar Header -->
-        <div class="flex items-center justify-between mb-3">
-          <button 
-            on:click={prevMonth}
-            class="p-1.5 hover:bg-white/20 rounded transition-colors"
-            aria-label="Previous month"
-          >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          
-          <h4 class="text-white font-semibold text-base">
-            {monthNames[currentMonth]} {currentYear}
-          </h4>
-          
-          <button 
-            on:click={nextMonth}
-            class="p-1.5 hover:bg-white/20 rounded transition-colors"
-            aria-label="Next month"
-          >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Day Names -->
-        <div class="grid grid-cols-7 gap-1 mb-2">
-          {#each dayNames as dayName}
-            <div class="text-center text-white/70 text-sm font-medium py-1">
-              {dayName}
-            </div>
-          {/each}
-        </div>
-
-        <!-- Calendar Grid -->
-        <div class="grid grid-cols-7 gap-1">
-          <!-- Empty cells for days before the first day of the month -->
-          {#each Array(firstDayOfMonth) as _}
-            <div class="aspect-square"></div>
-          {/each}
-          
-          <!-- Days of the month -->
-          {#each Array(daysInMonth) as _, i}
-            {@const day = i + 1}
-            {@const date = new Date(currentYear, currentMonth, day)}
-            {@const isToday = new Date().toDateString() === date.toDateString()}
-            {@const isSelected = selectedDateObj && selectedDateObj.getFullYear() === currentYear && selectedDateObj.getMonth() === currentMonth && selectedDateObj.getDate() === day}
-            {@const isPast = date < new Date(new Date().setHours(0, 0, 0, 0))}
-            
-            <button
-              on:click={() => selectDate(day)}
-              disabled={isPast}
-              class="aspect-square flex items-center justify-center text-sm font-medium rounded-md transition-all duration-200 hover:bg-accent/80 hover:text-white {isSelected ? 'bg-accent text-white' : isToday ? 'bg-white/25 text-white' : 'text-white/80 hover:bg-white/15'} {isPast ? 'opacity-50 cursor-not-allowed' : ''}"
-              aria-label="Select {monthNames[currentMonth]} {day}, {currentYear}"
-            >
-              {day}
-            </button>
-          {/each}
-        </div>
-
-        {#if selectedDateObj}
-          <div class="mt-3 p-2 bg-accent/15 rounded text-center">
-            <p class="text-white text-sm">
-              {selectedDateObj.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric' 
-              })}
-            </p>
-          </div>
-        {/if}
-      </div>
-
-      <!-- Right: Combined Form -->
-      <div in:slide={{ duration: 600, delay: 1200, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 max-w-lg mx-auto lg:flex-grow flex flex-col justify-center">
-        <h3 class="text-lg font-bold mb-3 text-white text-center">Get Free Estimate</h3>
+      <!-- Right: Form -->
+      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 mx-auto lg:mx-0 lg:shrink-0 lg:max-w-sm w-full flex flex-col justify-center">
+        <h3 class="text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
         <form on:submit|preventDefault={handleSubmit} class="space-y-3">
           <div>
             <input
@@ -239,7 +132,10 @@
               type="tel"
               id="phone"
               bind:value={formData.phone}
+              on:input={handlePhoneInput}
               required
+              pattern="[\d\s\(\)\-]+"
+              title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="(207) 123-4567"
             />
@@ -266,16 +162,9 @@
               rows="3"
             ></textarea>
           </div>
-          {#if selectedDateObj}
-            <div aria-live="polite" id="selected-date-display" class="mt-2 p-2 bg-accent/15 rounded">
-              <p class="text-white text-sm font-medium">Selected Date: {selectedDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-            </div>
-          {/if}
-          <input type="hidden" name="preferredDate" value={selectedDateObj ? selectedDateObj.toISOString().split('T')[0] : ''} />
           <button
             type="submit"
             class="w-full bg-accent text-white font-semibold py-2 px-4 rounded transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-transparent text-sm"
-            aria-describedby={selectedDateObj ? 'selected-date-display' : undefined}
           >
             Get Free Estimate
           </button>

@@ -66,7 +66,12 @@ function checkRateLimit(key: string): { allowed: boolean; retryAfter?: number } 
 
 // Server-safe HTML escaping utility
 function escapeHtml(text: string): string {
-  return String(text)
+  // Normalize line endings: convert CRLF and CR to LF before escaping
+  const normalized = String(text)
+    .replaceAll('\r\n', '\n')
+    .replaceAll('\r', '\n');
+  
+  return normalized
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')

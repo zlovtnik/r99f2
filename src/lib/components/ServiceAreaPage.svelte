@@ -3,7 +3,7 @@
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$lib/components/CTA.svelte';
   import { BUSINESS_INFO, STANDARD_SERVICES } from '$lib/utils/constants';
-  import { createLocalBusinessSchema } from '$lib/utils/seo';
+  import { createLocalBusinessSchema, createBreadcrumbSchema } from '$lib/utils/seo';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
 
   export let areaSlug: string;
@@ -33,30 +33,11 @@
   }) : null;
 
   // BreadcrumbList schema
-  $: breadcrumbSchema = area ? {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: baseUrl
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Service Areas',
-        item: `${baseUrl}/service-areas`
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: area.name,
-        item: `${baseUrl}/service-areas/${area.slug}`
-      }
-    ]
-  } : null;
+  $: breadcrumbSchema = area ? createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Service Areas', url: `${baseUrl}/service-areas` },
+    { name: area.name, url: `${baseUrl}/service-areas/${area.slug}` }
+  ]) : null;
 </script>
 
 <svelte:head>

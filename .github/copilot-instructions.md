@@ -14,9 +14,9 @@
 
 ## Data & Configuration
 - **Structured data**: Services/testimonials/FAQ/service areas live in [src/lib/data/](src/lib/data/) and use types from [src/lib/types/index.ts](src/lib/types/index.ts); update data files, not inline in components
-- **Constants**: Business/site constants in [src/lib/utils/constants.ts](src/lib/utils/constants.ts) (BUSINESS_INFO, SERVICE_AREAS, SERVICE_OPTIONS exported as const arrays)
+- **Constants**: Business/site constants in [src/lib/utils/constants.ts](src/lib/utils/constants.ts) (BUSINESS_INFO, SERVICE_AREAS, SERVICE_OPTIONS exported as const arrays). **SERVICE_OPTIONS is the canonical list of service slugs**; use it for form `<select>` values and ensure [src/lib/data/services.ts](src/lib/data/services.ts) exports a services array whose slug fields are validated against SERVICE_OPTIONS to prevent drift. Any form validation logic that builds select options or validates submitted service slugs must derive its values from SERVICE_OPTIONS so both the data file and form validation code reference the same canonical source
 - **Config flags**: [src/lib/config/siteConfig.ts](src/lib/config/siteConfig.ts) reads `VITE_ENABLE_*` envs for feature toggles (enableContactForm, enableAnalytics, etc.)
-- **Environment vars**: `VITE_GA_MEASUREMENT_ID`, `VITE_ENABLE_*` toggles, `VITE_BUSINESS_EMAIL/PHONE`, `VITE_SITE_URL` (default `https://lbsunrise.com`)
+- **Environment vars**: `VITE_GA_MEASUREMENT_ID`, `VITE_ENABLE_*` toggles, `VITE_BUSINESS_EMAIL/PHONE` (client-side display), `ADMIN_EMAIL` (server-side email recipient for contact API), `VITE_SITE_URL` (default `https://lbsunrise.com`)
 
 ## SEO & Analytics
 - **SEO utilities**: [src/lib/utils/seo.ts](src/lib/utils/seo.ts) provides `createLocalBusinessSchema`, `createServiceSchema`, `formatPricing`, breadcrumbs
@@ -26,8 +26,8 @@
 
 ## Forms & Validation
 - **Contact form**: [ContactForm.svelte](src/lib/components/ContactForm.svelte) uses `validateContactForm` from [validation.ts](src/lib/utils/validation.ts) (validates name/email/phone/ZIP/service/message)
-- **Service validation**: Form `<select>` values must match `SERVICE_OPTIONS` from constants.ts; validation checks against `services.map(s => s.slug)`
-- **API endpoint**: [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts) handles form submission with rate limiting (configurable via `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_MAX`)
+- **Service validation**: Form `<select>` values must match **SERVICE_OPTIONS** from constants.ts (the canonical list); validation checks must validate service values against SERVICE_OPTIONS to avoid drift
+- **API endpoint**: [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts) handles form submission with rate limiting (configurable via `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_MAX`) and sends email to `ADMIN_EMAIL` (server-side env); client-side display uses `VITE_BUSINESS_EMAIL` and `VITE_BUSINESS_PHONE`
 
 ## UI Components & Styling
 - **Components**: Hero/CTA/ServiceCard/TestimonialCard/Footer/Navigation in [src/lib/components/](src/lib/components/); Navigation uses `$page` store for active route highlighting

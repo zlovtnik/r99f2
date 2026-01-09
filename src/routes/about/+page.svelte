@@ -2,6 +2,7 @@
   import { SITE_URL, BUSINESS_INFO } from '$utils/constants';
   import { services } from '$data/services';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
+  import { createBreadcrumbSchema } from '$utils/seo';
 
   const baseUrl = SITE_URL;
 
@@ -15,24 +16,10 @@
   };
 
   // BreadcrumbList schema
-  $: breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: baseUrl
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'About Us',
-        item: `${baseUrl}/about`
-      }
-    ]
-  };
+  $: breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'About Us', url: `${baseUrl}/about` }
+  ]);
 </script>
 
 <svelte:head>
@@ -53,7 +40,9 @@
   <meta name="twitter:image" content={seo.image} />
 </svelte:head>
 
-<SchemaMarkup schema={breadcrumbSchema} />
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">

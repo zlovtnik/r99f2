@@ -5,6 +5,7 @@
   import CTA from '$components/CTA.svelte';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { createBreadcrumbSchema } from '$utils/seo';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -39,24 +40,10 @@
   };
 
   // BreadcrumbList schema
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: baseUrl
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'FAQ',
-        item: `${baseUrl}/faq`
-      }
-    ]
-  };
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'FAQ', url: `${baseUrl}/faq` }
+  ]);
 </script>
 
 <svelte:head>
@@ -80,7 +67,9 @@
 </svelte:head>
 
 <SchemaMarkup schema={faqSchema} />
-<SchemaMarkup schema={breadcrumbSchema} />
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16">
