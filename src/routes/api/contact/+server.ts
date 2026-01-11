@@ -2,6 +2,7 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { validateContactForm } from '$lib/utils/validation';
 import { sendEmail } from '$lib/utils/email';
+import { SERVICE_OPTIONS } from '$lib/utils/constants';
 
 // Parse and validate rate limit environment variables
 const parseRateLimitEnv = (envVar: string | undefined, defaultValue: number, minValue: number = 1): number => {
@@ -107,7 +108,6 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     const formData = await request.json();
     const { name, email, phone, zip, service, message } = formData;
 
-    // Validate form data
     const validation = validateContactForm({ name, email, phone, zipCode: zip, service, message });
     if (Object.keys(validation).length > 0) {
       return json({

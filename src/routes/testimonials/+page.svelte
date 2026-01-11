@@ -39,7 +39,7 @@
 
 <style>
   .hero-bg {
-    background-image: url('/images/Construction-Company.webp');
+    background-image: url('/images/testimonials-hero.webp');
   }
 </style>
 
@@ -82,7 +82,7 @@
           </svg>
         {/each}
       </div>
-      <span class="text-2xl font-bold ml-2">5.0</span>
+      <span class="text-2xl font-bold ml-2">{STATS.starRating}</span>
       <span class="text-neutral-light">Average Rating</span>
     </div>
   </div>
