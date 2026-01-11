@@ -1,6 +1,6 @@
 <script lang="ts">
   import { validateContactForm } from '$lib/utils/validation';
-  import { services } from '$data/services';
+  import { SERVICE_OPTIONS } from '$lib/utils/constants';
   import type { ContactFormData } from '$lib/types';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
@@ -24,12 +24,23 @@
       try {
         const parsedData = JSON.parse(storedData);
         if (typeof parsedData === 'object' && parsedData !== null && !Array.isArray(parsedData)) {
-          const allowedKeys = ['name', 'email', 'phone', 'service', 'message', 'zipCode'];
+          const allowedKeys: Array<keyof ContactFormData> = ['name', 'email', 'phone', 'service', 'message', 'zipCode'];
           const safeData: Partial<ContactFormData> = {};
           for (const key of allowedKeys) {
-            if (key in parsedData && typeof parsedData[key] === 'string') {
-              safeData[key as keyof ContactFormData] = parsedData[key];
+            const value = parsedData[key];
+            if (typeof value !== 'string') {
+              continue;
             }
+
+            if (key === 'service') {
+              if (SERVICE_OPTIONS.includes(value)) {
+                safeData.service = value;
+              }
+              continue;
+            }
+
+            const nonServiceKey = key as Exclude<keyof ContactFormData, 'service'>;
+            safeData[nonServiceKey] = value;
           }
           formData = { ...formData, ...safeData };
         } else {
@@ -47,7 +58,8 @@
       formData.name = (urlParams.get('name') || '').slice(0, maxLength);
       formData.email = (urlParams.get('email') || '').slice(0, maxLength);
       formData.phone = (urlParams.get('phone') || '').slice(0, maxLength);
-      formData.service = (urlParams.get('service') || '').slice(0, maxLength);
+      const serviceParam = (urlParams.get('service') || '').slice(0, maxLength);
+      formData.service = SERVICE_OPTIONS.includes(serviceParam) ? serviceParam : '';
       formData.message = (urlParams.get('message') || '').slice(0, 1000);
       formData.zipCode = (urlParams.get('zipCode') || '').slice(0, 10);
       // Also check for preferredDate and append to message if present
@@ -59,6 +71,19 @@
       }
     }
   });
+
+  const serviceOptions = SERVICE_OPTIONS.map((value) => ({
+    value,
+    label: formatServiceLabel(value)
+  }));
+
+  function formatServiceLabel(value: string): string {
+    return value
+      .replace(/[-_]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
@@ -89,7 +114,7 @@
       type="text"
       placeholder="Enter your full name"
       bind:value={formData.name}
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.name ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
       aria-required="true"
       aria-describedby={errors.name ? "name-error" : undefined}
     />
@@ -105,7 +130,7 @@
       type="email"
       placeholder="Enter your email address"
       bind:value={formData.email}
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.email ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
       aria-required="true"
       aria-describedby={errors.email ? "email-error" : undefined}
     />
@@ -121,7 +146,7 @@
       type="tel"
       placeholder="Enter your phone number"
       bind:value={formData.phone}
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.phone ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
       aria-required="true"
       aria-describedby={errors.phone ? "phone-error" : undefined}
     />
@@ -135,13 +160,13 @@
     <select 
       id="service"
       bind:value={formData.service} 
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors appearance-none bg-white"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.service ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors appearance-none bg-white`}
       aria-required="true"
       aria-describedby={errors.service ? "service-error" : undefined}
     >
       <option value="">Select a Service</option>
-      {#each services as service}
-        <option value={service.slug}>{service.name}</option>
+      {#each serviceOptions as option}
+        <option value={option.value}>{option.label}</option>
       {/each}
     </select>
     {#if errors.service}
@@ -157,7 +182,7 @@
       inputmode="numeric"
       placeholder="Enter your ZIP code"
       bind:value={formData.zipCode}
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.zipCode ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
       aria-required="true"
       aria-describedby={errors.zipCode ? "zipCode-error" : undefined}
     />
@@ -172,7 +197,7 @@
       id="message"
       placeholder="Tell us about your project needs"
       bind:value={formData.message}
-      class="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-y"
+      class={`w-full px-4 py-3 sm:py-2 border ${errors.message ? 'border-red-400' : 'border-gray-300'} rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-y`}
       rows="4"
       aria-required="true"
       aria-describedby={errors.message ? "message-error" : undefined}

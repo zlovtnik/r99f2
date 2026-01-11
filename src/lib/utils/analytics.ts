@@ -1,6 +1,7 @@
 /**
- * Google Analytics 4 utility functions
- * Requires VITE_GA_MEASUREMENT_ID environment variable
+ * Analytics utility functions
+ * Supports Google Analytics 4 and Cloudflare Web Analytics
+ * Requires VITE_GA_MEASUREMENT_ID and/or VITE_CLOUDFLARE_TOKEN environment variables
  */
 
 function isValidGAMeasurementId(value: unknown): value is string {
@@ -12,8 +13,19 @@ function isValidGAMeasurementId(value: unknown): value is string {
   return /^G-[A-Z0-9]+$/i.test(trimmed);
 }
 
+function isValidCloudflareToken(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  // Cloudflare tokens are 32-character hex strings
+  return /^[a-f0-9]{32}$/i.test(trimmed);
+}
+
 const GA_ID_RAW = import.meta.env.VITE_GA_MEASUREMENT_ID;
 const GA_ID = isValidGAMeasurementId(GA_ID_RAW) ? GA_ID_RAW.trim() : undefined;
+
+const CLOUDFLARE_TOKEN_RAW = import.meta.env.VITE_CLOUDFLARE_TOKEN;
+const CLOUDFLARE_TOKEN = isValidCloudflareToken(CLOUDFLARE_TOKEN_RAW) ? CLOUDFLARE_TOKEN_RAW.trim() : undefined;
 
 interface GtagConfig {
   page_path?: string;
@@ -30,6 +42,7 @@ interface GtagEvent {
 
 // Track whether GA initialization failed
 let gaInitFailed = false;
+let cloudflareInitFailed = false;
 
 declare global {
   interface Window {
@@ -47,6 +60,10 @@ declare global {
  */
 export function isGAInitFailed(): boolean {
   return gaInitFailed;
+}
+
+export function isCloudflareInitFailed(): boolean {
+  return cloudflareInitFailed;
 }
 
 /**
@@ -97,6 +114,40 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>): 
     return;
   }
   globalThis.window.gtag('event', eventName, eventData);
+}
+
+/**
+ * Initialize Cloudflare Web Analytics
+ * Injects Cloudflare beacon script into document head
+ * Should be called once on app initialization (in root layout)
+ */
+export function initializeCloudflare(): void {
+  // Validate Cloudflare token exists
+  if (!CLOUDFLARE_TOKEN) {
+    cloudflareInitFailed = true;
+    if (globalThis.window !== undefined) {
+      console.warn(
+        'Cloudflare Web Analytics disabled: set VITE_CLOUDFLARE_TOKEN in your environment.'
+      );
+    }
+    return;
+  }
+
+  // Inject Cloudflare beacon script
+  if (globalThis.window !== undefined) {
+    const script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', JSON.stringify({ token: CLOUDFLARE_TOKEN }));
+    
+    // Add error handler for script loading failures
+    script.onerror = (error) => {
+      cloudflareInitFailed = true;
+      console.error('Failed to load Cloudflare Web Analytics script', error);
+    };
+    
+    document.head.appendChild(script);
+  }
 }
 
 /**

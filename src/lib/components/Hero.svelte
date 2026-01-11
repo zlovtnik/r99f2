@@ -18,8 +18,36 @@
 
   function handlePhoneInput(event: Event) {
     const input = event.currentTarget as HTMLInputElement;
-    const formatted = formatPhoneNumber(input.value);
+    const cursorStart = input.selectionStart ?? 0;
+    const rawValue = input.value;
+    const formatted = formatPhoneNumber(rawValue);
+    
+    // Calculate new cursor position by counting digits before cursor
+    let digitsBeforeCursor = 0;
+    for (let i = 0; i < cursorStart; i++) {
+      if (/\d/.test(rawValue[i])) {
+        digitsBeforeCursor++;
+      }
+    }
+    
+    // Find new position in formatted string
+    let newPos = 0;
+    let digitsSeen = 0;
+    for (let i = 0; i < formatted.length; i++) {
+      if (/\d/.test(formatted[i])) {
+        digitsSeen++;
+        if (digitsSeen >= digitsBeforeCursor) {
+          newPos = i + 1;
+          break;
+        }
+      }
+    }
+    
+    // Update input value and restore cursor
+    input.value = formatted;
+    input.setSelectionRange(newPos, newPos);
     formData.phone = formatted;
+    
   }
 
   function handleSubmit() {
@@ -36,6 +64,13 @@
     // Store in sessionStorage (with error handling)
     try {
       sessionStorage.setItem('contactFormData', JSON.stringify(cleanedData));
+      formData = {
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: ''
+      };
     } catch (err) {
       console.error('Failed to save contact form data to sessionStorage:', err);
     }
@@ -45,8 +80,16 @@
   }
 </script>
 
-<section class="bg-gradient-to-r from-primary to-secondary text-white py-12 sm:py-16 md:py-20 relative overflow-hidden">
-  <div class="absolute inset-0 bg-black/20"></div>
+<section class="text-white py-12 sm:py-16 md:py-20 relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div
+      class="absolute inset-0 bg-cover bg-center"
+      style="background-image: url('/images/General-Contractor-1.webp');"
+      aria-hidden="true"
+    ></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/70 to-secondary/70"></div>
+    <div class="absolute inset-0 bg-black/30"></div>
+  </div>
   <!-- Animated background elements -->
   <div class="absolute inset-0" aria-hidden="true">
     <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-bounce" style="animation-delay: 0s; animation-duration: 3s;"></div>
@@ -152,15 +195,14 @@
               required
               autocomplete="tel"
               inputmode="tel"
-              pattern="[\d\s\(\)\-]+"
               title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
               aria-invalid={errors.phone ? 'true' : 'false'}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-3 py-2 bg-white/20 border {errors.phone ? 'border-red-400' : 'border-white/30'} rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="(207) 123-4567"
             />
             {#if errors.phone}
-              <p id="phone-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.phone}</p>
+              <p id="phone-error" class="mt-1 text-xs text-red-200 font-medium" role="alert">{errors.phone}</p>
             {/if}
           </div>
           <div>
@@ -224,9 +266,4 @@
     background-color: #fff !important;
   }
 
-  /* Webkit-specific overrides for better cross-browser support */
-  select::-webkit-listbox option {
-    color: #000 !important;
-    background-color: #fff !important;
-  }
 </style>

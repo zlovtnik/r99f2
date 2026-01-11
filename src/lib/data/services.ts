@@ -106,7 +106,7 @@ export const services: Service[] = [
     slug: 'house-framing',
     description: 'Professional house framing services for residential and commercial projects. Our experienced team provides precision framing and finish work tailored to each space, coordinating design alignment, material selection, and phased execution while maintaining minimal disruption to your daily routine.',
     shortDescription: 'Precision framing for residential and commercial structures',
-    imageUrl: '/images/Construction-Company.webp', // Distinct from Carpentry-Services.webp - structural framing work
+    imageUrl: '/images/framing.webp', // Structural framing work visual unique to this service
     imageAlt: 'House framing services in Portland, Maine',
     benefits: [
       'Structural integrity',
@@ -251,7 +251,7 @@ export const services: Service[] = [
     slug: 'gutter-services',
     description: 'Comprehensive gutter installation, repair, and maintenance services to protect your property from water damage. Properly functioning gutters direct water away from your foundation and prevent erosion, basement flooding, and structural damage.',
     shortDescription: 'Complete gutter installation and maintenance',
-    imageUrl: '/images/Professional-construction-contractor.webp',
+    imageUrl: '/images/Professional-Construction-Contractor.webp',
     imageAlt: 'Gutter services in Portland, Maine',
     benefits: [
       'Water damage prevention',

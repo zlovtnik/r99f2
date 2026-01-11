@@ -84,5 +84,19 @@ export const galleryItems: GalleryItem[] = [
     category: 'roofing',
     description: 'Storm damage repair on clay tile roof, including re-securing loose tiles, replacing damaged ones, and reinforcing flashing around chimneys',
     image: '/images/r-27.webp'
+  },
+  {
+    id: 14,
+    title: 'Precision Framing Layout',
+    category: 'framing',
+    description: 'Detailed framing layout for a new residential build, highlighting our careful attention to structural accuracy.',
+    image: '/images/framing.webp'
+  },
+  {
+    id: 15,
+    title: 'Finish Carpentry Framing',
+    category: 'framing',
+    description: 'Advanced finish carpentry framing that prepares the space for drywall, trim, and cabinetry.',
+    image: '/images/framing2.webp'
   }
 ];
