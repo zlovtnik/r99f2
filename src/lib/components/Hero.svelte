@@ -47,6 +47,7 @@
     input.value = formatted;
     input.setSelectionRange(newPos, newPos);
     formData.phone = formatted;
+    errors = { ...errors, phone: undefined };
     
   }
 
@@ -198,11 +199,11 @@
               title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
               aria-invalid={errors.phone ? 'true' : 'false'}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border {errors.phone ? 'border-red-400' : 'border-white/30'} rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
               placeholder="(207) 123-4567"
             />
             {#if errors.phone}
-              <p id="phone-error" class="mt-1 text-xs text-red-200 font-medium" role="alert">{errors.phone}</p>
+              <p id="phone-error" class="mt-1 text-xs text-white/90" aria-live="polite">{errors.phone}</p>
             {/if}
           </div>
           <div>

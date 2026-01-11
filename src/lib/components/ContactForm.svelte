@@ -82,7 +82,9 @@
       .replace(/[-_]+/g, ' ')
       .replace(/\s+/g, ' ')
       .trim()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
+      .split(' ')
+      .map((word) => word.charAt(0).toLocaleUpperCase() + word.slice(1).toLocaleLowerCase())
+      .join(' ');
   }
 
   const handleSubmit = async (e: SubmitEvent) => {

@@ -2,7 +2,6 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { validateContactForm } from '$lib/utils/validation';
 import { sendEmail } from '$lib/utils/email';
-import { SERVICE_OPTIONS } from '$lib/utils/constants';
 
 // Parse and validate rate limit environment variables
 const parseRateLimitEnv = (envVar: string | undefined, defaultValue: number, minValue: number = 1): number => {
@@ -107,8 +106,9 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
   try {
     const formData = await request.json();
     const { name, email, phone, zip, service, message } = formData;
+    const normalizedService = String(service ?? '').trim();
 
-    const validation = validateContactForm({ name, email, phone, zipCode: zip, service, message });
+    const validation = validateContactForm({ name, email, phone, zipCode: zip, service: normalizedService, message });
     if (Object.keys(validation).length > 0) {
       return json({
         success: false,
@@ -116,21 +116,12 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
       }, { status: 400 });
     }
 
-    // Ensure the service value is one of the canonical SERVICE_OPTIONS
-    const normalizedService = String(service ?? '').trim();
-    if (!SERVICE_OPTIONS.includes(normalizedService)) {
-      return json({
-        success: false,
-        error: `Unrecognized service: ${normalizedService || 'none'}`
-      }, { status: 422 });
-    }
-
     // Escape user inputs to prevent XSS
     const escapedName = escapeHtml(name);
     const escapedEmail = escapeHtml(email);
     const escapedPhone = escapeHtml(phone);
     const escapedZip = escapeHtml(zip);
-    const escapedService = escapeHtml(service);
+    const escapedService = escapeHtml(normalizedService);
     const escapedMessage = escapeHtml(message);
 
     // Send email
