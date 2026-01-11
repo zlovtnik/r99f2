@@ -124,7 +124,6 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>): 
 export function initializeCloudflare(): void {
   // Validate Cloudflare token exists
   if (!CLOUDFLARE_TOKEN) {
-    cloudflareInitFailed = true;
     if (globalThis.window !== undefined) {
       console.warn(
         'Cloudflare Web Analytics disabled: set VITE_CLOUDFLARE_TOKEN in your environment.'

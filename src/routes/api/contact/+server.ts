@@ -116,6 +116,15 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
       }, { status: 400 });
     }
 
+    // Ensure the service value is one of the canonical SERVICE_OPTIONS
+    const normalizedService = String(service ?? '').trim();
+    if (!SERVICE_OPTIONS.includes(normalizedService)) {
+      return json({
+        success: false,
+        error: `Unrecognized service: ${normalizedService || 'none'}`
+      }, { status: 422 });
+    }
+
     // Escape user inputs to prevent XSS
     const escapedName = escapeHtml(name);
     const escapedEmail = escapeHtml(email);
