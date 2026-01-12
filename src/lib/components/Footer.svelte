@@ -64,6 +64,7 @@
         <ul class="space-y-1 text-gray-300">
           <li><a href="/services" class="hover:text-white transition-colors block py-2 sm:py-1">Services</a></li>
           <li><a href="/service-areas" class="hover:text-white transition-colors block py-2 sm:py-1">Service Areas</a></li>
+          <li><a href="/blog" class="hover:text-white transition-colors block py-2 sm:py-1">Blog</a></li>
           <li><a href="/gallery" class="hover:text-white transition-colors block py-2 sm:py-1">Gallery</a></li>
           <li><a href="/testimonials" class="hover:text-white transition-colors block py-2 sm:py-1">Testimonials</a></li>
           <li><a href="/faq" class="hover:text-white transition-colors block py-2 sm:py-1">FAQ</a></li>

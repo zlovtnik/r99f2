@@ -4,8 +4,7 @@
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import CTA from '$components/CTA.svelte';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
-  import { BUSINESS_INFO } from '$lib/utils/constants';
-  import { STATS } from '$lib/utils/constants';
+  import { BUSINESS_INFO, STATS } from '$lib/utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -74,12 +73,29 @@
     <p class="text-xl text-neutral-light max-w-3xl mx-auto">
       Don't just take our word for it. Read real reviews from homeowners and businesses who have trusted {BUSINESS_INFO.name} with their construction projects.
     </p>
-    <div class="mt-8 flex items-center justify-center gap-2">
+    <div class="mt-8 flex items-center justify-center gap-2" role="img" aria-label="{STATS.starRating} out of 5 stars">
       <div class="flex">
         {#each Array(5) as _, i}
-          <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
+          {@const isFullStar = i < Math.floor(STATS.starRating)}
+          {@const isHalfStar = i === Math.floor(STATS.starRating) && STATS.starRating % 1 !== 0}
+          <div class="relative w-8 h-8">
+            {#if isFullStar || isHalfStar}
+              <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              {#if isHalfStar}
+                <div class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+                  <svg class="w-8 h-8 text-gray-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+              {/if}
+            {:else}
+              <svg class="w-8 h-8 text-gray-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            {/if}
+          </div>
         {/each}
       </div>
       <span class="text-2xl font-bold ml-2">{STATS.starRating}</span>

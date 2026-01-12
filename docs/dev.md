@@ -132,7 +132,7 @@ lb-sunrise/
 ### 3.1 svelte.config.js
 ```typescript
 import adapter from '@sveltejs/adapter-vercel';
-import { vitePreprocess } from 'svelte-vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
   preprocess: vitePreprocess(),
@@ -274,7 +274,7 @@ export interface SchemaMarkup {
 }
 
 export interface LocalBusinessSchema extends SchemaMarkup {
-  '@type': 'LocalBusiness' | 'Plumber' | 'HomeServiceBusiness';
+  '@type': 'LocalBusiness' | 'RoofingContractor' | 'HomeServiceBusiness';
   name: string;
   telephone: string;
   address: {
@@ -356,7 +356,9 @@ export interface BreadcrumbSchema extends SchemaMarkup {
 </script>
 
 <svelte:head>
+<svelte:head>
   {@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
+</svelte:head>
 </svelte:head>
 ```
 
@@ -793,16 +795,29 @@ export const POST: RequestHandler = async ({ request }) => {
       return new Response(JSON.stringify({ errors }), { status: 400 });
     }
 
-    // Send email (implement with email service)
-    // await sendEmail(data);
+    // Send email using configured provider (SMTP/SES/SendGrid)
+    try {
+      await sendEmail(data);
+      console.log(`Email sent successfully for submission: ${data.email}`);
+    } catch (emailError) {
+      console.error('Email delivery failed:', emailError);
+      // Log submission for manual follow-up or fallback persistence
+      // In production, persist to database or queue for retry
+      return new Response(JSON.stringify({ error: 'Email delivery failed. Please try again later.' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
+    console.error('Contact form submission error:', error);
     return new Response(JSON.stringify({ error: 'Failed to submit form' }), {
-      status: 500
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 };
@@ -1069,8 +1084,7 @@ a {
     "lint": "eslint .",
     "format": "prettier --write ."
   },
-  "devDependencies": {
-    "@sveltejs/adapter-vercel": "^4.1.0",
+  "devDependencadapter-vercel": "^4.1.0",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@tailwindcss/forms": "^0.5.7",
@@ -1085,10 +1099,7 @@ a {
     "typescript": "^5.3.2",
     "vite": "^5.0.0",
     "vite-plugin-svgo": "^2.4.0"
-  },
-  "dependencies": {
-    "@sveltejs/kit": "^2.0.0",
-    "svelte": "^4.2.0"
+  }
   }
 }
 ```
@@ -1764,8 +1775,8 @@ vercel list
 
 ---
 
-#### **Day 4 - Friday, January 9** | PAGE ROUTES
-**Theme:** Build all page routes (core route structure)
+#### **Day 4 - Friday, January 9** | PAGE ROUTES & EMAIL INTEGRATION
+**Theme:** Build all page routes and wire email service
 
 **Morning Tasks (4 hours):**
 1. Create main pages
@@ -1791,39 +1802,26 @@ vercel list
    - Create `src/routes/api/contact/+server.ts` (contact form handler)
    - Create `src/routes/api/analytics/+server.ts` (analytics stub)
    - Implement email service integration:
-     - **PROVIDER ALREADY SELECTED ON DAY 1** - Use chosen email provider (SendGrid/Mailgun/SES)
+     - Use provider selected on Day 1 (SendGrid/Mailgun/SES)
      - Create `src/lib/utils/email.ts` helper with sendEmail() function
-     - Add retry/fallback logic for email delivery
-     - Wire sendEmail() into contact API handler (uncomment existing call)
-     - Configure `VITE_EMAIL_API_KEY` environment variable
+     - Add retry/backoff logic and submission persistence for email delivery
+     - Wire sendEmail() into contact API handler with error handling and logging
+     - Ensure `VITE_EMAIL_API_KEY` environment variable is configured
      - Test email delivery end-to-end (send/receive verification)
 
-5. Error boundary implementation
-   - Create `src/routes/+error.svelte` (SvelteKit error boundary)
-     - Handle 404 errors: Show "Page Not Found" with navigation back to home
-     - Handle 500 errors: Show "Server Error" with contact information
-     - Include proper SEO meta tags for error pages
-   - Wire error handling in `src/routes/+layout.svelte` if necessary
-     - Ensure error boundary catches all unhandled errors
-     - Add error logging for debugging (console.error in development)
-   - Manual testing:
-     - Navigate to nonexistent route (e.g., /nonexistent-page) → confirm 404 page shows
-     - Simulate server error (temporarily break API endpoint) → confirm 500 page shows
-     - Test error page navigation and styling on mobile/desktop
-
-6. Test ContactForm functionality
+5. Test ContactForm and Error Handling (lower priority)
    - Test ContactForm component functionality
    - Test form validation (client-side)
    - Test form submission to API endpoint
    - Verify error handling and success messages
-   - Test email delivery end-to-end (send/receive verification)
+   - Create basic `src/routes/+error.svelte` if time permits
 
 **Deliverables:**
 - ✅ All 11+ page routes created
-- ✅ Contact form API endpoint created
+- ✅ Contact form API endpoint created with email wiring
 - ✅ All pages render without errors
 - ✅ Navigation links work correctly
-- ✅ ContactForm fully tested and functional
+- ✅ ContactForm functional with email delivery
 
 **Verification:**
 - Click through all navigation links

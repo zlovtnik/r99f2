@@ -23,6 +23,13 @@ export interface ServiceArea {
   keywords: string[];
   state: string;
   emergencyResponseTime?: string;
+  climateContext?: string;
+  architecturalNotes?: string;
+  seasonalTips?: string[];
+  localFaqs?: FAQ[];
+  testimonials?: Testimonial[];
+  galleryItems?: GalleryItem[];
+  videoUrl?: string;
 }
 
 export interface Testimonial {
@@ -42,11 +49,33 @@ export interface FAQ {
 }
 
 export interface GalleryItem {
-  id: number;
+  id: string;
   title: string;
   category: string;
   description: string;
   image: string;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  publishedAt: string;
+  updatedAt?: string;
+  category: string;
+  tags: string[];
+  featuredImage?: string;
+  imageAlt?: string;
+  videoUrl?: string;
+  readingTime?: number;
+  relatedServices?: string[];
+  relatedAreas?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  keywords?: string[];
 }
 
 export interface ContactFormData {

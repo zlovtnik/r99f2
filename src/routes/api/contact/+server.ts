@@ -20,6 +20,26 @@ type RateLimitRecord = {
 
 const rateLimitStore = new Map<string, RateLimitRecord>();
 
+// Periodic cleanup of expired rate limit entries (runs every 60 seconds)
+// Only run in long-lived server environments, not in serverless
+const isServerless = process.env.IS_SERVERLESS === 'true';
+let cleanupTimer: ReturnType<typeof setInterval> | null = null;
+
+if (!isServerless) {
+  cleanupTimer = setInterval(() => {
+    const now = Date.now();
+    for (const [k, r] of rateLimitStore.entries()) {
+      if (r.expiresAt <= now) {
+        rateLimitStore.delete(k);
+      }
+    }
+  }, 60000);
+  // Allow Node.js to exit even if this interval is still pending
+  if (cleanupTimer.unref) {
+    cleanupTimer.unref();
+  }
+}
+
 function getClientKey(request: Request, getClientAddress: () => string): string {
   // Try to get IP from forwarded headers first (more secure)
   const forwardedHeader = request.headers.get('x-forwarded-for');
@@ -44,23 +64,29 @@ function checkRateLimit(key: string): { allowed: boolean; retryAfter?: number } 
   const windowMs = RATE_LIMIT_WINDOW_SECONDS * 1000;
   const record = rateLimitStore.get(key);
 
-  // Clean up expired entries to prevent memory leaks
-  for (const [k, r] of rateLimitStore.entries()) {
-    if (r.expiresAt <= now) {
-      rateLimitStore.delete(k);
-    }
-  }
-
-  if (!record || record.expiresAt <= now) {
+  // Case 1: Record exists but is expired - delete and treat as new
+  if (record && record.expiresAt <= now) {
+    rateLimitStore.delete(key);
+    // Create fresh record for this request
     rateLimitStore.set(key, { count: 1, expiresAt: now + windowMs });
     return { allowed: true };
   }
 
+  // Case 2: No record exists - create new one
+  if (!record) {
+    rateLimitStore.set(key, { count: 1, expiresAt: now + windowMs });
+    return { allowed: true };
+  }
+
+  // Case 3: Active record exists
+  // Check if limit reached before incrementing
   if (record.count >= RATE_LIMIT_MAX) {
     return { allowed: false, retryAfter: Math.ceil((record.expiresAt - now) / 1000) };
   }
 
+  // Increment count and update store
   record.count += 1;
+  rateLimitStore.set(key, record);
   return { allowed: true };
 }
 
@@ -106,9 +132,16 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
   try {
     const formData = await request.json();
     const { name, email, phone, zip, service, message } = formData;
+    
+    // Normalize all string fields consistently
+    const normalizedName = String(name ?? '').trim();
+    const normalizedEmail = String(email ?? '').trim();
+    const normalizedPhone = String(phone ?? '').trim();
+    const normalizedZip = String(zip ?? '').trim();
     const normalizedService = String(service ?? '').trim();
+    const normalizedMessage = String(message ?? '').trim();
 
-    const validation = validateContactForm({ name, email, phone, zipCode: zip, service: normalizedService, message });
+    const validation = validateContactForm({ name: normalizedName, email: normalizedEmail, phone: normalizedPhone, zipCode: normalizedZip, service: normalizedService, message: normalizedMessage });
     if (Object.keys(validation).length > 0) {
       return json({
         success: false,
@@ -117,12 +150,12 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     }
 
     // Escape user inputs to prevent XSS
-    const escapedName = escapeHtml(name);
-    const escapedEmail = escapeHtml(email);
-    const escapedPhone = escapeHtml(phone);
-    const escapedZip = escapeHtml(zip);
+    const escapedName = escapeHtml(normalizedName);
+    const escapedEmail = escapeHtml(normalizedEmail);
+    const escapedPhone = escapeHtml(normalizedPhone);
+    const escapedZip = escapeHtml(normalizedZip);
     const escapedService = escapeHtml(normalizedService);
-    const escapedMessage = escapeHtml(message);
+    const escapedMessage = escapeHtml(normalizedMessage);
 
     // Send email
     const emailResult = await sendEmail({

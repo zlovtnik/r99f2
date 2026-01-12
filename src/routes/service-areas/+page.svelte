@@ -95,9 +95,9 @@
         {#if serviceAreas && serviceAreas.length > 0}
           {#each serviceAreas as area (area.id)}
             <a href="/service-areas/{area.slug}" class="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow group" aria-label="View roofing services in {area.name}, {area.state}">
-              <h2 class="text-2xl font-semibold mb-4 text-gray-900 group-hover:text-primary transition-colors">
+              <h3 class="text-2xl font-semibold mb-4 text-gray-900 group-hover:text-primary transition-colors">
                 {area.name}, {area.state}
-              </h2>
+              </h3>
               <p class="text-gray-700 mb-4">{area.description}</p>
               <div class="mb-4">
                 <p class="font-medium text-gray-900 mb-2">ZIP Codes Served:</p>

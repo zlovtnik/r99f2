@@ -9,8 +9,9 @@
   import { serviceAreas } from "$lib/data/serviceAreas";
   import ServiceCard from "$lib/components/ServiceCard.svelte";
   import TestimonialCard from "$lib/components/TestimonialCard.svelte";
-  import CTA from "$lib/components/CTA.svelte";
+  import BlogPostCard from "$lib/components/BlogPostCard.svelte";
   import BenefitIcon from "$lib/components/BenefitIcon.svelte";
+  import { blogPosts } from "$lib/data/blog";
   import { fade, slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
@@ -60,7 +61,7 @@
 <!-- Services Section -->
 <section
   class="container mx-auto px-4 sm:px-6 py-10 sm:py-16"
-  transition:fade={{ duration: 600, easing: quintOut }}
+  in:fade={{ duration: 600, easing: quintOut }}
 >
   <div class="text-center mb-8 sm:mb-12">
     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
@@ -97,7 +98,7 @@
 <!-- Why Choose Us Section -->
 <section
   class="bg-gray-50 py-10 sm:py-16"
-  transition:fade={{ duration: 600, delay: 100, easing: quintOut }}
+  in:fade={{ duration: 600, delay: 100, easing: quintOut }}
 >
   <div class="container mx-auto px-4 sm:px-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -179,7 +180,7 @@
     </div>
 
     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-      {#each serviceAreas as area}
+      {#each serviceAreas as area (area.slug)}
         <a
           href={`/service-areas/${area.slug}`}
           class="bg-gray-100 hover:bg-neutral-light active:bg-neutral-light/80 text-gray-700 hover:text-primary px-3 sm:px-4 py-2 rounded-full transition-colors text-sm sm:text-base"
@@ -194,7 +195,7 @@
 <!-- Testimonials Section -->
 <section
   class="bg-gray-50 py-10 sm:py-16"
-  transition:fade={{ duration: 600, delay: 200, easing: quintOut }}
+  in:fade={{ duration: 600, delay: 200, easing: quintOut }}
 >
   <div class="container mx-auto px-4 sm:px-6">
     <div class="text-center mb-8 sm:mb-12">
@@ -228,6 +229,48 @@
         class="inline-block border-2 border-primary text-primary hover:bg-primary hover:text-white active:bg-primary/90 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg"
       >
         View All Testimonials
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Section -->
+<section
+  class="py-10 sm:py-16"
+  in:fade={{ duration: 600, delay: 200, easing: quintOut }}
+>
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="text-center mb-8 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+        Home Improvement Tips & Insights
+      </h2>
+      <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
+        Stay informed with expert advice on roofing, siding, and home maintenance for Maine homeowners.
+      </p>
+    </div>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+    >
+      {#each blogPosts.slice(0, 3) as post, i (post.id)}
+        <div
+          transition:slide={{
+            duration: 400,
+            delay: 300 + i * 100,
+            easing: quintOut,
+          }}
+        >
+          <BlogPostCard {post} />
+        </div>
+      {/each}
+    </div>
+
+    <div class="text-center mt-6 sm:mt-8">
+      <a
+        href="/blog"
+        class="inline-block border-2 border-primary text-primary hover:bg-primary hover:text-white active:bg-primary/90 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg"
+      >
+        Read Our Blog
       </a>
     </div>
   </div>

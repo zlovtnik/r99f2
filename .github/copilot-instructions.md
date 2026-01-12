@@ -44,7 +44,7 @@
 ## Deployment & DevOps
 
 - **Primary target**: Vercel via adapter-vercel (outputs to `build/`)
-- **Alternative deployments**: Docker via [Dockerfile](Dockerfile) (multi-stage alpine build, port 3000, healthcheck at `/health`); OCI via [build_spec.yml](build_spec.yml) for OCI DevOps pipelines; Kubernetes manifests in [k8s-\*.yaml](k8s-deployment.yaml)
+- **Alternative deployments**: Docker via [Dockerfile](Dockerfile) (multi-stage alpine build, port 3000, healthcheck at `/health`); OCI via [build_spec.yml](build_spec.yml) for OCI DevOps pipelines; Kubernetes manifests in [k8s-deployment.yaml](k8s-deployment.yaml), [k8s-service.yaml](k8s-service.yaml), [k8s-ingress.yaml](k8s-ingress.yaml)
 - **Build artifacts**: Vercel uses `build/` output; OCI DevOps copies to `dist/` with production deps
 - **Makefile**: [Makefile](Makefile) provides shortcuts: `make install|dev|build|check|docker-build|deploy-k8s`
 

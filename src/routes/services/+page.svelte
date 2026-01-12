@@ -51,7 +51,7 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
   <div class="absolute inset-0 bg-black/40"></div>
-    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({heroImage})"></div>
+  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({heroImage})"></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Construction Services</h1>
   </div>

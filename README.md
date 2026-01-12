@@ -65,7 +65,7 @@ This repository hosts a SvelteKit landing page for LR Sunrise Construction. It i
 
 - Global styles reside in `src/app.css`, Tailwind utilities are used with the extended color palette from `tailwind.config.js`, and the `Navigation` component uses the `$page` store to highlight the active route.
 - Pages that need schema or SEO updates should import helpers from `src/lib/utils/seo.ts` and update `BUSINESS_INFO`, `SERVICE_OPTIONS`, or `SERVICE_AREAS` rather than hardcoding values.
-- Keep analytics initialization (`initializeGA()`) inside `src/routes/+layout.svelte` guarded by the browser environment (e.g., `if (typeof window !== 'undefined')`).# sv
+- Keep analytics initialization (`initializeGA()`) inside `src/routes/+layout.svelte` guarded by the browser environment (e.g., `if (typeof window !== 'undefined')`).
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
