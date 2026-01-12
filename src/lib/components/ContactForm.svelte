@@ -1,6 +1,6 @@
 <script lang="ts">
   import { validateContactForm } from '$lib/utils/validation';
-  import { SERVICE_OPTIONS } from '$lib/utils/constants';
+  import { SERVICE_OPTIONS, KNOWN_ACRONYMS } from '$lib/utils/constants';
   import type { ContactFormData } from '$lib/types';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
@@ -83,7 +83,14 @@
       .replace(/\s+/g, ' ')
       .trim()
       .split(' ')
-      .map((word) => word.charAt(0).toLocaleUpperCase() + word.slice(1).toLocaleLowerCase())
+      .map((word) => {
+        // Check if word is a known acronym (all uppercase in original)
+        if (KNOWN_ACRONYMS.includes(word.toUpperCase() as typeof KNOWN_ACRONYMS[number])) {
+          return word.toUpperCase();
+        }
+        // Otherwise, title case the word
+        return word.charAt(0).toLocaleUpperCase() + word.slice(1).toLocaleLowerCase();
+      })
       .join(' ');
   }
 

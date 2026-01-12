@@ -209,7 +209,7 @@ Deploy your SvelteKit application to Oracle Kubernetes Engine (OKE) for scalable
    ./setup-kubectl.sh <cluster-id> <region> [endpoint-type]
 
    # Example:
-   ./setup-kubectl.sh ocid1.cluster.oc1.us-chicago-1.aaaaaaaagfp3m2azgas5imu4tanitysypbodhaso6kw5br5w2ci3mkr7ap4a us-chicago-1 PUBLIC_ENDPOINT
+   ./setup-kubectl.sh ocid1.cluster.oc1.<region>.<OCID_CLUSTER_PLACEHOLDER> us-chicago-1 PUBLIC_ENDPOINT
 
    # To find your cluster ID, run:
    oci ce cluster list --compartment-id <your-compartment-id>
@@ -258,11 +258,11 @@ Deploy your SvelteKit application to Oracle Kubernetes Engine (OKE) for scalable
    export OCI_REGION="us-chicago-1"
    export NAMESPACE="your-namespace"
    export CLUSTER_ID="your-cluster-ocid"
-   export REPO_NAME="lbsunrise-roofing"
+   export REPO_NAME="your-repo-name"
    export IMAGE_TAG="latest"
    export VITE_SITE_URL="https://your-domain.com"
-   export VITE_BUSINESS_EMAIL="contact@lbsunrise.com"
-   export VITE_BUSINESS_PHONE="(978) 519-9774"
+   export VITE_BUSINESS_EMAIL="your-email@example.com"
+   export VITE_BUSINESS_PHONE="+1-000-000-0000"
    export VITE_GA_MEASUREMENT_ID="your-ga-id"
    export OCI_USER="your-oci-user"
    export OCI_AUTH_TOKEN="your-auth-token"
@@ -292,8 +292,8 @@ The project includes the following Kubernetes manifests:
 ### Monitoring and Scaling
 
 - Check pod status: `kubectl get pods`
-- View logs: `kubectl logs -l app=lbsunrise-roofing`
-- Scale deployment: `kubectl scale deployment lbsunrise-roofing --replicas=3`
+- View logs: `kubectl logs -l app=<your-app>` (replace `<your-app>` with your application name)
+- Scale deployment: `kubectl scale deployment <your-app> --replicas=3` (replace `<your-app>` with your deployment name)
 
 ## Next Steps
 

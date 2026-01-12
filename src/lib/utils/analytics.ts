@@ -43,6 +43,8 @@ interface GtagEvent {
 // Track whether GA initialization failed
 let gaInitFailed = false;
 let cloudflareInitFailed = false;
+let gaInitialized = false;
+let cloudflareInitialized = false;
 
 declare global {
   interface Window {
@@ -72,6 +74,11 @@ export function isCloudflareInitFailed(): boolean {
  * Should be called once on app initialization (in root layout)
  */
 export function initializeGA(): void {
+  // Prevent double initialization
+  if (gaInitialized) {
+    return;
+  }
+
   // Validate GA ID exists
   if (!GA_ID) {
     if (globalThis.window !== undefined) {
@@ -91,6 +98,7 @@ export function initializeGA(): void {
     // Add error handler for script loading failures
     script.onerror = (error) => {
       gaInitFailed = true;
+      gaInitialized = false; // Reset flag to allow retry on next initialization attempt
       console.error(`Failed to load Google Analytics script for GA_ID: ${GA_ID}`, error);
     };
     
@@ -98,6 +106,7 @@ export function initializeGA(): void {
 
     // Initialize gtag function
     globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+    gaInitialized = true;
     globalThis.window.gtag = function (...args: any[]) {
       globalThis.window.dataLayer.push(args);
     };
@@ -122,6 +131,11 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>): 
  * Should be called once on app initialization (in root layout)
  */
 export function initializeCloudflare(): void {
+  // Prevent double initialization
+  if (cloudflareInitialized) {
+    return;
+  }
+
   // Validate Cloudflare token exists
   if (!CLOUDFLARE_TOKEN) {
     if (globalThis.window !== undefined) {
@@ -134,10 +148,17 @@ export function initializeCloudflare(): void {
 
   // Inject Cloudflare beacon script
   if (globalThis.window !== undefined) {
+    // Check if script already exists
+    const existingScript = document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]');
+    if (existingScript) {
+      cloudflareInitialized = true;
+      return;
+    }
+
     const script = document.createElement('script');
     script.defer = true;
     script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-    script.setAttribute('data-cf-beacon', JSON.stringify({ token: CLOUDFLARE_TOKEN }));
+    script.dataset.cfBeacon = JSON.stringify({ token: CLOUDFLARE_TOKEN });
     
     // Add error handler for script loading failures
     script.onerror = (error) => {
@@ -146,6 +167,7 @@ export function initializeCloudflare(): void {
     };
     
     document.head.appendChild(script);
+    cloudflareInitialized = true;
   }
 }
 

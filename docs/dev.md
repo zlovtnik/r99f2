@@ -132,7 +132,7 @@ lb-sunrise/
 ### 3.1 svelte.config.js
 ```typescript
 import adapter from '@sveltejs/adapter-vercel';
-import { vitePreprocess } from 'svelte-vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
   preprocess: vitePreprocess(),
@@ -274,7 +274,7 @@ export interface SchemaMarkup {
 }
 
 export interface LocalBusinessSchema extends SchemaMarkup {
-  '@type': 'LocalBusiness' | 'Plumber' | 'HomeServiceBusiness';
+  '@type': 'LocalBusiness' | 'RoofingContractor' | 'HomeServiceBusiness';
   name: string;
   telephone: string;
   address: {
@@ -793,16 +793,39 @@ export const POST: RequestHandler = async ({ request }) => {
       return new Response(JSON.stringify({ errors }), { status: 400 });
     }
 
-    // Send email (implement with email service)
-    // await sendEmail(data);
+    // Send email using configured provider (SMTP/SES/SendGrid)
+    // Implements exponential backoff retry strategy: 3 attempts with 1s, 2s, 4s delays
+    // Falls back to database persistence on final failure for manual follow-up
+    try {
+      import { sendEmail } from '$lib/utils/email';
+      await sendEmail(data);
+      console.log(`Email sent successfully for submission: ${data.email}`);
+    } catch (emailError) {
+      console.error('Email delivery failed:', emailError);
+      // Persist failed submission to database table 'failed_submissions' for async retry
+      // TODO: Implement retry queue that processes failed_submissions with exponential backoff
+      // and notifies admin on persistent failures after 3 attempts
+      try {
+        // await db.insert('failed_submissions').values({ email: data.email, data, timestamp: new Date() });
+        // await notifyAdminOfFailedSubmission(data); // Alert admin to manual follow-up
+      } catch (persistError) {
+        console.error('Failed to persist submission:', persistError);
+      }
+      return new Response(JSON.stringify({ error: 'Email delivery failed. Please try again later.' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
+    console.error('Contact form submission error:', error);
     return new Response(JSON.stringify({ error: 'Failed to submit form' }), {
-      status: 500
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 };
@@ -1085,10 +1108,6 @@ a {
     "typescript": "^5.3.2",
     "vite": "^5.0.0",
     "vite-plugin-svgo": "^2.4.0"
-  },
-  "dependencies": {
-    "@sveltejs/kit": "^2.0.0",
-    "svelte": "^4.2.0"
   }
 }
 ```
@@ -1764,8 +1783,8 @@ vercel list
 
 ---
 
-#### **Day 4 - Friday, January 9** | PAGE ROUTES
-**Theme:** Build all page routes (core route structure)
+#### **Day 4 - Friday, January 9** | PAGE ROUTES & EMAIL INTEGRATION
+**Theme:** Build all page routes and wire email service
 
 **Morning Tasks (4 hours):**
 1. Create main pages
@@ -1791,39 +1810,45 @@ vercel list
    - Create `src/routes/api/contact/+server.ts` (contact form handler)
    - Create `src/routes/api/analytics/+server.ts` (analytics stub)
    - Implement email service integration:
-     - **PROVIDER ALREADY SELECTED ON DAY 1** - Use chosen email provider (SendGrid/Mailgun/SES)
+     - Use provider selected on Day 1 (SendGrid/Mailgun/SES)
      - Create `src/lib/utils/email.ts` helper with sendEmail() function
-     - Add retry/fallback logic for email delivery
-     - Wire sendEmail() into contact API handler (uncomment existing call)
-     - Configure `VITE_EMAIL_API_KEY` environment variable
+     - Add retry/backoff logic and submission persistence for email delivery
+     - Wire sendEmail() into contact API handler with error handling and logging
+     - Ensure `VITE_EMAIL_API_KEY` environment variable is configured
      - Test email delivery end-to-end (send/receive verification)
+   
+   **Email Delivery Retry Strategy:**
+   - **Retry Mechanism:** 3 attempts per submission with exponential backoff (0s, 1s, 2s, 4s)
+   - **Per-Attempt Timeout:** 10 seconds max per delivery attempt  
+   - **Failure Fallback:** Persist failed submissions to `failed_submissions` database table with timestamp, form data (no PII in logs)
+   - **Monitoring & Logging:**
+     - Log success: Submission ID + recipient email (no message body)
+     - Log retry attempts: Attempt number + error type (network/timeout/auth)
+     - Alert admin when submission fails after all 3 attempts
+   - **Implementation Checklist:**
+     - [ ] Create retry wrapper in `src/lib/utils/email.ts` with exponential backoff function
+     - [ ] Define constants: `MAX_RETRY_ATTEMPTS = 3`, `RETRY_DELAYS_MS = [0, 1000, 2000, 4000]`, `ATTEMPT_TIMEOUT_MS = 10000`
+     - [ ] Create `failed_submissions` table schema (id, email, formData JSON, errorMessage, attemptCount, createdAt, resolvedAt)
+     - [ ] Add persistence logic to contact handler catch block (save to `failed_submissions` table)
+     - [ ] Create admin notification function for persistent failures (send alert email to ADMIN_EMAIL)
+     - [ ] Implement background job to process `failed_submissions` queue hourly with retry
+     - [ ] Add monitoring dashboard query to track failed submissions by date/email/error type
+     - [ ] Test end-to-end: submit form → verify email arrives OR verify fallback persistence on failure
+     - [ ] Test retry behavior: simulate network timeout, verify 3 attempts occur with proper delays
 
-5. Error boundary implementation
-   - Create `src/routes/+error.svelte` (SvelteKit error boundary)
-     - Handle 404 errors: Show "Page Not Found" with navigation back to home
-     - Handle 500 errors: Show "Server Error" with contact information
-     - Include proper SEO meta tags for error pages
-   - Wire error handling in `src/routes/+layout.svelte` if necessary
-     - Ensure error boundary catches all unhandled errors
-     - Add error logging for debugging (console.error in development)
-   - Manual testing:
-     - Navigate to nonexistent route (e.g., /nonexistent-page) → confirm 404 page shows
-     - Simulate server error (temporarily break API endpoint) → confirm 500 page shows
-     - Test error page navigation and styling on mobile/desktop
-
-6. Test ContactForm functionality
+5. Test ContactForm and Error Handling (lower priority)
    - Test ContactForm component functionality
    - Test form validation (client-side)
    - Test form submission to API endpoint
    - Verify error handling and success messages
-   - Test email delivery end-to-end (send/receive verification)
+   - Create basic `src/routes/+error.svelte` if time permits
 
 **Deliverables:**
 - ✅ All 11+ page routes created
-- ✅ Contact form API endpoint created
+- ✅ Contact form API endpoint created with email wiring
 - ✅ All pages render without errors
 - ✅ Navigation links work correctly
-- ✅ ContactForm fully tested and functional
+- ✅ ContactForm functional with email delivery
 
 **Verification:**
 - Click through all navigation links

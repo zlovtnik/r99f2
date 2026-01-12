@@ -32,13 +32,17 @@
     
     // Find new position in formatted string
     let newPos = 0;
-    let digitsSeen = 0;
-    for (let i = 0; i < formatted.length; i++) {
-      if (/\d/.test(formatted[i])) {
-        digitsSeen++;
-        if (digitsSeen >= digitsBeforeCursor) {
-          newPos = i + 1;
-          break;
+    if (digitsBeforeCursor === 0) {
+      newPos = 0;
+    } else {
+      let digitsSeen = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) {
+          digitsSeen++;
+          if (digitsSeen >= digitsBeforeCursor) {
+            newPos = i + 1;
+            break;
+          }
         }
       }
     }
@@ -47,7 +51,7 @@
     input.value = formatted;
     input.setSelectionRange(newPos, newPos);
     formData.phone = formatted;
-    errors = { ...errors, phone: undefined };
+    errors = { ...errors, phone: '' };
     
   }
 
