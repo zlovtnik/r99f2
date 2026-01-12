@@ -6,8 +6,9 @@
   import CTA from '$lib/components/CTA.svelte';
   import { createBreadcrumbSchema } from '$utils/seo';
 
+  const heroImage = '/images/Commercial-Construction-Contractor.webp';
+
   const baseUrl = siteConfig.siteUrl;
-  const servicesHeroImg = '/images/services-hero-background.webp';
 
   // SEO metadata
   $: seo = {
@@ -50,7 +51,7 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
   <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({servicesHeroImg})"></div>
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({heroImage})"></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Construction Services</h1>
   </div>

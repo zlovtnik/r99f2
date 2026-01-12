@@ -1,8 +1,12 @@
 {
 	"name": "r99f2",
+	"packageManager": "bun@1.2.17",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"engines": {
+		"bun": ">=1.0.0"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",

@@ -3,7 +3,7 @@
   import CTA from '$lib/components/CTA.svelte';
   import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
 
-  import { SITE_URL } from '$lib/utils/constants';
+  import { SITE_URL, BUSINESS_INFO } from '$lib/utils/constants';
 
   const baseUrl = SITE_URL;
 
@@ -63,10 +63,30 @@
 
 <SchemaMarkup {schema} />
 
+<section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">
+  <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('/images/r-25.webp')"></div>
+  <div class="absolute inset-0 bg-black/60"></div>
+  <div class="container mx-auto px-4 relative z-10 text-center">
+    <p class="text-sm uppercase tracking-wider mb-2">Service Areas</p>
+    <h1 class="text-4xl font-bold mb-4">Serving {BUSINESS_INFO.city}, {BUSINESS_INFO.state} & Surrounding Communities</h1>
+    <p class="text-neutral-light max-w-3xl mx-auto text-lg">
+      {BUSINESS_INFO.serviceAreas}
+    </p>
+    <div class="mt-6 flex flex-col sm:flex-row sm:justify-center gap-3">
+      <a href="/contact" class="btn bg-white text-primary hover:bg-neutral-light/90 font-semibold px-5 py-3 rounded-lg transition-colors">
+        Schedule Service Call
+      </a>
+      <a href={`tel:${BUSINESS_INFO.telephone}`} class="btn border border-white text-white hover:bg-white/20 font-semibold px-5 py-3 rounded-lg transition-colors">
+        Call Now: {BUSINESS_INFO.telephone}
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Our Service Areas</h1>
+      <h2 class="text-4xl font-bold text-center mb-8 text-gray-900">Our Service Areas</h2>
       <p class="text-xl text-center text-gray-600 mb-12">
         Professional roofing services serving Portland, Westbrook, and surrounding communities in Maine.
       </p>

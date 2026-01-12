@@ -106,9 +106,9 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
   try {
     const formData = await request.json();
     const { name, email, phone, zip, service, message } = formData;
+    const normalizedService = String(service ?? '').trim();
 
-    // Validate form data
-    const validation = validateContactForm({ name, email, phone, zipCode: zip, service, message });
+    const validation = validateContactForm({ name, email, phone, zipCode: zip, service: normalizedService, message });
     if (Object.keys(validation).length > 0) {
       return json({
         success: false,
@@ -121,7 +121,7 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     const escapedEmail = escapeHtml(email);
     const escapedPhone = escapeHtml(phone);
     const escapedZip = escapeHtml(zip);
-    const escapedService = escapeHtml(service);
+    const escapedService = escapeHtml(normalizedService);
     const escapedMessage = escapeHtml(message);
 
     // Send email
