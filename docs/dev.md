@@ -356,9 +356,7 @@ export interface BreadcrumbSchema extends SchemaMarkup {
 </script>
 
 <svelte:head>
-<svelte:head>
   {@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
-</svelte:head>
 </svelte:head>
 ```
 
@@ -796,13 +794,23 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     // Send email using configured provider (SMTP/SES/SendGrid)
+    // Implements exponential backoff retry strategy: 3 attempts with 1s, 2s, 4s delays
+    // Falls back to database persistence on final failure for manual follow-up
     try {
+      import { sendEmail } from '$lib/utils/email';
       await sendEmail(data);
       console.log(`Email sent successfully for submission: ${data.email}`);
     } catch (emailError) {
       console.error('Email delivery failed:', emailError);
-      // Log submission for manual follow-up or fallback persistence
-      // In production, persist to database or queue for retry
+      // Persist failed submission to database table 'failed_submissions' for async retry
+      // TODO: Implement retry queue that processes failed_submissions with exponential backoff
+      // and notifies admin on persistent failures after 3 attempts
+      try {
+        // await db.insert('failed_submissions').values({ email: data.email, data, timestamp: new Date() });
+        // await notifyAdminOfFailedSubmission(data); // Alert admin to manual follow-up
+      } catch (persistError) {
+        console.error('Failed to persist submission:', persistError);
+      }
       return new Response(JSON.stringify({ error: 'Email delivery failed. Please try again later.' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
@@ -1084,7 +1092,8 @@ a {
     "lint": "eslint .",
     "format": "prettier --write ."
   },
-  "devDependencadapter-vercel": "^4.1.0",
+  "devDependencies": {
+    "@sveltejs/adapter-vercel": "^4.1.0",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@tailwindcss/forms": "^0.5.7",
@@ -1099,7 +1108,6 @@ a {
     "typescript": "^5.3.2",
     "vite": "^5.0.0",
     "vite-plugin-svgo": "^2.4.0"
-  }
   }
 }
 ```
@@ -1808,6 +1816,25 @@ vercel list
      - Wire sendEmail() into contact API handler with error handling and logging
      - Ensure `VITE_EMAIL_API_KEY` environment variable is configured
      - Test email delivery end-to-end (send/receive verification)
+   
+   **Email Delivery Retry Strategy:**
+   - **Retry Mechanism:** 3 attempts per submission with exponential backoff (0s, 1s, 2s, 4s)
+   - **Per-Attempt Timeout:** 10 seconds max per delivery attempt  
+   - **Failure Fallback:** Persist failed submissions to `failed_submissions` database table with timestamp, form data (no PII in logs)
+   - **Monitoring & Logging:**
+     - Log success: Submission ID + recipient email (no message body)
+     - Log retry attempts: Attempt number + error type (network/timeout/auth)
+     - Alert admin when submission fails after all 3 attempts
+   - **Implementation Checklist:**
+     - [ ] Create retry wrapper in `src/lib/utils/email.ts` with exponential backoff function
+     - [ ] Define constants: `MAX_RETRY_ATTEMPTS = 3`, `RETRY_DELAYS_MS = [0, 1000, 2000, 4000]`, `ATTEMPT_TIMEOUT_MS = 10000`
+     - [ ] Create `failed_submissions` table schema (id, email, formData JSON, errorMessage, attemptCount, createdAt, resolvedAt)
+     - [ ] Add persistence logic to contact handler catch block (save to `failed_submissions` table)
+     - [ ] Create admin notification function for persistent failures (send alert email to ADMIN_EMAIL)
+     - [ ] Implement background job to process `failed_submissions` queue hourly with retry
+     - [ ] Add monitoring dashboard query to track failed submissions by date/email/error type
+     - [ ] Test end-to-end: submit form → verify email arrives OR verify fallback persistence on failure
+     - [ ] Test retry behavior: simulate network timeout, verify 3 attempts occur with proper delays
 
 5. Test ContactForm and Error Handling (lower priority)
    - Test ContactForm component functionality

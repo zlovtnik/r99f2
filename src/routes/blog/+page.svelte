@@ -4,6 +4,7 @@
   import BlogPostCard from '$components/BlogPostCard.svelte';
   import { createCollectionSchema } from '$utils/seo';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
+  import { siteConfig } from '$config/siteConfig';
 
   // Get selected category from query params
   $: selectedCategory = $page.url.searchParams.get('category') || '';
@@ -31,22 +32,22 @@
   <title>{seoTitle}</title>
   <meta name="description" content={seoDescription} />
   <meta name="keywords" content="home improvement blog, roofing tips, Maine construction, home renovation advice, siding guide" />
-  <link rel="canonical" href="https://lbsunrise.com/blog" />
+  <link rel="canonical" href="{siteConfig.siteUrl}/blog" />
   <meta property="og:title" content={seoTitle} />
   <meta property="og:description" content={seoDescription} />
-  <meta property="og:image" content="https://lbsunrise.com/images/og-image.jpg" />
-  <meta property="og:url" content="https://lbsunrise.com/blog" />
+  <meta property="og:image" content="{siteConfig.siteUrl}/images/og-image.jpg" />
+  <meta property="og:url" content="{siteConfig.siteUrl}/blog" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={seoTitle} />
   <meta name="twitter:description" content={seoDescription} />
-  <meta name="twitter:image" content="https://lbsunrise.com/images/og-image.jpg" />
+  <meta name="twitter:image" content="{siteConfig.siteUrl}/images/og-image.jpg" />
 </svelte:head>
 
 <SchemaMarkup schema={createCollectionSchema({
   name: 'LR Sunrise Construction Blog',
   description: seoDescription,
-  url: 'https://lbsunrise.com/blog',
+  url: '{siteConfig.siteUrl}/blog',
   items: filteredPosts.map(post => ({
     name: post.title,
     description: post.excerpt,
@@ -104,19 +105,26 @@
       </div>
     </section>
 
+    <!-- Featured Post Empty State -->
+    {#if !featuredPost}
+      <section class="bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-12 mb-12 text-center">
+        <p class="text-gray-600 text-lg">No articles available in this category yet. Check back soon!</p>
+      </section>
+    {/if}
+
     <!-- All Posts -->
     {#if otherPosts.length > 0}
       <section>
         <h2 class="text-2xl font-bold text-gray-900 mb-6">All Articles</h2>
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {#each otherPosts as post}
+          {#each otherPosts as post (post.id)}
             <BlogPostCard {post} />
           {/each}
         </div>
       </section>
-    {:else}
+    {:else if filteredPosts.length === 0}
       <section class="text-center py-12">
-        <p class="text-gray-600 text-lg">No additional articles in this category yet. Check back soon!</p>
+        <p class="text-gray-600 text-lg">No articles in this category yet. Check back soon!</p>
       </section>
     {/if}
   </div>

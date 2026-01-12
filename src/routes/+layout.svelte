@@ -7,16 +7,14 @@
 	let { children } = $props();
 
 	onMount(() => {
-			const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'not configured';
+		const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'not configured';
 		const initializers = [
 			{
 				name: 'Google Analytics',
-				errorPrefix: `Failed to initialize Google Analytics (GA_ID: ${gaId}):`,
 				init: initializeGA
 			},
 			{
 				name: 'Cloudflare Web Analytics',
-				errorPrefix: 'Failed to initialize Cloudflare Web Analytics:',
 				init: initializeCloudflare
 			}
 		];

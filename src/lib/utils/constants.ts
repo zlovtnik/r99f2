@@ -103,7 +103,7 @@ export const SITE_URL = envSiteUrl || 'https://constructioncompanyme.com';
 export const LOGO_URL = '/images/logo.svg' as const;
 export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
 
-export const KNOWN_ACRONYMS = ['HVAC', 'AC', 'API', 'LED'] as const;
+export const KNOWN_ACRONYMS = ['HVAC', 'AC', 'LED'] as const;
 
 export const SOCIAL_LINKS = {
   facebook: 'https://facebook.com/lrsunriseconstruction',

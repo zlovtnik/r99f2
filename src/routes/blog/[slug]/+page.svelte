@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { blogPosts, getRelatedBlogPosts } from '$data/blog';
   import type { BlogPost } from '$types';
   import BlogPostCard from '$components/BlogPostCard.svelte';
   import { createArticleSchema } from '$utils/seo';

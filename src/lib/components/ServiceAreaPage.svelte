@@ -1,11 +1,11 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
   import { serviceAreas } from '$lib/data/serviceAreas';
-  import CTA from '$lib/components/CTA.svelte';
+  import CTA from '$components/CTA.svelte';
   import { BUSINESS_INFO, STANDARD_SERVICES } from '$lib/utils/constants';
   import { createLocalBusinessSchema, createBreadcrumbSchema } from '$lib/utils/seo';
-  import SchemaMarkup from '$lib/components/SchemaMarkup.svelte';
-  import TestimonialCard from '$lib/components/TestimonialCard.svelte';
+  import SchemaMarkup from '$components/SchemaMarkup.svelte';
+  import TestimonialCard from '$components/TestimonialCard.svelte';
 
   export let areaSlug: string;
 
@@ -140,7 +140,7 @@
         <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
           <h3 class="text-2xl font-semibold mb-6 text-gray-900">Seasonal Service Recommendations</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {#each area.seasonalTips as tip}
+            {#each area.seasonalTips as tip, idx (idx)}
               <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2"></div>
                 <p class="text-gray-700">{tip}</p>

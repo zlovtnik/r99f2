@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { BlogPost } from '$types';
 
-  export let post: BlogPost;
-  export let featured: boolean = false;
+  let { post, featured = false }: { post: BlogPost; featured?: boolean } = $props();
 </script>
 
 {#if featured}
@@ -48,10 +47,11 @@
         <span class="text-sm text-gray-500">By {post.author}</span>
         <a
           href="/blog/{post.slug}"
+          aria-label="Read more about {post.title}"
           class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium"
         >
           Read More
-          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
         </a>
@@ -102,6 +102,7 @@
         <span class="text-sm text-gray-500">By {post.author}</span>
         <a
           href="/blog/{post.slug}"
+          aria-label="Read more about {post.title}"
           class="text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200"
         >
           Read More →
@@ -135,17 +136,6 @@
   }
 
   .aspect-w-16 {
-    position: relative;
-    padding-bottom: 56.25%;
-  }
-
-  .aspect-w-16 > * {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    aspect-ratio: 16 / 9;
   }
 </style>

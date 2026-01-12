@@ -51,7 +51,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/roofing-1.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'brunswick',
@@ -102,7 +101,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-1.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'biddeford',
@@ -153,7 +151,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/roofing-2.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'westbrook',
@@ -204,7 +201,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-1.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'falmouth',
@@ -255,7 +251,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-2.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'kennebunk',
@@ -306,7 +301,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-2.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'standish',
@@ -357,7 +351,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-3.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'yarmouth',
@@ -408,7 +401,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-4.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'freeport',
@@ -459,7 +451,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-3.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Placeholder video URL
   },
   {
     id: 'buxton',
@@ -504,7 +495,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/roofing-3.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'gray',
@@ -549,7 +539,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-4.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'waterboro',
@@ -594,7 +583,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-5.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'poland',
@@ -639,7 +627,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/roofing-4.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'new-gloucester',
@@ -684,7 +671,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-5.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'north-windham',
@@ -729,7 +715,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-6.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'raymond',
@@ -774,7 +759,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-7.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'lisbon-falls',
@@ -819,7 +803,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-8.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'limington',
@@ -864,7 +847,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-9.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'casco',
@@ -909,7 +891,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/siding-6.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'alfred',
@@ -954,7 +935,6 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/roofing-5.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'lake-arrowhead',
@@ -999,6 +979,5 @@ export const serviceAreas: ServiceArea[] = [
         image: '/images/services/carpentry-10.jpg'
       }
     ],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   }
 ];

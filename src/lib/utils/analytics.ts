@@ -98,6 +98,7 @@ export function initializeGA(): void {
     // Add error handler for script loading failures
     script.onerror = (error) => {
       gaInitFailed = true;
+      gaInitialized = false; // Reset flag to allow retry on next initialization attempt
       console.error(`Failed to load Google Analytics script for GA_ID: ${GA_ID}`, error);
     };
     

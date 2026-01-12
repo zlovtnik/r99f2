@@ -18,12 +18,12 @@
         Get your free estimate today. Our team will assess your project and provide honest, transparent pricing.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <a href="/contact" class="btn bg-accent hover:bg-accent/90 active:bg-accent/80 text-white font-bold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-200">
+        <a href="/contact" aria-label="Get your free estimate for your home improvement project" class="btn bg-accent hover:bg-accent/90 active:bg-accent/80 text-white font-bold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-200">
           Get Your Free Estimate
         </a>
-        <a href="/contact" class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg transition-all duration-200 hover:scale-105">
+        <a href="/contact" aria-label="Quick contact form for immediate inquiries" class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg transition-all duration-200 hover:scale-105">
           <span class="flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             Quick Contact

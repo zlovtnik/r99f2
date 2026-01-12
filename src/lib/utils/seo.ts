@@ -147,6 +147,14 @@ export function createArticleSchema(article: {
   url: string;
   keywords?: string[];
 }) {
+  const absoluteLogoUrl = (() => {
+    try {
+      return new URL(LOGO_URL, SITE_URL).toString();
+    } catch {
+      return LOGO_URL;
+    }
+  })();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -163,7 +171,7 @@ export function createArticleSchema(article: {
       name: article.publisher,
       logo: {
         '@type': 'ImageObject',
-        url: LOGO_URL
+        url: absoluteLogoUrl
       }
     },
     mainEntityOfPage: {
@@ -293,9 +301,9 @@ export function createReviewSchema(review: {
   datePublished: string;
   headline?: string;
 }) {
-  // Validate rating is within 1-5 range (matches createAggregateRatingSchema behavior)
+  // Validate rating is within 1-5 range; return null for invalid input (consistent with createAggregateRatingSchema)
   if (review.ratingValue < 1 || review.ratingValue > 5) {
-    throw new RangeError(`Review rating must be between 1 and 5, received: ${review.ratingValue}`);
+    return null;
   }
 
   const schema: Record<string, unknown> = {
