@@ -1,9 +1,9 @@
 import { marked } from 'marked';
 import type { BlogPost } from '$types';
 
-// Helper function to convert markdown to HTML
+// Helper function to convert markdown to HTML (synchronous)
 function md(content: string): string {
-  return marked.parse(content);
+  return marked.parse(content, { async: false }) as string;
 }
 
 const rawBlogPosts: BlogPost[] = [

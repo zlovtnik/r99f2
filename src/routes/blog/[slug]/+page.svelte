@@ -424,8 +424,4 @@
   .post-featured-image {
     filter: none !important;
   }
-
-  .post-featured-image.loaded {
-    filter: none !important;
-  }
 </style>
