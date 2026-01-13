@@ -49,7 +49,7 @@ export const STATS = {
   yearsOfExperience: BUSINESS_INFO.yearsOfExperience,
   projectsCompleted: 500,
   satisfactionRate: 100,
-  starRating: 5.0
+  starRating: 5
 } as const;
 
 export const KEYWORDS = {
