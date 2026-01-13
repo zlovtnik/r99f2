@@ -17,8 +17,8 @@ function isValidCloudflareToken(value: unknown): value is string {
   if (typeof value !== 'string') return false;
   const trimmed = value.trim();
   if (!trimmed) return false;
-  // Cloudflare tokens are 32-character hex strings
-  return /^[a-f0-9]{32}$/i.test(trimmed);
+  // Cloudflare Web Analytics tokens are alphanumeric with possible dashes/underscores, typically 32+ chars
+  return /^[a-zA-Z0-9_-]{20,}$/.test(trimmed);
 }
 
 const GA_ID_RAW = import.meta.env.VITE_GA_MEASUREMENT_ID;
