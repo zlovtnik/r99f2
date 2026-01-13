@@ -1,33 +1,40 @@
 <script lang="ts">
-  import type { BlogPost } from '$types';
-  import BlogPostCard from '$components/BlogPostCard.svelte';
-  import { createArticleSchema } from '$utils/seo';
-  import SchemaMarkup from '$components/SchemaMarkup.svelte';
+  import type { BlogPost } from "$types";
+  import BlogPostCard from "$components/BlogPostCard.svelte";
+  import { createArticleSchema } from "$utils/seo";
+  import SchemaMarkup from "$components/SchemaMarkup.svelte";
+  import { siteConfig } from "$config/siteConfig";
 
   export let data: { post: BlogPost; relatedPosts: BlogPost[] };
 
   $: ({ post, relatedPosts } = data);
+
+  // Normalize image path to ensure leading slash
+  function normalizeImagePath(path: string): string {
+    return path.startsWith("/") ? path : `/${path}`;
+  }
 
   // Convert slug to title: split on non-alphanumeric, capitalize each word, join with spaces
   function slugToTitle(slug: string): string {
     return slug
       .split(/[-_\s]+/)
       .filter(Boolean)
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
   }
 
   // SEO metadata
   $: seoTitle = post.seoTitle || `${post.title} | LR Sunrise Construction Blog`;
   $: seoDescription = post.seoDescription || post.excerpt;
-  $: canonicalUrl = `https://lbsunrise.com/blog/${post.slug}`;
+  $: canonicalUrl = `${siteConfig.siteUrl}/blog/${post.slug}`;
+  $: ogImageUrl = post.featuredImage ? `${siteConfig.siteUrl}${normalizeImagePath(post.featuredImage)}` : undefined;
 </script>
 
 <svelte:head>
   <title>{seoTitle}</title>
   <meta name="description" content={seoDescription} />
   {#if post.keywords}
-    <meta name="keywords" content={post.keywords.join(', ')} />
+    <meta name="keywords" content={post.keywords.join(", ")} />
   {/if}
   <link rel="canonical" href={canonicalUrl} />
   <meta property="og:title" content={seoTitle} />
@@ -35,7 +42,10 @@
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:type" content="article" />
   {#if post.featuredImage}
-    <meta property="og:image" content={`https://lbsunrise.com${post.featuredImage}`} />
+    <meta
+      property="og:image"
+      content={ogImageUrl}
+    />
   {/if}
   {#if post.imageAlt}
     <meta property="og:image:alt" content={post.imageAlt} />
@@ -55,24 +65,31 @@
   <meta name="twitter:title" content={seoTitle} />
   <meta name="twitter:description" content={seoDescription} />
   {#if post.featuredImage}
-    <meta name="twitter:image" content={`https://lbsunrise.com${post.featuredImage}`} />
+    <meta
+      name="twitter:image"
+      content={`${siteConfig.siteUrl}${post.featuredImage}`}
+    />
   {/if}
   {#if post.imageAlt}
     <meta name="twitter:image:alt" content={post.imageAlt} />
   {/if}
 </svelte:head>
 
-<SchemaMarkup schema={createArticleSchema({
-  headline: post.title,
-  description: post.excerpt,
-  image: post.featuredImage ? `https://lbsunrise.com${post.featuredImage}` : undefined,
-  datePublished: post.publishedAt,
-  dateModified: post.updatedAt || post.publishedAt,
-  author: post.author,
-  publisher: 'LR Sunrise Construction',
-  url: canonicalUrl,
-  keywords: post.keywords || post.tags
-})} />
+<SchemaMarkup
+  schema={createArticleSchema({
+    headline: post.title,
+    description: post.excerpt,
+    image: post.featuredImage
+      ? `${siteConfig.siteUrl}${post.featuredImage}`
+      : undefined,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    author: post.author,
+    publisher: "LR Sunrise Construction",
+    url: canonicalUrl,
+    keywords: post.keywords || post.tags,
+  })}
+/>
 
 <div class="min-h-screen bg-gray-50">
   <!-- Breadcrumb -->
@@ -83,7 +100,9 @@
         <li><span class="mx-2" aria-hidden="true">/</span></li>
         <li><a href="/blog" class="hover:text-primary">Blog</a></li>
         <li><span class="mx-2" aria-hidden="true">/</span></li>
-        <li class="text-gray-900 font-medium" aria-current="page">{post.title}</li>
+        <li class="text-gray-900 font-medium" aria-current="page">
+          {post.title}
+        </li>
       </ol>
     </div>
   </nav>
@@ -92,15 +111,17 @@
     <!-- Article Header -->
     <header class="mb-8">
       <div class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-        <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">
+        <span
+          class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium"
+        >
           {post.category}
         </span>
         <span>•</span>
         <time datetime={post.publishedAt}>
-          {new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+          {new Date(post.publishedAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </time>
         {#if post.readingTime}
@@ -123,7 +144,7 @@
         <span>By {post.author}</span>
         {#if post.updatedAt && post.updatedAt !== post.publishedAt}
           <span>•</span>
-          <span>Updated {new Date(post.updatedAt).toLocaleDateString()}</span>
+          <span>Updated {new Date(post.updatedAt).toLocaleDateString("en-US")}</span>
         {/if}
       </div>
     </header>
@@ -134,13 +155,13 @@
         <img
           src={post.featuredImage}
           alt={post.imageAlt || post.title}
-          class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+          class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg post-featured-image"
         />
       </div>
     {/if}
 
     <!-- Article Content -->
-    <div class="prose prose-lg max-w-none mb-8">
+    <div class="article-content mb-8">
       {@html post.content}
     </div>
 
@@ -164,7 +185,9 @@
     <!-- Related Services -->
     {#if post.relatedServices && post.relatedServices.length > 0}
       <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-        <h3 class="text-lg font-semibold text-blue-900 mb-3">Related Services</h3>
+        <h3 class="text-lg font-semibold text-blue-900 mb-3">
+          Related Services
+        </h3>
         <div class="flex flex-wrap gap-2">
           {#each post.relatedServices as service}
             <a
@@ -230,28 +253,175 @@
 </div>
 
 <style>
-  .prose h1 {
-    @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+  :global(.article-content) {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: rgb(55, 65, 81);
   }
-  .prose h2 {
-    @apply text-xl font-semibold text-gray-900 mt-6 mb-3;
+
+  :global(.article-content h1) {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgb(17, 24, 39);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
   }
-  .prose h3 {
-    @apply text-lg font-medium text-gray-900 mt-5 mb-2;
+
+  :global(.article-content h2) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
   }
-  .prose p {
-    @apply text-gray-700 leading-relaxed mb-4;
+
+  :global(.article-content h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
   }
-  .prose ul {
-    @apply list-disc list-inside text-gray-700 mb-4 space-y-1;
+
+  :global(.article-content h4) {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
   }
-  .prose ol {
-    @apply list-decimal list-inside text-gray-700 mb-4 space-y-1;
+
+  :global(.article-content p) {
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
   }
-  .prose li {
-    @apply leading-relaxed;
+
+  :global(.article-content a) {
+    color: rgb(76, 175, 80);
+    text-decoration: underline;
+    transition: color 0.2s;
   }
-  .prose strong {
-    @apply font-semibold text-gray-900;
+
+  :global(.article-content a:hover) {
+    color: rgb(56, 142, 60);
+  }
+
+  :global(.article-content strong) {
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+  }
+
+  :global(.article-content em) {
+    font-style: italic;
+  }
+
+  :global(.article-content code) {
+    background-color: rgb(243, 244, 246);
+    color: rgb(17, 24, 39);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: "Courier New", monospace;
+    font-size: 0.9em;
+  }
+
+  :global(.article-content pre) {
+    background-color: rgb(31, 41, 55);
+    color: rgb(243, 244, 246);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+    font-family: "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  :global(.article-content pre code) {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: 1em;
+  }
+
+  :global(.article-content ul) {
+    list-style-type: disc;
+    list-style-position: outside;
+    margin-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  :global(.article-content ul li) {
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.article-content ol) {
+    list-style-type: decimal;
+    list-style-position: outside;
+    margin-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  :global(.article-content ol li) {
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.article-content li) {
+    line-height: 1.75;
+  }
+
+  :global(.article-content blockquote) {
+    border-left: 4px solid rgb(76, 175, 80);
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-bottom: 1.25rem;
+    color: rgb(107, 114, 128);
+    font-style: italic;
+  }
+
+  :global(.article-content img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    filter: none !important;
+  }
+
+  :global(.article-content table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.25rem;
+    border: 1px solid rgb(229, 231, 235);
+  }
+
+  :global(.article-content th) {
+    background-color: rgb(243, 244, 246);
+    font-weight: 600;
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid rgb(229, 231, 235);
+  }
+
+  :global(.article-content td) {
+    padding: 0.75rem;
+    border: 1px solid rgb(229, 231, 235);
+  }
+
+  :global(.article-content tr:nth-child(even)) {
+    background-color: rgb(249, 250, 251);
+  }
+
+  :global(.article-content hr) {
+    border: none;
+    border-top: 2px solid rgb(229, 231, 235);
+    margin: 2rem 0;
+  }
+
+  /* Ensure post images are never blurred */
+  .post-featured-image {
+    filter: none !important;
   }
 </style>

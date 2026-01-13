@@ -1,6 +1,12 @@
+import { marked } from 'marked';
 import type { BlogPost } from '$types';
 
-export const blogPosts: BlogPost[] = [
+// Helper function to convert markdown to HTML (synchronous)
+function md(content: string): string {
+  return marked.parse(content, { async: false }) as string;
+}
+
+const rawBlogPosts: BlogPost[] = [
   {
     id: '1',
     title: 'Understanding Roof Shingles: When to Repair vs. Replace',
@@ -52,7 +58,7 @@ Contact us today for a free roof inspection and personalized recommendations.`,
     publishedAt: '2024-01-15',
     category: 'Roofing',
     tags: ['roof repair', 'roof replacement', 'shingles', 'roof maintenance'],
-    featuredImage: '/images/blog/roof-shingles-guide.jpg',
+    featuredImage: '/images/roof-shingles-guide.webp',
     imageAlt: 'Roof shingles showing signs of wear and tear',
     readingTime: 5,
     relatedServices: ['roofing'],
@@ -110,7 +116,7 @@ Don't wait for damage to occur. Schedule your winter roof inspection today and p
     publishedAt: '2024-01-08',
     category: 'Roofing',
     tags: ['ice dams', 'winter roofing', 'attic insulation', 'roof protection'],
-    featuredImage: '/images/blog/ice-dams-maine.jpg',
+    featuredImage: '/images/ice-dam-maine.webp',
     imageAlt: 'Ice dams forming on a Maine home roof during winter',
     readingTime: 6,
     relatedServices: ['roofing'],
@@ -173,7 +179,7 @@ Contact us for a free siding consultation and material recommendations tailored 
     publishedAt: '2024-01-01',
     category: 'Siding',
     tags: ['siding materials', 'vinyl siding', 'fiber cement', 'wood siding'],
-    featuredImage: '/images/blog/siding-materials-maine.jpg',
+    featuredImage: '/images/siding-materials-maine.webp',
     imageAlt: 'Various siding materials suitable for Maine homes',
     readingTime: 7,
     relatedServices: ['siding'],
@@ -262,7 +268,7 @@ Schedule your spring home maintenance inspection today!`,
     publishedAt: '2023-12-20',
     category: 'Maintenance',
     tags: ['spring maintenance', 'home inspection', 'seasonal care', 'roof inspection'],
-    featuredImage: '/images/blog/spring-maintenance-maine.jpg',
+    featuredImage: '/images/spring-maintenance-maine.webp',
     imageAlt: 'Spring home maintenance checklist for Maine homes',
     readingTime: 8,
     relatedServices: ['roofing', 'siding', 'carpentry'],
@@ -331,7 +337,7 @@ Investing in energy efficiency not only reduces your utility bills but also incr
     publishedAt: '2023-12-15',
     category: 'Energy Efficiency',
     tags: ['energy efficiency', 'insulation', 'heating costs', 'home improvements'],
-    featuredImage: '/images/blog/energy-efficient-maine.jpg',
+    featuredImage: '/images/framing2.webp',
     imageAlt: 'Energy-efficient home improvements for Maine winters',
     readingTime: 9,
     relatedServices: ['insulation', 'windows', 'hvac'],
@@ -409,7 +415,7 @@ Preserving Maine's architectural heritage while creating comfortable, modern liv
     publishedAt: '2023-12-10',
     category: 'Historic Renovation',
     tags: ['historic homes', 'preservation', 'architecture', 'renovation'],
-    featuredImage: '/images/blog/historic-maine-homes.jpg',
+    featuredImage: '/images/construction-work-hero.webp',
     imageAlt: 'Historic Maine home undergoing sensitive renovation',
     readingTime: 10,
     relatedServices: ['carpentry', 'siding', 'roofing'],
@@ -419,25 +425,33 @@ Preserving Maine's architectural heritage while creating comfortable, modern liv
   }
 ];
 
+// Convert all markdown content to HTML
+const processedBlogPosts = rawBlogPosts.map(post => ({
+  ...post,
+  content: md(post.content)
+}));
+
+export { processedBlogPosts as blogPosts };
+
 // Derive categories from blogPosts to keep them in sync
 export const blogCategories = [
-  ...new Set(blogPosts.map(post => post.category))
+  ...new Set(processedBlogPosts.map(post => post.category))
 ];
 
 export const getBlogPostsByCategory = (category: string): BlogPost[] => {
-  return blogPosts.filter(post => post.category === category);
+  return processedBlogPosts.filter(post => post.category === category);
 };
 
 export const getBlogPostsByTag = (tag: string): BlogPost[] => {
-  return blogPosts.filter(post => post.tags.includes(tag));
+  return processedBlogPosts.filter(post => post.tags.includes(tag));
 };
 
 export const getRelatedBlogPosts = (currentPostId: string, limit: number = 3): BlogPost[] => {
-  const currentPost = blogPosts.find(post => post.id === currentPostId);
+  const currentPost = processedBlogPosts.find(post => post.id === currentPostId);
   if (!currentPost) return [];
 
   // Calculate relevance score for each candidate post
-  const candidatesWithScores = blogPosts
+  const candidatesWithScores = processedBlogPosts
     .filter(post => post.id !== currentPostId)
     .map(post => {
       let score = 0;

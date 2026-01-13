@@ -101,34 +101,34 @@
     <div class="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-bounce" style="animation-delay: 1s; animation-duration: 4s;"></div>
     <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-bounce" style="animation-delay: 2s; animation-duration: 3.5s;"></div>
   </div>
-  <div class="container mx-auto px-4 sm:px-6 relative z-10">
-    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+  <div class="container mx-auto px-3 sm:px-6 relative z-10">
+    <div class="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 items-stretch lg:items-start">
       <!-- Left side: Hero text -->
-      <div class="text-center lg:text-left lg:flex-1">
+      <div class="text-center lg:text-left lg:flex-1 w-full lg:w-auto">
         <div in:fade={{ duration: 800, easing: quintOut }}>
-          <p class="text-white/90 uppercase tracking-wider text-sm sm:text-base font-medium mb-3 sm:mb-4">
+          <p class="text-white/90 uppercase tracking-wider text-xs sm:text-sm font-medium mb-2 sm:mb-3">
             General Contractor • {BUSINESS_INFO.city}, {BUSINESS_INFO.state}
           </p>
         </div>
         <div in:slide={{ duration: 600, delay: 200, easing: quintOut }}>
-          <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 leading-tight">
             Expert Siding & Roof Installation Services in Portland
           </h1>
         </div>
         <div in:fade={{ duration: 600, delay: 400, easing: quintOut }}>
-          <p class="text-lg sm:text-xl md:text-2xl mb-4 sm:mb-6 text-neutral-light">
+          <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-neutral-light">
             Your trusted general contractor for quality construction and remodeling.
           </p>
-          <p class="text-base sm:text-lg mb-6 sm:mb-8 text-neutral-light/90 px-2 lg:px-0">
+          <p class="text-sm sm:text-base mb-4 sm:mb-6 text-neutral-light/90">
             LR Sunrise Construction specializes in siding installation, roof replacement, and property improvements. Transform your home with our expert craftsmanship.
           </p>
         </div>
         
         <!-- Badges - scrollable on mobile -->
-        <div in:slide={{ duration: 500, delay: 600, easing: quintOut }} class="flex flex-nowrap gap-2 sm:gap-4 mb-6 sm:mb-8 justify-center lg:justify-start overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory sm:flex-wrap">
+        <div in:slide={{ duration: 500, delay: 600, easing: quintOut }} class="flex flex-nowrap gap-2 mb-4 sm:mb-6 justify-center lg:justify-start overflow-x-auto pb-2 sm:pb-0 -mx-3 px-3 sm:mx-0 sm:px-0 snap-x snap-mandatory sm:flex-wrap">
           {#each PROMOTIONAL_BADGES as badge, i (`${badge.title}|${badge.subtitle}`)}
             <div
-              class="bg-white/10 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-2 border border-white/20 flex-shrink-0 snap-start text-sm sm:text-base hover:bg-white/20 transition-colors duration-200"
+              class="bg-white/10 backdrop-blur-sm rounded-lg px-2 sm:px-4 py-1.5 sm:py-2 border border-white/20 flex-shrink-0 snap-start text-xs sm:text-sm hover:bg-white/20 transition-colors duration-200"
               in:fade={{ duration: 300, delay: 700 + i * 50, easing: quintOut }}
             >
               <span class="font-bold">{badge.title}</span> <span class="whitespace-nowrap">{badge.subtitle}</span>
@@ -137,25 +137,25 @@
         </div>
 
         <!-- CTA buttons - stacked on mobile with proper sizing -->
-        <div in:slide={{ duration: 500, delay: 800, easing: quintOut }} class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center lg:justify-start px-2 sm:px-0">
-          <a href="/contact" class="btn bg-accent text-white hover:bg-accent/90 font-semibold px-6 sm:px-8 py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-base sm:text-lg shadow-lg">
+        <div in:slide={{ duration: 500, delay: 800, easing: quintOut }} class="flex flex-col gap-2 sm:flex-row sm:gap-3 justify-center lg:justify-start">
+          <a href="/contact" class="btn bg-accent text-white hover:bg-accent/90 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-sm sm:text-base shadow-lg flex-1 sm:flex-none">
             Get Free Estimate
           </a>
-          <a href={`tel:${BUSINESS_INFO.telephone}`} class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-6 sm:px-8 py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 text-base sm:text-lg">
-            <span class="flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <a href={`tel:${BUSINESS_INFO.telephone}`} class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 text-xs sm:text-sm flex-1 sm:flex-none">
+            <span class="flex items-center justify-center gap-1 sm:gap-2">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              Call Now: {formatPhoneNumber(BUSINESS_INFO.telephone)}
+              <span class="hidden sm:inline">Call Now:</span> {formatPhoneNumber(BUSINESS_INFO.telephone)}
             </span>
           </a>
         </div>
       </div>
 
       <!-- Right: Form -->
-      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 mx-auto lg:mx-0 lg:shrink-0 lg:max-w-sm w-full flex flex-col justify-center">
-        <h3 class="text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
-        <form on:submit|preventDefault={handleSubmit} class="space-y-3">
+      <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/20 w-full sm:max-w-md lg:max-w-sm mx-auto lg:mx-0">
+        <h3 class="text-base sm:text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
+        <form on:submit|preventDefault={handleSubmit} class="space-y-2 w-full">
           <div>
             <label for="name" class="sr-only">Name</label>
             <input
@@ -166,7 +166,7 @@
               autocomplete="name"
               aria-invalid={errors.name ? 'true' : 'false'}
               aria-describedby={errors.name ? 'name-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-2 sm:px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm sm:text-base"
               placeholder="Your name"
             />
             {#if errors.name}
@@ -183,7 +183,7 @@
               autocomplete="email"
               aria-invalid={errors.email ? 'true' : 'false'}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-2 sm:px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm sm:text-base"
               placeholder="your@email.com"
             />
             {#if errors.email}
@@ -203,7 +203,7 @@
               title="Enter a valid US phone number (e.g., (207) 123-4567 or 2071234567)"
               aria-invalid={errors.phone ? 'true' : 'false'}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-2 sm:px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm sm:text-base"
               placeholder="(207) 123-4567"
             />
             {#if errors.phone}
@@ -219,7 +219,7 @@
               autocomplete="off"
               aria-invalid={errors.service ? 'true' : 'false'}
               aria-describedby={errors.service ? 'service-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-2 sm:px-3 py-2 bg-white/20 border border-white/30 rounded text-white focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-xs sm:text-sm"
             >
               <option value="" disabled>Choose service</option>
               {#each SERVICE_OPTIONS as service}
@@ -237,7 +237,7 @@
               bind:value={formData.message}
               aria-invalid={errors.message ? 'true' : 'false'}
               aria-describedby={errors.message ? 'message-error' : undefined}
-              class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-sm"
+              class="w-full px-2 sm:px-3 py-2 bg-white/20 border border-white/30 rounded text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent text-xs sm:text-sm"
               placeholder="Tell us about your project..."
               rows="3"
             ></textarea>
@@ -247,7 +247,7 @@
           </div>
           <button
             type="submit"
-            class="w-full bg-accent text-white font-semibold py-2 px-4 rounded transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-transparent text-sm"
+            class="w-full bg-accent text-white font-semibold py-2 px-3 sm:px-4 rounded transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-transparent text-xs sm:text-sm"
           >
             Get Free Estimate
           </button>

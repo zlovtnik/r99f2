@@ -6,13 +6,14 @@
 
 {#if featured}
   <!-- Featured Post Layout -->
-  <div class="flex flex-col lg:flex-row">
+  <div class="flex flex-col lg:flex-row border border-silver rounded-lg p-4">
     {#if post.featuredImage}
-      <div class="lg:w-1/2 mb-6 lg:mb-0 lg:mr-8">
+      <div class="lg:w-1/2 mb-6 lg:mb-0 lg:mr-8 featured-image-wrapper featured">
         <img
           src={post.featuredImage}
           alt={post.imageAlt || post.title}
-          class="w-full h-64 lg:h-full object-cover rounded-lg"
+          class="featured-image"
+          loading="lazy"
         />
       </div>
     {/if}
@@ -60,13 +61,14 @@
   </div>
 {:else}
   <!-- Regular Post Card Layout -->
-  <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
+  <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-silver">
     {#if post.featuredImage}
-      <div class="aspect-w-16 aspect-h-9">
+      <div class="featured-image-wrapper">
         <img
           src={post.featuredImage}
           alt={post.imageAlt || post.title}
-          class="w-full object-cover"
+          class="featured-image"
+          loading="lazy"
         />
       </div>
     {/if}
@@ -135,7 +137,38 @@
     overflow: hidden;
   }
 
-  .aspect-w-16 {
+  /* Silver border color */
+  .border-silver {
+    border-color: #c0c0c0;
+  }
+
+  /* Featured image wrapper */
+  .featured-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: #f3f4f6;
+  }
+
+  .featured-image-wrapper.featured {
+    width: 100%;
     aspect-ratio: 16 / 9;
+    min-height: clamp(12rem, 50vh, 24rem);
+  }
+
+  @media (min-width: 1024px) {
+    .featured-image-wrapper.featured {
+      min-height: clamp(16rem, 60vh, 32rem);
+    }
+  }
+
+  .featured-image-wrapper:not(.featured) {
+    aspect-ratio: 16 / 9;
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>
