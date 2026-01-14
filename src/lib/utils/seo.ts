@@ -1,6 +1,6 @@
 import type { SEOMetadata } from '../types';
 import type { LocalBusinessInfo, ServiceInfo } from '../types/seo';
-import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS, OG_IMAGE_URL } from './constants';
+import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS, OG_IMAGE_URL, SOCIAL_URLS, DEFAULT_GEO, DEFAULT_OPENING_HOURS } from './constants';
 
 function toTitleCase(str: string): string {
   return str.replaceAll('-', ' ').split(' ').map(word => 
@@ -95,11 +95,7 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
       postalCode: businessInfo.zipCode,
       addressCountry: 'US'
     },
-    geo: businessInfo.geo || {
-      '@type': 'GeoCoordinates',
-      latitude: businessInfo.lat || 43.6612,
-      longitude: businessInfo.lng || -70.2556
-    },
+    geo: businessInfo.geo || DEFAULT_GEO,
     url: baseUrl,
     serviceArea: businessInfo.serviceArea || {
       '@type': 'City',
@@ -107,19 +103,8 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
     },
     areaServed: businessInfo.areaServed || SERVICE_AREAS,
     priceRange: businessInfo.priceRange || '$$',
-    openingHoursSpecification: businessInfo.openingHours || [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        opens: '07:00',
-        closes: '17:00'
-      }
-    ],
-    sameAs: businessInfo.sameAs || [
-      'https://facebook.com/lrsunriseconstruction',
-      'https://instagram.com/lrsunriseconstruction',
-      'https://g.page/lrsunriseconstruction'
-    ]
+    openingHoursSpecification: businessInfo.openingHours || DEFAULT_OPENING_HOURS,
+    sameAs: businessInfo.sameAs || SOCIAL_URLS
   };
 }
 

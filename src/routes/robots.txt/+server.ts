@@ -2,8 +2,6 @@ import { SITE_URL } from '$lib/utils/constants';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = () => {
-	const siteUrl = SITE_URL;
-
 	const robots = `# Robots.txt for LR Sunrise Construction
 # Generated dynamically to ensure correct sitemap URL
 
@@ -25,10 +23,7 @@ User-agent: bingbot
 Crawl-delay: 1
 
 # Sitemap location (critical for SEO)
-Sitemap: ${siteUrl}/sitemap.xml
-
-# Host directive (helps with canonical domain)
-Host: ${siteUrl}
+Sitemap: ${SITE_URL}/sitemap.xml
 `;
 
 	return new Response(robots, {
