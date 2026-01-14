@@ -1,6 +1,9 @@
-import type { SEOMetadata } from '../types';
-import type { LocalBusinessInfo, ServiceInfo } from '../types/seo';
-import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS, OG_IMAGE_URL, SOCIAL_URLS, DEFAULT_GEO, DEFAULT_OPENING_HOURS } from './constants';
+import type { SEOMetadata } from '$types';
+import type { LocalBusinessInfo, ServiceInfo } from '$types/seo';
+import { BUSINESS_INFO, LOGO_URL, SITE_URL, SERVICE_AREAS, OG_IMAGE_URL, SOCIAL_URLS, DEFAULT_GEO, DEFAULT_OPENING_HOURS } from '$utils/constants';
+
+/** Default state for service areas - configurable for future expansion */
+const DEFAULT_SERVICE_STATE = 'Maine';
 
 function toTitleCase(str: string): string {
   return str.replaceAll('-', ' ').split(' ').map(word => 
@@ -111,10 +114,14 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
 export function createServiceSchema(service: ServiceInfo & { 
   offers?: { 
     priceCurrency?: string; 
+    price?: number;
     priceRange?: string; 
     availability?: string;
   };
+  state?: string;
 }) {
+  const serviceState = service.state || DEFAULT_SERVICE_STATE;
+  
   const baseSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -127,7 +134,7 @@ export function createServiceSchema(service: ServiceInfo & {
     },
     areaServed: (service.areaServed || SERVICE_AREAS).map(area => ({
       '@type': 'City',
-      name: typeof area === 'string' ? `${area}, Maine` : area
+      name: typeof area === 'string' ? `${area}, ${serviceState}` : area
     })),
     url: `${SITE_URL}/services/${service.slug}`,
     serviceType: service.name
@@ -135,18 +142,29 @@ export function createServiceSchema(service: ServiceInfo & {
 
   // Add offers if provided (for pricing rich snippets)
   if (service.offers) {
+    const hasNumericPrice = typeof service.offers.price === 'number' && Number.isFinite(service.offers.price);
+    
+    const offerSchema: Record<string, unknown> = {
+      '@type': 'Offer',
+      priceCurrency: service.offers.priceCurrency || 'USD',
+      availability: service.offers.availability || 'https://schema.org/InStock'
+    };
+
+    // Only include priceSpecification when we have a valid numeric price
+    if (hasNumericPrice) {
+      offerSchema.priceSpecification = {
+        '@type': 'PriceSpecification',
+        priceCurrency: service.offers.priceCurrency || 'USD',
+        price: service.offers.price
+      };
+    } else if (service.offers.priceRange) {
+      // For non-numeric prices, use priceRange as a description
+      offerSchema.priceRange = service.offers.priceRange;
+    }
+
     return {
       ...baseSchema,
-      offers: {
-        '@type': 'Offer',
-        priceCurrency: service.offers.priceCurrency || 'USD',
-        priceSpecification: {
-          '@type': 'PriceSpecification',
-          priceCurrency: service.offers.priceCurrency || 'USD',
-          price: service.offers.priceRange || 'Contact for quote'
-        },
-        availability: service.offers.availability || 'https://schema.org/InStock'
-      }
+      offers: offerSchema
     };
   }
 
