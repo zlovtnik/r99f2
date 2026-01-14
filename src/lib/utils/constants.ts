@@ -110,3 +110,27 @@ export const SOCIAL_LINKS = {
   instagram: 'https://instagram.com/lrsunriseconstruction',
   google: 'https://g.page/lrsunriseconstruction'
 } as const;
+
+/** Array of social media profile URLs for Schema.org sameAs property */
+export const SOCIAL_URLS = [
+  SOCIAL_LINKS.facebook,
+  SOCIAL_LINKS.instagram,
+  SOCIAL_LINKS.google
+] as const;
+
+/** Default geo coordinates derived from BUSINESS_INFO */
+export const DEFAULT_GEO = {
+  '@type': 'GeoCoordinates' as const,
+  latitude: BUSINESS_INFO.lat,
+  longitude: BUSINESS_INFO.lng
+} as const;
+
+/** Default business opening hours (7 days, 7am-5pm) */
+export const DEFAULT_OPENING_HOURS = [
+  {
+    '@type': 'OpeningHoursSpecification' as const,
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const,
+    opens: '07:00',
+    closes: '17:00'
+  }
+] as const;
