@@ -47,14 +47,14 @@
 <SchemaMarkup schema={createCollectionSchema({
   name: 'LR Sunrise Construction Blog',
   description: seoDescription,
-  url: '{siteConfig.siteUrl}/blog',
+  url: `${siteConfig.siteUrl}/blog`,
   items: filteredPosts.map(post => ({
     name: post.title,
     description: post.excerpt,
-    url: `https://lbsunrise.com/blog/${post.slug}`,
+    url: `${siteConfig.siteUrl}/blog/${post.slug}`,
     datePublished: post.publishedAt,
     author: post.author,
-    image: post.featuredImage ? `https://lbsunrise.com${post.featuredImage}` : undefined
+    image: post.featuredImage ? `${siteConfig.siteUrl}${post.featuredImage}` : undefined
   }))
 })} />
 

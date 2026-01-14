@@ -4,6 +4,13 @@ export interface SchemaMarkup {
   [key: string]: unknown;
 }
 
+export interface OpeningHoursSpec {
+  '@type': 'OpeningHoursSpecification';
+  dayOfWeek: string[];
+  opens: string;
+  closes: string;
+}
+
 export interface LocalBusinessInfo {
   name: string;
   telephone: string;
@@ -12,12 +19,21 @@ export interface LocalBusinessInfo {
   city: string;
   state: string;
   zipCode: string;
+  lat?: number;
+  lng?: number;
   image?: string;
   description?: string;
   url?: string;
   serviceArea?: { '@type': string; name: string };
   areaServed?: string[];
   priceRange?: string;
+  geo?: {
+    '@type': 'GeoCoordinates';
+    latitude: number;
+    longitude: number;
+  };
+  openingHours?: OpeningHoursSpec[];
+  sameAs?: string[];
 }
 
 export interface LocalBusinessSchema extends SchemaMarkup {

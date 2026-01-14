@@ -2,8 +2,9 @@ import { marked } from 'marked';
 import type { BlogPost } from '$types';
 
 // Helper function to convert markdown to HTML (synchronous)
+// Note: With { async: false }, marked.parse always returns a string
 function md(content: string): string {
-  return marked.parse(content, { async: false }) as string;
+  return marked.parse(content, { async: false });
 }
 
 const rawBlogPosts: BlogPost[] = [
@@ -56,6 +57,7 @@ While repairs might seem cheaper initially, frequent repairs can cost more than 
 Contact us today for a free roof inspection and personalized recommendations.`,
     author: 'Mike Johnson',
     publishedAt: '2024-01-15',
+    updatedAt: '2025-11-20',
     category: 'Roofing',
     tags: ['roof repair', 'roof replacement', 'shingles', 'roof maintenance'],
     featuredImage: '/images/roof-shingles-guide.webp',
@@ -114,6 +116,7 @@ Our certified technicians specialize in Maine winter roofing challenges. We offe
 Don't wait for damage to occur. Schedule your winter roof inspection today and protect your Maine home from ice dams.`,
     author: 'Sarah Mitchell',
     publishedAt: '2024-01-08',
+    updatedAt: '2025-10-15',
     category: 'Roofing',
     tags: ['ice dams', 'winter roofing', 'attic insulation', 'roof protection'],
     featuredImage: '/images/ice-dam-maine.webp',
@@ -177,6 +180,7 @@ Regardless of material choice, professional installation ensures proper performa
 Contact us for a free siding consultation and material recommendations tailored to your home and location.`,
     author: 'David Chen',
     publishedAt: '2024-01-01',
+    updatedAt: '2025-09-10',
     category: 'Siding',
     tags: ['siding materials', 'vinyl siding', 'fiber cement', 'wood siding'],
     featuredImage: '/images/siding-materials-maine.webp',
@@ -266,6 +270,7 @@ Our certified technicians provide comprehensive spring inspections and repairs t
 Schedule your spring home maintenance inspection today!`,
     author: 'Jennifer Walsh',
     publishedAt: '2023-12-20',
+    updatedAt: '2025-03-15',
     category: 'Maintenance',
     tags: ['spring maintenance', 'home inspection', 'seasonal care', 'roof inspection'],
     featuredImage: '/images/spring-maintenance-maine.webp',
@@ -335,6 +340,7 @@ Our energy auditors use advanced tools to identify improvement opportunities and
 Investing in energy efficiency not only reduces your utility bills but also increases your home's comfort and value. Contact us for a free energy assessment today!`,
     author: 'Robert Martinez',
     publishedAt: '2023-12-15',
+    updatedAt: '2025-08-20',
     category: 'Energy Efficiency',
     tags: ['energy efficiency', 'insulation', 'heating costs', 'home improvements'],
     featuredImage: '/images/framing2.webp',
@@ -413,6 +419,7 @@ Our team has extensive experience with historic Maine homes, including:
 Preserving Maine's architectural heritage while creating comfortable, modern living spaces is our passion. Contact us for your historic home renovation project.`,
     author: 'Patricia Anderson',
     publishedAt: '2023-12-10',
+    updatedAt: '2025-06-05',
     category: 'Historic Renovation',
     tags: ['historic homes', 'preservation', 'architecture', 'renovation'],
     featuredImage: '/images/construction-work-hero.webp',

@@ -3,7 +3,7 @@
   import { serviceAreas } from '$lib/data/serviceAreas';
   import CTA from '$components/CTA.svelte';
   import { BUSINESS_INFO, STANDARD_SERVICES } from '$lib/utils/constants';
-  import { createLocalBusinessSchema, createBreadcrumbSchema } from '$lib/utils/seo';
+  import { createLocalBusinessSchema, createBreadcrumbSchema, createFAQSchema } from '$lib/utils/seo';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import TestimonialCard from '$components/TestimonialCard.svelte';
 
@@ -45,7 +45,13 @@
     areaServed: area.zipCodes.map(zip => `${zip}, ${area.state}`)
   }) : null;
 
-  // Validate video URLs to prevent XSS
+  // FAQ Schema for local FAQs - enables rich results in search
+  $: faqSchema = area?.localFaqs && area.localFaqs.length > 0 
+    ? createFAQSchema(area.localFaqs.map(faq => ({
+        question: faq.question,
+        answer: faq.answer
+      })))
+    : null;
 
   // Validate video URLs to prevent XSS
   function isValidVideoUrl(url: string): boolean {
@@ -96,6 +102,10 @@
 
 {#if breadcrumbSchema}
   <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
+
+{#if faqSchema}
+  <SchemaMarkup schema={faqSchema} />
 {/if}
 
 {#if area}

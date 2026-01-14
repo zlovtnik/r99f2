@@ -81,6 +81,7 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
+    '@id': `${baseUrl}/#localbusiness`,
     name: businessInfo.name,
     image: absoluteImageUrl,
     description: businessInfo.description || 'Professional roofing services in Maine',
@@ -94,29 +95,77 @@ export function createLocalBusinessSchema(businessInfo: LocalBusinessInfo) {
       postalCode: businessInfo.zipCode,
       addressCountry: 'US'
     },
+    geo: businessInfo.geo || {
+      '@type': 'GeoCoordinates',
+      latitude: businessInfo.lat || 43.6612,
+      longitude: businessInfo.lng || -70.2556
+    },
     url: baseUrl,
     serviceArea: businessInfo.serviceArea || {
       '@type': 'City',
       name: 'Portland, Maine'
     },
     areaServed: businessInfo.areaServed || SERVICE_AREAS,
-    priceRange: businessInfo.priceRange || '$$'
+    priceRange: businessInfo.priceRange || '$$',
+    openingHoursSpecification: businessInfo.openingHours || [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        opens: '07:00',
+        closes: '17:00'
+      }
+    ],
+    sameAs: businessInfo.sameAs || [
+      'https://facebook.com/lrsunriseconstruction',
+      'https://instagram.com/lrsunriseconstruction',
+      'https://g.page/lrsunriseconstruction'
+    ]
   };
 }
 
-export function createServiceSchema(service: ServiceInfo) {
-  return {
+export function createServiceSchema(service: ServiceInfo & { 
+  offers?: { 
+    priceCurrency?: string; 
+    priceRange?: string; 
+    availability?: string;
+  };
+}) {
+  const baseSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: service.name,
     description: service.description,
     provider: {
       '@type': 'LocalBusiness',
-      name: service.providerName || BUSINESS_INFO.name
+      name: service.providerName || BUSINESS_INFO.name,
+      '@id': `${SITE_URL}/#localbusiness`
     },
-    areaServed: service.areaServed || SERVICE_AREAS,
-    url: `/services/${service.slug}`
+    areaServed: (service.areaServed || SERVICE_AREAS).map(area => ({
+      '@type': 'City',
+      name: typeof area === 'string' ? `${area}, Maine` : area
+    })),
+    url: `${SITE_URL}/services/${service.slug}`,
+    serviceType: service.name
   };
+
+  // Add offers if provided (for pricing rich snippets)
+  if (service.offers) {
+    return {
+      ...baseSchema,
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: service.offers.priceCurrency || 'USD',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          priceCurrency: service.offers.priceCurrency || 'USD',
+          price: service.offers.priceRange || 'Contact for quote'
+        },
+        availability: service.offers.availability || 'https://schema.org/InStock'
+      }
+    };
+  }
+
+  return baseSchema;
 }
 
 export function createBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
