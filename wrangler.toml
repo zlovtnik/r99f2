@@ -1,0 +1,28 @@
+name = "r99f2"
+compatibility_date = "2026-01-15"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+[vars]
+# Site Configuration
+VITE_SITE_URL = "https://lbsunrise.com"
+PUBLIC_SITE_URL = "https://lbsunrise.com"
+
+# Google Analytics
+VITE_GA_MEASUREMENT_ID = "G-447Z99CRD2"
+
+# Business Contact
+VITE_BUSINESS_EMAIL = "LEMADILAN5@gmail.com"
+VITE_BUSINESS_PHONE = "(978) 519-9774"
+
+# Feature Flags
+VITE_ENABLE_CONTACT_FORM = "true"
+VITE_ENABLE_SERVICE_AREAS = "true"
+VITE_ENABLE_TESTIMONIALS = "true"
+VITE_ENABLE_FAQ = "true"
+VITE_ENABLE_ANALYTICS = "true"
+VITE_ENABLE_SOCIAL_SHARING = "true"
+
+# Note: Secrets like VITE_EMAIL_API_KEY and ADMIN_EMAIL should be added via:
+# bunx wrangler pages secret put VITE_EMAIL_API_KEY --project-name=r99f2
+# bunx wrangler pages secret put ADMIN_EMAIL --project-name=r99f2
