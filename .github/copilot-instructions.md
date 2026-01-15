@@ -3,7 +3,7 @@
 ## Stack & Architecture
 
 - **Framework**: SvelteKit 2 with Vite 7, Tailwind 3.4, PostCSS (autoprefixer), TypeScript
-- **Adapter**: Vercel targeting `nodejs22.x` runtime (see [svelte.config.js](svelte.config.js))
+- **Adapter**: Cloudflare Pages via adapter-cloudflare (see [svelte.config.js](svelte.config.js) and [wrangler.jsonc](wrangler.jsonc))
 - **Build commands**: `npm run dev|build|preview|check` (type-checking via svelte-check)
 - **Path aliases**: `$components`, `$types`, `$utils`, `$data`, `$config` defined in [svelte.config.js](svelte.config.js); prefer these over relative imports
 
@@ -43,9 +43,9 @@
 
 ## Deployment & DevOps
 
-- **Primary target**: Vercel via adapter-vercel (outputs to `build/`)
+- **Primary target**: Cloudflare Pages via adapter-cloudflare (outputs to `.svelte-kit/cloudflare/`); config in [wrangler.jsonc](wrangler.jsonc)
 - **Alternative deployments**: Docker via [Dockerfile](Dockerfile) (multi-stage alpine build, port 3000, healthcheck at `/health`); OCI via [build_spec.yml](build_spec.yml) for OCI DevOps pipelines; Kubernetes manifests in [k8s-deployment.yaml](k8s-deployment.yaml), [k8s-service.yaml](k8s-service.yaml), [k8s-ingress.yaml](k8s-ingress.yaml)
-- **Build artifacts**: Vercel uses `build/` output; OCI DevOps copies to `dist/` with production deps
+- **Build artifacts**: Cloudflare uses `.svelte-kit/cloudflare/` output; OCI DevOps copies to `dist/` with production deps
 - **Makefile**: [Makefile](Makefile) provides shortcuts: `make install|dev|build|check|docker-build|deploy-k8s`
 
 ## Development Workflow
