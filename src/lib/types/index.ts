@@ -60,7 +60,8 @@ export interface GalleryItem {
   beforeImage?: string;  // For before/after comparisons
   afterImage?: string;   // For before/after comparisons (defaults to image if not set)
   location?: string;     // City/area where project was completed
-  completedDate?: string; // When project was completed
+  /** When project was completed. Format: ISO 8601 date string (e.g., "2024-03-15") */
+  completedDate?: string;
 }
 
 export interface BlogPost {

@@ -10,7 +10,7 @@
   // SEO metadata
   $: seo = {
     title: 'Service Areas | Construction Services in 21 Maine Communities',
-    description: 'Expert siding, roofing & construction in Portland, Brunswick, Biddeford, Westbrook, Falmouth, Kennebunk & 15 more Maine communities. Same-day emergency service. Free estimates. Call (978) 519-9774.',
+    description: `Expert siding, roofing & construction in Portland, Brunswick, Biddeford, Westbrook, Falmouth, Kennebunk & 15 more Maine communities. Same-day emergency service. Free estimates. Call ${BUSINESS_INFO.telephone}.`,
     keywords: 'construction service areas Maine, Portland Maine contractor, Brunswick ME construction, Biddeford Maine contractor',
     url: `${baseUrl}/service-areas`,
     image: `${baseUrl}/images/og-image.webp`

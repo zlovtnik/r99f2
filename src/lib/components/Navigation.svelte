@@ -42,6 +42,92 @@
     FEATURED_AREAS.includes(area.name as typeof FEATURED_AREAS[number])
   );
 
+  // Refs for keyboard navigation
+  let servicesMenuItems: HTMLAnchorElement[] = [];
+  let areasMenuItems: HTMLAnchorElement[] = [];
+  let servicesButton: HTMLButtonElement;
+  let areasButton: HTMLButtonElement;
+
+  function handleServicesKeydown(event: KeyboardEvent) {
+    if (!servicesDropdownOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        servicesDropdownOpen = true;
+        // Focus first menu item after dropdown opens
+        setTimeout(() => servicesMenuItems[0]?.focus(), 0);
+      }
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        servicesDropdownOpen = false;
+        servicesButton?.focus();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        {
+          const currentIndex = servicesMenuItems.findIndex(item => item === document.activeElement);
+          const nextIndex = currentIndex < servicesMenuItems.length - 1 ? currentIndex + 1 : 0;
+          servicesMenuItems[nextIndex]?.focus();
+        }
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        {
+          const currentIndex = servicesMenuItems.findIndex(item => item === document.activeElement);
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : servicesMenuItems.length - 1;
+          servicesMenuItems[prevIndex]?.focus();
+        }
+        break;
+      case 'Tab':
+        // Allow natural tab, but close dropdown
+        servicesDropdownOpen = false;
+        break;
+    }
+  }
+
+  function handleAreasKeydown(event: KeyboardEvent) {
+    if (!areasDropdownOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        areasDropdownOpen = true;
+        // Focus first menu item after dropdown opens
+        setTimeout(() => areasMenuItems[0]?.focus(), 0);
+      }
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        areasDropdownOpen = false;
+        areasButton?.focus();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        {
+          const currentIndex = areasMenuItems.findIndex(item => item === document.activeElement);
+          const nextIndex = currentIndex < areasMenuItems.length - 1 ? currentIndex + 1 : 0;
+          areasMenuItems[nextIndex]?.focus();
+        }
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        {
+          const currentIndex = areasMenuItems.findIndex(item => item === document.activeElement);
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : areasMenuItems.length - 1;
+          areasMenuItems[prevIndex]?.focus();
+        }
+        break;
+      case 'Tab':
+        // Allow natural tab, but close dropdown
+        areasDropdownOpen = false;
+        break;
+    }
+  }
+
   // Cleanup on component destroy to ensure body scroll is restored
   onDestroy(() => {
     if (typeof document !== 'undefined') {
@@ -104,36 +190,55 @@
           class="relative"
           on:mouseenter={() => servicesDropdownOpen = true}
           on:mouseleave={() => servicesDropdownOpen = false}
+          on:focusin={() => servicesDropdownOpen = true}
+          on:focusout={(e) => {
+            // Close dropdown if focus leaves the entire li
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              servicesDropdownOpen = false;
+            }
+          }}
         >
           <button 
+            bind:this={servicesButton}
             class="nav-link flex items-center gap-1"
             class:active={$page.url.pathname.startsWith('/services')}
             aria-expanded={servicesDropdownOpen}
-            aria-haspopup="true"
+            aria-haspopup="menu"
             on:click={() => servicesDropdownOpen = !servicesDropdownOpen}
+            on:keydown={handleServicesKeydown}
           >
             Services
-            <svg class="w-4 h-4 transition-transform {servicesDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 transition-transform {servicesDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           {#if servicesDropdownOpen}
             <div 
               class="absolute top-full left-0 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+              role="menu"
+              aria-label="Services menu"
+              tabindex="-1"
               transition:slide={{ duration: 150 }}
+              on:keydown={handleServicesKeydown}
             >
-              {#each featuredServices.slice(0, 6) as service}
+              {#each featuredServices.slice(0, 6) as service, i}
                 <a 
+                  bind:this={servicesMenuItems[i]}
                   href={`/services/${service.slug}`} 
                   class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors"
+                  role="menuitem"
+                  tabindex="0"
                 >
                   {service.name}
                 </a>
               {/each}
               <div class="border-t border-gray-100 mt-2 pt-2">
                 <a 
+                  bind:this={servicesMenuItems[6]}
                   href="/services" 
                   class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
+                  role="menuitem"
+                  tabindex="0"
                 >
                   View All Services →
                 </a>
@@ -147,35 +252,55 @@
           class="relative"
           on:mouseenter={() => areasDropdownOpen = true}
           on:mouseleave={() => areasDropdownOpen = false}
+          on:focusin={() => areasDropdownOpen = true}
+          on:focusout={(e) => {
+            // Close dropdown if focus leaves the entire li
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              areasDropdownOpen = false;
+            }
+          }}
         >
           <button 
+            bind:this={areasButton}
             class="nav-link flex items-center gap-1"
             class:active={$page.url.pathname.startsWith('/service-areas')}
             aria-expanded={areasDropdownOpen}
-            aria-haspopup="true"
+            aria-haspopup="menu"
+            on:click={() => areasDropdownOpen = !areasDropdownOpen}
+            on:keydown={handleAreasKeydown}
           >
             Areas
-            <svg class="w-4 h-4 transition-transform {areasDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 transition-transform {areasDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           {#if areasDropdownOpen}
             <div 
               class="absolute top-full left-0 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+              role="menu"
+              aria-label="Service areas menu"
+              tabindex="-1"
               transition:slide={{ duration: 150 }}
+              on:keydown={handleAreasKeydown}
             >
-              {#each featuredAreasList as area}
+              {#each featuredAreasList as area, i}
                 <a 
+                  bind:this={areasMenuItems[i]}
                   href={`/service-areas/${area.slug}`} 
                   class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors"
+                  role="menuitem"
+                  tabindex="0"
                 >
                   {area.name}, ME
                 </a>
               {/each}
               <div class="border-t border-gray-100 mt-2 pt-2">
                 <a 
+                  bind:this={areasMenuItems[featuredAreasList.length]}
                   href="/service-areas" 
                   class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
+                  role="menuitem"
+                  tabindex="0"
                 >
                   All {serviceAreas.length} Areas →
                 </a>

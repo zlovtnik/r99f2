@@ -26,7 +26,7 @@
     </ul>
     
     {#if service.warranty}
-      <p class="text-xs sm:text-sm text-green-600 font-semibold mb-4">{service.warranty}</p>
+      <p class="text-xs sm:text-sm text-green-800 font-semibold mb-4">{service.warranty}</p>
     {/if}
     
     <a href="/services/{service.slug}" class="btn btn-primary block text-center py-3 sm:py-2 hover:scale-105 transition-transform duration-200">

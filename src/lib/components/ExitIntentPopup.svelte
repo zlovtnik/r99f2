@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
   import { fade, scale } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
-  import { BUSINESS_INFO } from '$lib/utils/constants';
+  import { BUSINESS_INFO } from '$utils/constants';
 
   export let enabled: boolean = true;
   export let delay: number = 0; // Delay in ms before exit intent is active
@@ -11,6 +11,8 @@
   let isVisible = false;
   let hasTriggered = false;
   let isActive = false;
+  let closeButtonRef: HTMLButtonElement;
+  let previousActiveElement: HTMLElement | null = null;
 
   const COOKIE_NAME = 'lrsunrise_exit_popup_dismissed';
 
@@ -38,12 +40,21 @@
   function showPopup() {
     if (hasTriggered || getCookie(COOKIE_NAME)) return;
     hasTriggered = true;
+    // Store current focus to restore on close
+    previousActiveElement = document.activeElement as HTMLElement;
     isVisible = true;
+    // Focus the close button after popup renders
+    tick().then(() => {
+      closeButtonRef?.focus();
+    });
   }
 
   function closePopup() {
     isVisible = false;
     setCookie(COOKIE_NAME, 'true', cookieDays);
+    // Restore focus to previous element
+    previousActiveElement?.focus();
+    previousActiveElement = null;
   }
 
   function handleKeydown(event: KeyboardEvent) {
@@ -100,6 +111,7 @@
     >
       <!-- Close button -->
       <button
+        bind:this={closeButtonRef}
         on:click={closePopup}
         class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors z-10"
         aria-label="Close popup"

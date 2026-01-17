@@ -116,10 +116,10 @@
           </h1>
         </div>
         <div in:fade={{ duration: 600, delay: 400, easing: quintOut }}>
-          <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-neutral-light font-medium">
+          <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-white/95 font-medium">
             Portland's trusted choice for siding, roofing & expert craftsmanship.
           </p>
-          <p class="text-sm sm:text-base mb-4 sm:mb-6 text-neutral-light/90">
+          <p class="text-sm sm:text-base mb-4 sm:mb-6 text-white/90">
             10+ years serving Maine homeowners. Free estimates within 24 hours. Same-day emergency response available.
           </p>
         </div>
@@ -138,7 +138,7 @@
 
         <!-- CTA buttons - stacked on mobile with proper sizing -->
         <div in:slide={{ duration: 500, delay: 800, easing: quintOut }} class="flex flex-col gap-2 sm:flex-row sm:gap-3 justify-center lg:justify-start">
-          <a href="/contact" class="btn bg-accent text-white hover:bg-accent/90 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-sm sm:text-base shadow-lg flex-1 sm:flex-none group">
+          <a href="/contact" class="btn bg-accent text-neutral-900 hover:bg-accent/90 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-sm sm:text-base shadow-lg flex-1 sm:flex-none group">
             <span class="flex items-center justify-center gap-2">
               <svg class="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-pulse motion-reduce:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -159,7 +159,7 @@
 
       <!-- Right: Form -->
       <div in:slide={{ duration: 600, delay: 1000, easing: quintOut }} class="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/20 w-full sm:max-w-md lg:max-w-sm mx-auto lg:mx-0">
-        <h3 class="text-base sm:text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h3>
+        <h2 class="text-base sm:text-lg font-bold mb-3 text-white text-center">Schedule Your FREE Estimate Today!</h2>
         <form on:submit|preventDefault={handleSubmit} class="space-y-2 w-full">
           <div>
             <label for="name" class="sr-only">Name</label>
@@ -252,9 +252,15 @@
           </div>
           <button
             type="submit"
-            class="w-full bg-accent text-white font-bold py-2.5 px-3 sm:px-4 rounded transition-all duration-200 hover:bg-accent/90 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-transparent text-xs sm:text-sm shadow-lg"
+            class="w-full bg-accent text-neutral-900 font-bold py-2.5 px-3 sm:px-4 rounded transition-all duration-200 hover:bg-accent/90 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-transparent text-xs sm:text-sm shadow-lg"
+            aria-label="Get Your Free Quote Now"
           >
-            🚀 Get Your Free Quote Now
+            <span class="flex items-center justify-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Get Your Free Quote Now
+            </span>
           </button>
           <p class="text-center text-xs text-white/70 mt-1">Same-day response guaranteed</p>
         </form>

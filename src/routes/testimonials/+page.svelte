@@ -4,8 +4,8 @@
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import CTA from '$components/CTA.svelte';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
-  import { createBreadcrumbSchema, createAggregateRatingSchema, createReviewSchema } from '$utils/seo';
-  import { BUSINESS_INFO, STATS, SITE_URL } from '$lib/utils/constants';
+  import { createBreadcrumbSchema, createAggregateRatingSchema } from '$utils/seo';
+  import { BUSINESS_INFO, STATS } from '$utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
 
@@ -34,9 +34,9 @@
   $: reviewSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}/#localbusiness`,
+    '@id': `${baseUrl}/#localbusiness`,
     name: BUSINESS_INFO.name,
-    url: SITE_URL,
+    url: baseUrl,
     telephone: BUSINESS_INFO.telephone,
     aggregateRating: aggregateRating,
     review: testimonials.map(t => ({

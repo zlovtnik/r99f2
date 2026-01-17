@@ -2,11 +2,11 @@
   import { createLocalBusinessSchema, createAggregateRatingSchema } from "$lib/utils/seo";
   import SchemaMarkup from "$lib/components/SchemaMarkup.svelte";
   import Hero from "$lib/components/Hero.svelte";
-  import { BUSINESS_INFO, SITE_URL, STATS } from "$lib/utils/constants";
+  import { BUSINESS_INFO, SITE_URL, STATS, SERVICE_AREAS } from "$lib/utils/constants";
   import { featuredServices } from "$lib/data/services";
   import { testimonials } from "$lib/data/testimonials";
   import { benefits } from "$lib/data/benefits";
-  import { serviceAreas } from "$lib/data/serviceAreas";
+  import { featuredServiceAreas } from "$lib/data/serviceAreas";
   import ServiceCard from "$lib/components/ServiceCard.svelte";
   import TestimonialCard from "$lib/components/TestimonialCard.svelte";
   import BlogPostCard from "$lib/components/BlogPostCard.svelte";
@@ -34,8 +34,8 @@
     aggregateRating: aggregateRatingSchema
   };
 
-  // Filter service areas to show only featured ones on homepage
-  $: featuredAreas = serviceAreas.filter(area => area.featured);
+  // Use pre-filtered featured areas (no runtime filtering needed)
+  const featuredAreas = featuredServiceAreas;
 </script>
 
 <svelte:head>
@@ -191,7 +191,7 @@
         href="/service-areas"
         class="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-sm sm:text-base"
       >
-        View All {serviceAreas.length} Service Areas
+        View All {SERVICE_AREAS.length} Service Areas
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
@@ -290,8 +290,11 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-6xl mx-auto">
       <!-- Left: Contact Info -->
       <div class="text-center lg:text-left">
-        <span class="inline-block bg-accent/10 text-accent text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
-          🚀 Free Quote in 24 Hours
+        <span class="inline-flex items-center gap-1 bg-accent/20 text-accent font-bold text-sm px-4 py-1.5 rounded-full mb-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Free Quote in 24 Hours
         </span>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900">
           Ready to Start Your Project?
@@ -339,7 +342,7 @@
         
         <a 
           href="/contact" 
-          class="block w-full bg-accent hover:bg-accent/90 text-white font-bold py-4 px-6 rounded-xl text-center transition-all duration-200 hover:scale-[1.02] hover:shadow-lg mb-4"
+          class="block w-full bg-accent hover:bg-accent/90 text-neutral-900 font-bold py-4 px-6 rounded-xl text-center transition-all duration-200 hover:scale-[1.02] hover:shadow-lg mb-4"
         >
           <span class="flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

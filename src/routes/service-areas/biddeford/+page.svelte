@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ServiceAreaPage from '$lib/components/ServiceAreaPage.svelte';
+  import ServiceAreaPage from '$components/ServiceAreaPage.svelte';
 </script>
 
 <ServiceAreaPage areaSlug="biddeford" />

@@ -11,6 +11,9 @@
       visible = window.scrollY > 400;
     };
     
+    // Initialize visibility immediately for deep links
+    handleScroll();
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   });

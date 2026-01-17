@@ -9,6 +9,7 @@
 ## 📊 Current State Analysis
 
 ### ✅ Already Implemented (No Action Needed)
+
 | Feature | Status | Location |
 |---------|--------|----------|
 | Sticky top navigation | ✅ Done | `Navigation.svelte` - sticky top-0 z-50 |
@@ -25,6 +26,7 @@
 | Trust signals (years, discounts) | ✅ Done | constants.ts + displayed in Footer/Hero |
 
 ### ⚠️ Partially Implemented (Needs Enhancement)
+
 | Feature | Current State | Gap |
 |---------|---------------|-----|
 | Navigation dropdowns | Simple links only | No hover dropdowns for Services/Areas |
@@ -37,6 +39,7 @@
 | Google Maps embed | Not present | Service area pages need map integration |
 
 ### ❌ Not Yet Implemented (Requires Development)
+
 | Feature | Priority | Complexity |
 |---------|----------|------------|
 | Navigation dropdowns (hover/click) | High | Medium |
@@ -52,7 +55,8 @@
 ## 🎯 Implementation Roadmap
 
 ### Phase 1: High-Impact Quick Wins (Week 1)
-*Low effort, high conversion impact*
+
+#### Low effort, high conversion impact
 
 - [x] **1.1** Limit homepage service areas to 6 featured + "View All" link
 - [x] **1.2** Add urgency text to CTAs: "Free Quote in 24 Hours" / "Same-Day Response"
@@ -60,7 +64,8 @@
 - [x] **1.4** Move "Why Choose Us" section benefits summary (keep detail on subpage)
 
 ### Phase 2: Navigation & UX Enhancement (Week 2)
-*Better site navigation and discovery*
+
+#### Better site navigation and discovery
 
 - [x] **2.1** Add dropdown menus for Services (show 6 main services)
 - [x] **2.2** Add dropdown menu for Service Areas (featured areas + "All Areas")
@@ -68,7 +73,8 @@
 - [x] **2.4** Improve mobile nav with collapsible service/area sections
 
 ### Phase 3: Conversion Optimization (Week 2-3)
-*Maximize contact form submissions*
+
+#### Maximize contact form submissions
 
 - [x] **3.1** Add standalone contact section on homepage (below testimonials)
 - [x] **3.2** Add mini contact form to service area pages
@@ -77,7 +83,8 @@
 - [x] **3.5** Add exit-intent popup with special offer (optional)
 
 ### Phase 4: Visual & Content Improvements (Week 3-4)
-*Build trust through visuals*
+
+#### Build trust through visuals
 
 - [x] **4.1** Add before/after comparison slider component to gallery
 - [ ] **4.2** Enhance testimonials with client photos (if available)
@@ -87,7 +94,8 @@
 - [ ] **4.6** Add team member photos to About page
 
 ### Phase 5: Local SEO Enhancements (Week 4)
-*Improve local search visibility*
+
+#### Improve local search visibility
 
 - [x] **5.1** Add Google Maps embed to service area pages
 - [x] **5.2** Add Google Maps embed to Contact page
@@ -97,7 +105,8 @@
 - [x] **5.6** Create location-specific landing pages for top 3 areas
 
 ### Phase 6: Performance & Polish (Ongoing)
-*Site speed and quality assurance*
+
+#### Site speed and quality assurance
 
 - [x] **6.1** Audit images with PageSpeed Insights (all images already WebP)
 - [x] **6.2** Implement image lazy loading (verify working) - all img tags have loading="lazy"
@@ -112,6 +121,7 @@
 ## 📁 Files to Modify
 
 ### Core Components
+
 | File | Changes Needed |
 |------|----------------|
 | `components/Navigation.svelte` | Add dropdown menus, phone in header |
@@ -121,6 +131,7 @@
 | `components/Footer.svelte` | Already good; minor tweaks |
 
 ### New Components to Create
+
 | Component | Purpose |
 |-----------|---------|
 | `DropdownMenu.svelte` | Reusable dropdown for nav |
@@ -130,6 +141,7 @@
 | `MiniContactForm.svelte` | Compact form for service pages |
 
 ### Data Files
+
 | File | Changes Needed |
 |------|----------------|
 | `data/serviceAreas.ts` | Add `featured: boolean` field |

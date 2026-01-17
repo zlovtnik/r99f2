@@ -3,6 +3,28 @@
   export let title: string = 'Video';
   export let aspectRatio: '16:9' | '4:3' | '1:1' = '16:9';
 
+  // Valid YouTube hostnames (exact match)
+  const YOUTUBE_HOSTNAMES = new Set([
+    'youtube.com',
+    'www.youtube.com',
+    'm.youtube.com',
+    'youtu.be',
+    'www.youtu.be'
+  ]);
+
+  // Valid Vimeo hostnames (exact match)
+  const VIMEO_HOSTNAMES = new Set([
+    'vimeo.com',
+    'www.vimeo.com',
+    'player.vimeo.com'
+  ]);
+
+  // YouTube video IDs: 11 characters, alphanumeric plus dash and underscore
+  const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
+
+  // Vimeo video IDs: numeric only
+  const VIMEO_ID_PATTERN = /^\d+$/;
+
   // Parse video URL to get embed URL
   function getEmbedUrl(videoUrl: string): string | null {
     if (!videoUrl) return null;
@@ -11,27 +33,51 @@
       const urlObj = new URL(videoUrl);
       const hostname = urlObj.hostname.toLowerCase();
 
-      // YouTube
-      if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+      // YouTube - strict hostname check
+      if (YOUTUBE_HOSTNAMES.has(hostname)) {
         let videoId = '';
         
-        if (hostname.includes('youtu.be')) {
-          videoId = urlObj.pathname.slice(1);
+        if (hostname === 'youtu.be' || hostname === 'www.youtu.be') {
+          // Short URL: https://youtu.be/VIDEO_ID
+          videoId = urlObj.pathname.slice(1).split('/')[0] || '';
         } else if (urlObj.searchParams.has('v')) {
+          // Standard URL: https://www.youtube.com/watch?v=VIDEO_ID
           videoId = urlObj.searchParams.get('v') || '';
-        } else if (urlObj.pathname.includes('/embed/')) {
-          videoId = urlObj.pathname.split('/embed/')[1]?.split('?')[0] || '';
+        } else if (urlObj.pathname.startsWith('/embed/')) {
+          // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+          videoId = urlObj.pathname.split('/embed/')[1]?.split('/')[0] || '';
+        } else if (urlObj.pathname.startsWith('/v/')) {
+          // Old format: https://www.youtube.com/v/VIDEO_ID
+          videoId = urlObj.pathname.split('/v/')[1]?.split('/')[0] || '';
         }
 
-        if (videoId) {
+        // Clean the ID (remove any query/hash fragments that might have slipped through)
+        videoId = videoId.split('?')[0].split('#')[0];
+
+        // Validate YouTube ID format
+        if (videoId && YOUTUBE_ID_PATTERN.test(videoId)) {
           return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
         }
       }
 
-      // Vimeo
-      if (hostname.includes('vimeo.com')) {
-        const vimeoId = urlObj.pathname.split('/').pop();
-        if (vimeoId) {
+      // Vimeo - strict hostname check
+      if (VIMEO_HOSTNAMES.has(hostname)) {
+        // Extract ID from pathname, handling various formats
+        // /VIDEO_ID, /video/VIDEO_ID, /channels/CHANNEL/VIDEO_ID
+        const pathParts = urlObj.pathname.split('/').filter(Boolean);
+        let vimeoId = '';
+
+        // Find the numeric ID in the path
+        for (let i = pathParts.length - 1; i >= 0; i--) {
+          const part = pathParts[i].split('?')[0].split('#')[0];
+          if (VIMEO_ID_PATTERN.test(part)) {
+            vimeoId = part;
+            break;
+          }
+        }
+
+        // Validate Vimeo ID is numeric
+        if (vimeoId && VIMEO_ID_PATTERN.test(vimeoId)) {
           return `https://player.vimeo.com/video/${vimeoId}?dnt=1`;
         }
       }

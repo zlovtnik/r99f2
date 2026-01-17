@@ -5,6 +5,9 @@ const envSiteUrl = import.meta.env.VITE_SITE_URL;
 // Define streetAddress once to avoid duplication
 const streetAddress = '144 Veranda St';
 
+/** Country code for phone number formatting (US/Canada). Update if business expands internationally. */
+export const COUNTRY_CODE = '1';
+
 export const BUSINESS_INFO = {
   name: 'LR Sunrise Construction',
   telephone: envPhone || '(978) 519-9774',

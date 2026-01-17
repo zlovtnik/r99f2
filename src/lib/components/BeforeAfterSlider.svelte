@@ -6,10 +6,13 @@
   export let beforeAlt: string = 'Before';
   export let afterAlt: string = 'After';
   export let title: string = '';
+  export let sliderId: string = 'before-after-slider';
 
   let sliderPosition = 50;
   let container: HTMLDivElement;
   let isDragging = false;
+
+  $: hintId = `${sliderId}-hint`;
 
   function updateSliderPosition(clientX: number) {
     if (!container) return;
@@ -91,10 +94,11 @@
     aria-valuemin={0}
     aria-valuemax={100}
     aria-valuenow={Math.round(sliderPosition)}
+    aria-describedby={hintId}
     tabindex="0"
     on:mousedown={handleMouseDown}
-    on:touchstart={handleTouchStart}
-    on:touchmove={handleTouchMove}
+    on:touchstart|nonpassive={handleTouchStart}
+    on:touchmove|nonpassive={handleTouchMove}
     on:keydown={handleKeydown}
   >
     <!-- After Image (Background) -->
@@ -141,7 +145,7 @@
     </div>
   </div>
 
-  <p class="text-center text-gray-500 text-sm mt-2">
+  <p id={hintId} class="text-center text-gray-500 text-sm mt-2">
     Drag the slider to compare before and after
   </p>
 </div>

@@ -987,3 +987,24 @@ export const serviceAreas: ServiceArea[] = [
     ],
   }
 ];
+
+
+/**
+ * Pre-filtered featured service areas for homepage display.
+ * This avoids the need to import and filter the full serviceAreas array,
+ * reducing main thread blocking on initial page load.
+ */
+export const featuredServiceAreas = serviceAreas.filter(area => area.featured);
+
+/**
+ * Lightweight version of featured areas for homepage cards.
+ * Contains only the fields needed for rendering service area cards,
+ * reducing JavaScript parsing and execution time.
+ */
+export const featuredServiceAreasMinimal = featuredServiceAreas.map(area => ({
+  id: area.id,
+  name: area.name,
+  slug: area.slug,
+  description: area.description,
+  featured: area.featured
+}));

@@ -1,40 +1,56 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { initializeGA, initializeCloudflare } from '$lib/utils/analytics';
+	import { initializeGA, initializeCloudflare } from '$utils/analytics';
 	import favicon from '$lib/assets/favicon.svg';
-	import FloatingCTA from '$lib/components/FloatingCTA.svelte';
-	import ExitIntentPopup from '$lib/components/ExitIntentPopup.svelte';
 	import '../app.css';
 
 	let { children } = $props();
 
-	onMount(() => {
-		const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'not configured';
-		const initializers = [
-			{
-				name: 'Google Analytics',
-				init: initializeGA
-			},
-			{
-				name: 'Cloudflare Web Analytics',
-				init: initializeCloudflare
-			}
-		];
+	// Lazy-load non-critical UI components to reduce main thread blocking
+	let FloatingCTA: typeof import('$components/FloatingCTA.svelte').default | null = $state(null);
+	let ExitIntentPopup: typeof import('$components/ExitIntentPopup.svelte').default | null = $state(null);
 
-		void Promise.all(
-			initializers.map((initializer) =>
-				Promise.resolve(initializer.init())
-					.then(() => ({ name: initializer.name, success: true }))
-					.catch((error) => {
-						return { name: initializer.name, success: false, error };
-					})
-			)
-		).then((results) => {
-			const failures = results.filter((result) => !result.success);
-			if (failures.length > 0) {
-				console.error('One or more analytics initializers failed:', failures);
-			}
-		});
+	onMount(() => {
+		// Defer analytics initialization
+		const initAnalytics = () => {
+			const initializers = [
+				{ name: 'Google Analytics', init: initializeGA },
+				{ name: 'Cloudflare Web Analytics', init: initializeCloudflare }
+			];
+
+			void Promise.all(
+				initializers.map((initializer) =>
+					Promise.resolve(initializer.init())
+						.then(() => ({ name: initializer.name, success: true }))
+						.catch((error) => ({ name: initializer.name, success: false, error }))
+				)
+			).then((results) => {
+				const failures = results.filter((result) => !result.success);
+				if (failures.length > 0) {
+					console.error('One or more analytics initializers failed:', failures);
+				}
+			});
+		};
+
+		// Lazy-load non-critical components after initial paint
+		const loadDeferredComponents = async () => {
+			const [floatingCtaModule, exitIntentModule] = await Promise.all([
+				import('$components/FloatingCTA.svelte'),
+				import('$components/ExitIntentPopup.svelte')
+			]);
+			FloatingCTA = floatingCtaModule.default;
+			ExitIntentPopup = exitIntentModule.default;
+		};
+
+		// Use requestIdleCallback for analytics, setTimeout for component loading
+		if (typeof requestIdleCallback === 'function') {
+			requestIdleCallback(initAnalytics, { timeout: 3000 });
+		} else {
+			setTimeout(initAnalytics, 100);
+		}
+
+		// Load deferred components after a short delay to not block main thread
+		setTimeout(loadDeferredComponents, 1500);
 	});
 </script>
 
@@ -42,10 +58,16 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{@render children()}
+<main id="main-content">
+	{@render children()}
+</main>
 
-<!-- Mobile floating CTA buttons -->
-<FloatingCTA />
+<!-- Mobile floating CTA buttons (lazy-loaded) -->
+{#if FloatingCTA}
+	<FloatingCTA />
+{/if}
 
-<!-- Exit intent popup (desktop) -->
-<ExitIntentPopup enabled={true} delay={5000} cookieDays={7} />
+<!-- Exit intent popup (desktop, lazy-loaded) -->
+{#if ExitIntentPopup}
+	<ExitIntentPopup enabled={true} delay={5000} cookieDays={7} />
+{/if}

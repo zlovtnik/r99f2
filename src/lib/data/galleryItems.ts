@@ -78,7 +78,7 @@ export const galleryItems: GalleryItem[] = [
     category: 'roofing',
     description: 'Premium standing seam metal roof installation with custom skylight flashing and ridge vents, designed for Maine\'s harsh climate',
     image: '/images/r-22.webp',
-    beforeImage: '/images/r-22.webp',
+    beforeImage: '/images/r-24.webp',
     afterImage: '/images/r-29.webp',
     location: 'Falmouth',
     completedDate: '2025-09'

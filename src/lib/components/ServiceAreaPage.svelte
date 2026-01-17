@@ -1,9 +1,9 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
-  import { serviceAreas } from '$lib/data/serviceAreas';
+  import { serviceAreas } from '$data/serviceAreas';
   import CTA from '$components/CTA.svelte';
-  import { BUSINESS_INFO, STANDARD_SERVICES } from '$lib/utils/constants';
-  import { createLocalBusinessSchema, createBreadcrumbSchema, createFAQSchema } from '$lib/utils/seo';
+  import { BUSINESS_INFO, STANDARD_SERVICES } from '$utils/constants';
+  import { createLocalBusinessSchema, createBreadcrumbSchema, createFAQSchema } from '$utils/seo';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import MiniContactForm from '$components/MiniContactForm.svelte';

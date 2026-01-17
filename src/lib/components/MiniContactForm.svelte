@@ -47,6 +47,10 @@
     if (Object.keys(errors).length === 0) {
       isSubmitting = true;
       
+      // Create abort controller with 30 second timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+      
       try {
         const response = await fetch('/api/contact', {
           method: 'POST',
@@ -54,7 +58,8 @@
           body: JSON.stringify({
             ...formData,
             source: `Service Area Page: ${areaName}`
-          })
+          }),
+          signal: controller.signal
         });
 
         if (response.ok) {
@@ -70,9 +75,14 @@
         } else {
           errors = { form: 'Something went wrong. Please try again or call us directly.' };
         }
-      } catch {
-        errors = { form: 'Network error. Please try again or call us directly.' };
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          errors = { form: 'Request timed out. Please try again or call us directly.' };
+        } else {
+          errors = { form: 'Network error. Please try again or call us directly.' };
+        }
       } finally {
+        clearTimeout(timeoutId);
         isSubmitting = false;
       }
     }
@@ -121,8 +131,10 @@
             bind:value={formData.name}
             class="w-full px-4 py-2.5 border-2 {errors.name ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
             aria-required="true"
+            aria-describedby={errors.name ? 'mini-name-error' : undefined}
+            aria-invalid={errors.name ? 'true' : undefined}
           />
-          {#if errors.name}<p class="text-red-500 text-xs mt-1">{errors.name}</p>{/if}
+          {#if errors.name}<p id="mini-name-error" class="text-red-500 text-xs mt-1" role="alert">{errors.name}</p>{/if}
         </div>
 
         <!-- Phone -->
@@ -135,8 +147,10 @@
             bind:value={formData.phone}
             class="w-full px-4 py-2.5 border-2 {errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
             aria-required="true"
+            aria-describedby={errors.phone ? 'mini-phone-error' : undefined}
+            aria-invalid={errors.phone ? 'true' : undefined}
           />
-          {#if errors.phone}<p class="text-red-500 text-xs mt-1">{errors.phone}</p>{/if}
+          {#if errors.phone}<p id="mini-phone-error" class="text-red-500 text-xs mt-1" role="alert">{errors.phone}</p>{/if}
         </div>
       </div>
 
@@ -150,8 +164,10 @@
           bind:value={formData.email}
           class="w-full px-4 py-2.5 border-2 {errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
           aria-required="true"
+          aria-describedby={errors.email ? 'mini-email-error' : undefined}
+          aria-invalid={errors.email ? 'true' : undefined}
         />
-        {#if errors.email}<p class="text-red-500 text-xs mt-1">{errors.email}</p>{/if}
+        {#if errors.email}<p id="mini-email-error" class="text-red-500 text-xs mt-1" role="alert">{errors.email}</p>{/if}
       </div>
 
       <!-- Service -->
@@ -162,13 +178,15 @@
           bind:value={formData.service}
           class="w-full px-4 py-2.5 border-2 {errors.service ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all appearance-none bg-white cursor-pointer"
           aria-required="true"
+          aria-describedby={errors.service ? 'mini-service-error' : undefined}
+          aria-invalid={errors.service ? 'true' : undefined}
         >
           <option value="">Select a service</option>
           {#each serviceOptions as option}
             <option value={option.value}>{option.label}</option>
           {/each}
         </select>
-        {#if errors.service}<p class="text-red-500 text-xs mt-1">{errors.service}</p>{/if}
+        {#if errors.service}<p id="mini-service-error" class="text-red-500 text-xs mt-1" role="alert">{errors.service}</p>{/if}
       </div>
 
       <!-- ZIP Code -->
@@ -182,8 +200,10 @@
           bind:value={formData.zipCode}
           class="w-full px-4 py-2.5 border-2 {errors.zipCode ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
           aria-required="true"
+          aria-describedby={errors.zipCode ? 'mini-zip-error' : undefined}
+          aria-invalid={errors.zipCode ? 'true' : undefined}
         />
-        {#if errors.zipCode}<p class="text-red-500 text-xs mt-1">{errors.zipCode}</p>{/if}
+        {#if errors.zipCode}<p id="mini-zip-error" class="text-red-500 text-xs mt-1" role="alert">{errors.zipCode}</p>{/if}
       </div>
 
       <!-- Message (optional, shorter) -->
@@ -195,8 +215,10 @@
           bind:value={formData.message}
           rows="2"
           class="w-full px-4 py-2.5 border-2 {errors.message ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-primary'} rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-none"
+          aria-describedby={errors.message ? 'mini-message-error' : undefined}
+          aria-invalid={errors.message ? 'true' : undefined}
         ></textarea>
-        {#if errors.message}<p class="text-red-500 text-xs mt-1">{errors.message}</p>{/if}
+        {#if errors.message}<p id="mini-message-error" class="text-red-500 text-xs mt-1" role="alert">{errors.message}</p>{/if}
       </div>
 
       <button

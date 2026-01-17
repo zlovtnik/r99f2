@@ -3,13 +3,13 @@
   import ContactForm from '$components/ContactForm.svelte';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import GoogleMap from '$components/GoogleMap.svelte';
-  import { BUSINESS_INFO, BUSINESS_HOURS } from '$utils/constants';
+  import { BUSINESS_INFO, BUSINESS_HOURS, COUNTRY_CODE } from '$utils/constants';
   import { createBreadcrumbSchema } from '$utils/seo';
 
   const baseUrl = siteConfig.siteUrl;
 
   // Normalize phone number for WhatsApp (digits only with country code)
-  const whatsappPhone = `1${BUSINESS_INFO.telephone.replace(/\D/g, '')}`;
+  const whatsappPhone = `${COUNTRY_CODE}${BUSINESS_INFO.telephone.replace(/\D/g, '')}`;
 
   // SEO metadata
   $: seo = {
