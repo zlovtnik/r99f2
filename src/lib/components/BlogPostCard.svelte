@@ -75,7 +75,7 @@
 
     <div class="p-6">
       <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-        <span class="px-2 py-1 bg-primary/10 text-primary rounded-full font-medium text-xs">
+        <span class="px-2 py-1 bg-primary/20 text-primary font-bold rounded-full text-xs">
           {post.category}
         </span>
         <span>•</span>
@@ -105,7 +105,7 @@
         <a
           href="/blog/{post.slug}"
           aria-label="Read more about {post.title}"
-          class="text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200"
+          class="text-primary hover:underline font-semibold text-sm transition-colors duration-200"
         >
           Read More →
         </a>

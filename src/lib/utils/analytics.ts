@@ -2,7 +2,21 @@
  * Analytics utility functions
  * Supports Google Analytics 4 and Cloudflare Web Analytics
  * Requires VITE_GA_MEASUREMENT_ID and/or VITE_CLOUDFLARE_TOKEN environment variables
+ * 
+ * Scripts are loaded with requestIdleCallback to minimize impact on LCP/FCP
  */
+
+/**
+ * Defer execution until browser is idle or after timeout (for Safari compatibility)
+ */
+function whenIdle(callback: () => void, timeout = 3000): void {
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(callback, { timeout });
+  } else {
+    // Fallback for Safari - use setTimeout with a delay
+    setTimeout(callback, 100);
+  }
+}
 
 function isValidGAMeasurementId(value: unknown): value is string {
   if (typeof value !== 'string') return false;
@@ -70,8 +84,9 @@ export function isCloudflareInitFailed(): boolean {
 
 /**
  * Initialize Google Analytics 4
- * Injects GA4 script tag into document head
+ * Injects GA4 script tag into document head with deferred loading
  * Should be called once on app initialization (in root layout)
+ * Uses requestIdleCallback to minimize impact on LCP/FCP
  */
 export function initializeGA(): void {
   // Prevent double initialization
@@ -89,29 +104,37 @@ export function initializeGA(): void {
     return;
   }
 
-  // Inject GA4 script
-  if (globalThis.window !== undefined) {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    
-    // Add error handler for script loading failures
-    script.onerror = (error) => {
-      gaInitFailed = true;
-      gaInitialized = false; // Reset flag to allow retry on next initialization attempt
-      console.error(`Failed to load Google Analytics script for GA_ID: ${GA_ID}`, error);
-    };
-    
-    document.head.appendChild(script);
+  // Mark as initialized immediately to prevent duplicate calls
+  gaInitialized = true;
 
-    // Initialize gtag function
+  // Initialize gtag function immediately so events can be queued
+  if (globalThis.window !== undefined) {
     globalThis.window.dataLayer = globalThis.window.dataLayer || [];
-    gaInitialized = true;
     globalThis.window.gtag = function (...args: any[]) {
       globalThis.window.dataLayer.push(args);
     };
-    globalThis.window.gtag('js', new Date());
-    globalThis.window.gtag('config', GA_ID);
+
+    // Defer actual script injection until browser is idle
+    whenIdle(() => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      
+      // Add error handler for script loading failures
+      script.onerror = (error) => {
+        gaInitFailed = true;
+        gaInitialized = false; // Reset flag to allow retry on next initialization attempt
+        console.error(`Failed to load Google Analytics script for GA_ID: ${GA_ID}`, error);
+      };
+      
+      document.head.appendChild(script);
+
+      globalThis.window.gtag('js', new Date());
+      globalThis.window.gtag('config', GA_ID, {
+        // Reduce initial data sent to improve performance
+        send_page_view: true
+      });
+    });
   }
 }
 
@@ -127,8 +150,9 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>): 
 
 /**
  * Initialize Cloudflare Web Analytics
- * Injects Cloudflare beacon script into document head
+ * Injects Cloudflare beacon script into document head with deferred loading
  * Should be called once on app initialization (in root layout)
+ * Uses requestIdleCallback to minimize impact on LCP/FCP
  */
 export function initializeCloudflare(): void {
   // Prevent double initialization
@@ -146,28 +170,33 @@ export function initializeCloudflare(): void {
     return;
   }
 
+  // Mark as initialized immediately to prevent duplicate calls
+  cloudflareInitialized = true;
+
   // Inject Cloudflare beacon script
   if (globalThis.window !== undefined) {
     // Check if script already exists
     const existingScript = document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]');
     if (existingScript) {
-      cloudflareInitialized = true;
       return;
     }
 
-    const script = document.createElement('script');
-    script.defer = true;
-    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-    script.dataset.cfBeacon = JSON.stringify({ token: CLOUDFLARE_TOKEN });
-    
-    // Add error handler for script loading failures
-    script.onerror = (error) => {
-      cloudflareInitFailed = true;
-      console.error('Failed to load Cloudflare Web Analytics script', error);
-    };
-    
-    document.head.appendChild(script);
-    cloudflareInitialized = true;
+    // Defer script injection until browser is idle
+    whenIdle(() => {
+      const script = document.createElement('script');
+      script.defer = true;
+      script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      script.dataset.cfBeacon = JSON.stringify({ token: CLOUDFLARE_TOKEN });
+      
+      // Add error handler for script loading failures
+      script.onerror = (error) => {
+        cloudflareInitFailed = true;
+        cloudflareInitialized = false;
+        console.error('Failed to load Cloudflare Web Analytics script', error);
+      };
+      
+      document.head.appendChild(script);
+    });
   }
 }
 

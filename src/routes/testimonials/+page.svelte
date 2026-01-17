@@ -4,34 +4,55 @@
   import TestimonialCard from '$components/TestimonialCard.svelte';
   import CTA from '$components/CTA.svelte';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
-  import { BUSINESS_INFO, STATS } from '$lib/utils/constants';
+  import { createBreadcrumbSchema, createAggregateRatingSchema } from '$utils/seo';
+  import { BUSINESS_INFO, STATS } from '$utils/constants';
 
   const baseUrl = siteConfig.siteUrl;
 
   // SEO metadata
   $: seo = {
     title: 'Customer Reviews & Testimonials | LR Sunrise Construction',
-    description: 'Read what our satisfied customers say about LR Sunrise Construction. Real reviews from homeowners and businesses throughout Portland, ME and surrounding areas.',
-    keywords: 'construction reviews, contractor testimonials, customer feedback, Portland Maine contractor reviews',
+    description: 'Read 5-star reviews from homeowners in Portland, Brunswick, Biddeford & across Maine. Real testimonials about our siding, roofing & construction work. 100% satisfaction guaranteed.',
+    keywords: 'construction reviews, contractor testimonials, Portland Maine contractor reviews, Brunswick ME reviews',
     url: `${baseUrl}/testimonials`,
-    image: `${baseUrl}/images/og-testimonials.jpg`
+    image: `${baseUrl}/images/og-image.webp`
   };
 
-  // Review schema for SEO
+  // BreadcrumbList schema
+  $: breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Testimonials', url: `${baseUrl}/testimonials` }
+  ]);
+
+  // Aggregate rating schema for SEO rich snippets
+  $: aggregateRating = createAggregateRatingSchema({
+    ratingValue: STATS.starRating,
+    reviewCount: testimonials.length
+  });
+
+  // Organization schema with aggregate rating and individual reviews
   $: reviewSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': 'LocalBusiness',
+    '@id': `${baseUrl}/#localbusiness`,
     name: BUSINESS_INFO.name,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: STATS.starRating,
-      reviewCount: testimonials.length
-    },
+    url: baseUrl,
+    telephone: BUSINESS_INFO.telephone,
+    aggregateRating: aggregateRating,
     review: testimonials.map(t => ({
       '@type': 'Review',
       author: { '@type': 'Person', name: t.name },
-      reviewRating: { '@type': 'Rating', ratingValue: t.rating },
-      reviewBody: t.text
+      reviewRating: { 
+        '@type': 'Rating', 
+        ratingValue: t.rating,
+        bestRating: 5,
+        worstRating: 1
+      },
+      reviewBody: t.text,
+      itemReviewed: {
+        '@type': 'LocalBusiness',
+        name: BUSINESS_INFO.name
+      }
     }))
   };
 </script>
@@ -63,6 +84,9 @@
 </svelte:head>
 
 <SchemaMarkup schema={reviewSchema} />
+{#if breadcrumbSchema}
+  <SchemaMarkup schema={breadcrumbSchema} />
+{/if}
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 relative overflow-hidden">

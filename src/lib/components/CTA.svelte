@@ -14,17 +14,28 @@
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
         Ready to Transform Your Space?
       </h2>
-      <p class="text-base sm:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-medium">
+      <p class="text-base sm:text-lg text-white/90 mb-4 max-w-2xl mx-auto font-medium">
         Get your free estimate today. Our team will assess your project and provide honest, transparent pricing.
       </p>
+      <p class="text-sm text-accent font-semibold mb-6 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5 animate-pulse motion-reduce:animate-none" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+        </svg>
+        Free Quotes Within 24 Hours • Same-Day Emergency Response
+      </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <a href="/contact" aria-label="Get your free estimate for your home improvement project" class="btn bg-accent hover:bg-accent/90 active:bg-accent/80 text-white font-bold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-200">
-          Get Your Free Estimate
+        <a href="/contact" aria-label="Get your free quote for your home improvement project" class="btn bg-accent hover:bg-accent/90 active:bg-accent/80 text-white font-bold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-200 group">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Get Your Free Quote Now
+          </span>
         </a>
         <a href="/contact" aria-label="Quick contact form for immediate inquiries" class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg transition-all duration-200 hover:scale-105">
           <span class="flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
             Quick Contact
           </span>

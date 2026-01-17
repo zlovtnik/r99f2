@@ -30,7 +30,7 @@ a {
 }
 
 .btn-primary {
-  @apply bg-accent text-white hover:bg-accent/90 active:bg-accent/80;
+  @apply bg-accent text-neutral-900 hover:bg-accent/90 active:bg-accent/80;
 }
 
 .btn-secondary {

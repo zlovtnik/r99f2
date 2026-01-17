@@ -1,9 +1,16 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { onDestroy } from 'svelte';
-  import { BUSINESS_INFO } from '$utils/constants';
+  import { BUSINESS_INFO, FEATURED_AREAS } from '$utils/constants';
+  import { featuredServices } from '$data/services';
+  import { serviceAreas } from '$data/serviceAreas';
+  import { slide } from 'svelte/transition';
 
   let isOpen = false;
+  let servicesDropdownOpen = false;
+  let areasDropdownOpen = false;
+  let mobileServicesOpen = false;
+  let mobileAreasOpen = false;
 
   const toggleMenu = () => {
     isOpen = !isOpen;
@@ -15,16 +22,111 @@
 
   const closeMenu = () => {
     isOpen = false;
+    mobileServicesOpen = false;
+    mobileAreasOpen = false;
     if (typeof document !== 'undefined') {
       document.body.style.overflow = '';
     }
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && isOpen) {
-      closeMenu();
+    if (e.key === 'Escape') {
+      if (isOpen) closeMenu();
+      servicesDropdownOpen = false;
+      areasDropdownOpen = false;
     }
   };
+
+  // Get featured areas for dropdown
+  $: featuredAreasList = serviceAreas.filter(area => 
+    FEATURED_AREAS.includes(area.name as typeof FEATURED_AREAS[number])
+  );
+
+  // Refs for keyboard navigation
+  let servicesMenuItems: HTMLAnchorElement[] = [];
+  let areasMenuItems: HTMLAnchorElement[] = [];
+  let servicesButton: HTMLButtonElement;
+  let areasButton: HTMLButtonElement;
+
+  function handleServicesKeydown(event: KeyboardEvent) {
+    if (!servicesDropdownOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        servicesDropdownOpen = true;
+        // Focus first menu item after dropdown opens
+        setTimeout(() => servicesMenuItems[0]?.focus(), 0);
+      }
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        servicesDropdownOpen = false;
+        servicesButton?.focus();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        {
+          const currentIndex = servicesMenuItems.findIndex(item => item === document.activeElement);
+          const nextIndex = currentIndex < servicesMenuItems.length - 1 ? currentIndex + 1 : 0;
+          servicesMenuItems[nextIndex]?.focus();
+        }
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        {
+          const currentIndex = servicesMenuItems.findIndex(item => item === document.activeElement);
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : servicesMenuItems.length - 1;
+          servicesMenuItems[prevIndex]?.focus();
+        }
+        break;
+      case 'Tab':
+        // Allow natural tab, but close dropdown
+        servicesDropdownOpen = false;
+        break;
+    }
+  }
+
+  function handleAreasKeydown(event: KeyboardEvent) {
+    if (!areasDropdownOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        areasDropdownOpen = true;
+        // Focus first menu item after dropdown opens
+        setTimeout(() => areasMenuItems[0]?.focus(), 0);
+      }
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        areasDropdownOpen = false;
+        areasButton?.focus();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        {
+          const currentIndex = areasMenuItems.findIndex(item => item === document.activeElement);
+          const nextIndex = currentIndex < areasMenuItems.length - 1 ? currentIndex + 1 : 0;
+          areasMenuItems[nextIndex]?.focus();
+        }
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        {
+          const currentIndex = areasMenuItems.findIndex(item => item === document.activeElement);
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : areasMenuItems.length - 1;
+          areasMenuItems[prevIndex]?.focus();
+        }
+        break;
+      case 'Tab':
+        // Allow natural tab, but close dropdown
+        areasDropdownOpen = false;
+        break;
+    }
+  }
 
   // Cleanup on component destroy to ensure body scroll is restored
   onDestroy(() => {
@@ -37,8 +139,26 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <nav class="sticky top-0 z-50 bg-white shadow-md">
+  <!-- Top bar with phone number (desktop) -->
+  <div class="hidden md:block bg-primary text-white py-1.5">
+    <div class="container mx-auto px-4 flex justify-between items-center text-sm">
+      <span class="flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {BUSINESS_INFO.hoursDisplay}
+      </span>
+      <a href={`tel:${BUSINESS_INFO.telephone}`} class="flex items-center gap-2 font-semibold hover:text-neutral-light transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+        Call: {BUSINESS_INFO.telephone}
+      </a>
+    </div>
+  </div>
+
   <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center h-16 md:h-20">
+    <div class="flex justify-between items-center h-16 md:h-16">
       <!-- Logo with better mobile sizing -->
       <a href="/" class="text-xl sm:text-2xl font-bold text-primary truncate max-w-[200px] sm:max-w-none">
         LR Sunrise Construction
@@ -61,17 +181,143 @@
         </svg>
       </button>
       
-      <!-- Desktop navigation -->
-      <ul class="hidden md:flex gap-4 lg:gap-6 items-center">
+      <!-- Desktop navigation with dropdowns -->
+      <ul class="hidden md:flex gap-2 lg:gap-4 items-center">
         <li><a href="/" class="nav-link" class:active={$page.url.pathname === '/'}>Home</a></li>
-        <li><a href="/services" class="nav-link" class:active={$page.url.pathname.startsWith('/services')}>Services</a></li>
-        <li><a href="/service-areas" class="nav-link" class:active={$page.url.pathname.startsWith('/service-areas')}>Areas</a></li>
+        
+        <!-- Services Dropdown -->
+        <li 
+          class="relative"
+          on:mouseenter={() => servicesDropdownOpen = true}
+          on:mouseleave={() => servicesDropdownOpen = false}
+          on:focusin={() => servicesDropdownOpen = true}
+          on:focusout={(e) => {
+            // Close dropdown if focus leaves the entire li
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              servicesDropdownOpen = false;
+            }
+          }}
+        >
+          <button 
+            bind:this={servicesButton}
+            class="nav-link flex items-center gap-1"
+            class:active={$page.url.pathname.startsWith('/services')}
+            aria-expanded={servicesDropdownOpen}
+            aria-haspopup="menu"
+            on:click={() => servicesDropdownOpen = !servicesDropdownOpen}
+            on:keydown={handleServicesKeydown}
+          >
+            Services
+            <svg class="w-4 h-4 transition-transform {servicesDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {#if servicesDropdownOpen}
+            <div 
+              class="absolute top-full left-0 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+              role="menu"
+              aria-label="Services menu"
+              tabindex="-1"
+              transition:slide={{ duration: 150 }}
+              on:keydown={handleServicesKeydown}
+            >
+              {#each featuredServices.slice(0, 6) as service, i}
+                <a 
+                  bind:this={servicesMenuItems[i]}
+                  href={`/services/${service.slug}`} 
+                  class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors"
+                  role="menuitem"
+                  tabindex="0"
+                >
+                  {service.name}
+                </a>
+              {/each}
+              <div class="border-t border-gray-100 mt-2 pt-2">
+                <a 
+                  bind:this={servicesMenuItems[6]}
+                  href="/services" 
+                  class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
+                  role="menuitem"
+                  tabindex="0"
+                >
+                  View All Services →
+                </a>
+              </div>
+            </div>
+          {/if}
+        </li>
+        
+        <!-- Areas Dropdown -->
+        <li 
+          class="relative"
+          on:mouseenter={() => areasDropdownOpen = true}
+          on:mouseleave={() => areasDropdownOpen = false}
+          on:focusin={() => areasDropdownOpen = true}
+          on:focusout={(e) => {
+            // Close dropdown if focus leaves the entire li
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              areasDropdownOpen = false;
+            }
+          }}
+        >
+          <button 
+            bind:this={areasButton}
+            class="nav-link flex items-center gap-1"
+            class:active={$page.url.pathname.startsWith('/service-areas')}
+            aria-expanded={areasDropdownOpen}
+            aria-haspopup="menu"
+            on:click={() => areasDropdownOpen = !areasDropdownOpen}
+            on:keydown={handleAreasKeydown}
+          >
+            Areas
+            <svg class="w-4 h-4 transition-transform {areasDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {#if areasDropdownOpen}
+            <div 
+              class="absolute top-full left-0 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+              role="menu"
+              aria-label="Service areas menu"
+              tabindex="-1"
+              transition:slide={{ duration: 150 }}
+              on:keydown={handleAreasKeydown}
+            >
+              {#each featuredAreasList as area, i}
+                <a 
+                  bind:this={areasMenuItems[i]}
+                  href={`/service-areas/${area.slug}`} 
+                  class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors"
+                  role="menuitem"
+                  tabindex="0"
+                >
+                  {area.name}, ME
+                </a>
+              {/each}
+              <div class="border-t border-gray-100 mt-2 pt-2">
+                <a 
+                  bind:this={areasMenuItems[featuredAreasList.length]}
+                  href="/service-areas" 
+                  class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
+                  role="menuitem"
+                  tabindex="0"
+                >
+                  All {serviceAreas.length} Areas →
+                </a>
+              </div>
+            </div>
+          {/if}
+        </li>
+        
         <li><a href="/gallery" class="nav-link" class:active={$page.url.pathname === '/gallery'}>Gallery</a></li>
         <li><a href="/blog" class="nav-link" class:active={$page.url.pathname.startsWith('/blog')}>Blog</a></li>
         <li><a href="/testimonials" class="nav-link" class:active={$page.url.pathname === '/testimonials'}>Reviews</a></li>
-        <li><a href="/faq" class="nav-link" class:active={$page.url.pathname === '/faq'}>FAQ</a></li>
         <li><a href="/about" class="nav-link" class:active={$page.url.pathname === '/about'}>About</a></li>
-        <li><a href="/contact" class="btn bg-primary text-white hover:bg-secondary px-4 py-2">Contact</a></li>
+        <li>
+          <a href="/contact" class="btn bg-accent hover:bg-accent/90 text-white font-semibold px-4 py-2 rounded-lg transition-all hover:scale-105 shadow-md">
+            Free Quote
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -85,7 +331,17 @@
     <div 
       class="absolute inset-0 bg-black/50 transition-opacity {isOpen ? 'opacity-100' : 'opacity-0'}"
       on:click={closeMenu}
-      aria-hidden="true"
+      on:keydown={(e) => {
+        if (e.key === 'Enter') {
+          closeMenu();
+        } else if (e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          closeMenu();
+        }
+      }}
+      role="button"
+      tabindex="0"
+      aria-label="Close menu"
     ></div>
     
     <!-- Menu panel -->
@@ -100,7 +356,7 @@
         </a>
       </div>
       
-      <!-- Navigation links with large touch targets -->
+      <!-- Navigation links with collapsible sections -->
       <ul class="flex flex-col py-2">
         <li>
           <a href="/" class="mobile-nav-link" class:active={$page.url.pathname === '/'} on:click={closeMenu}>
@@ -108,18 +364,83 @@
             Home
           </a>
         </li>
-        <li>
-          <a href="/services" class="mobile-nav-link" class:active={$page.url.pathname.startsWith('/services')} on:click={closeMenu}>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-            Services
-          </a>
+        
+        <!-- Services with collapsible submenu -->
+        <li class="border-b border-gray-100">
+          <button 
+            class="mobile-nav-link w-full justify-between"
+            class:active={$page.url.pathname.startsWith('/services')}
+            on:click={() => mobileServicesOpen = !mobileServicesOpen}
+            aria-expanded={mobileServicesOpen}
+          >
+            <span class="flex items-center gap-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+              Services
+            </span>
+            <svg class="w-5 h-5 transition-transform {mobileServicesOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {#if mobileServicesOpen}
+            <div class="bg-gray-50 py-2" transition:slide={{ duration: 200 }}>
+              {#each featuredServices.slice(0, 6) as service}
+                <a 
+                  href={`/services/${service.slug}`} 
+                  class="block pl-14 pr-4 py-2.5 text-sm text-gray-600 hover:text-primary hover:bg-gray-100"
+                  on:click={closeMenu}
+                >
+                  {service.name}
+                </a>
+              {/each}
+              <a 
+                href="/services" 
+                class="block pl-14 pr-4 py-2.5 text-sm font-semibold text-primary hover:bg-gray-100"
+                on:click={closeMenu}
+              >
+                View All Services →
+              </a>
+            </div>
+          {/if}
         </li>
-        <li>
-          <a href="/service-areas" class="mobile-nav-link" class:active={$page.url.pathname.startsWith('/service-areas')} on:click={closeMenu}>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            Service Areas
-          </a>
+        
+        <!-- Service Areas with collapsible submenu -->
+        <li class="border-b border-gray-100">
+          <button 
+            class="mobile-nav-link w-full justify-between"
+            class:active={$page.url.pathname.startsWith('/service-areas')}
+            on:click={() => mobileAreasOpen = !mobileAreasOpen}
+            aria-expanded={mobileAreasOpen}
+          >
+            <span class="flex items-center gap-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              Service Areas
+            </span>
+            <svg class="w-5 h-5 transition-transform {mobileAreasOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {#if mobileAreasOpen}
+            <div class="bg-gray-50 py-2" transition:slide={{ duration: 200 }}>
+              {#each featuredAreasList as area}
+                <a 
+                  href={`/service-areas/${area.slug}`} 
+                  class="block pl-14 pr-4 py-2.5 text-sm text-gray-600 hover:text-primary hover:bg-gray-100"
+                  on:click={closeMenu}
+                >
+                  {area.name}, ME
+                </a>
+              {/each}
+              <a 
+                href="/service-areas" 
+                class="block pl-14 pr-4 py-2.5 text-sm font-semibold text-primary hover:bg-gray-100"
+                on:click={closeMenu}
+              >
+                All {serviceAreas.length} Areas →
+              </a>
+            </div>
+          {/if}
         </li>
+        
         <li>
           <a href="/gallery" class="mobile-nav-link" class:active={$page.url.pathname === '/gallery'} on:click={closeMenu}>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -139,20 +460,15 @@
           </a>
         </li>
         <li>
-          <a href="/faq" class="mobile-nav-link" class:active={$page.url.pathname === '/faq'} on:click={closeMenu}>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            FAQ
-          </a>
-        </li>
-        <li>
           <a href="/about" class="mobile-nav-link" class:active={$page.url.pathname === '/about'} on:click={closeMenu}>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             About
           </a>
         </li>
         <li class="px-4 py-3">
-          <a href="/contact" class="block w-full bg-primary text-white text-center font-semibold py-4 rounded-lg hover:bg-secondary transition-colors" on:click={closeMenu}>
-            Get Free Estimate
+          <a href="/contact" class="flex items-center justify-center gap-2 w-full bg-accent text-white text-center font-bold py-4 rounded-lg hover:bg-accent/90 transition-colors shadow-lg" on:click={closeMenu}>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            Get Free Quote Now
           </a>
         </li>
       </ul>

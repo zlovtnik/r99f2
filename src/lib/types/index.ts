@@ -22,6 +22,7 @@ export interface ServiceArea {
   zipCodes: string[];
   keywords: string[];
   state: string;
+  featured?: boolean;
   emergencyResponseTime?: string;
   climateContext?: string;
   architecturalNotes?: string;
@@ -39,6 +40,8 @@ export interface Testimonial {
   text: string;
   rating: 1 | 2 | 3 | 4 | 5;
   imageUrl?: string;
+  videoUrl?: string;  // For video testimonials (YouTube/Vimeo)
+  location?: string;  // City/area of the customer
 }
 
 export interface FAQ {
@@ -54,6 +57,11 @@ export interface GalleryItem {
   category: string;
   description: string;
   image: string;
+  beforeImage?: string;  // For before/after comparisons
+  afterImage?: string;   // For before/after comparisons (defaults to image if not set)
+  location?: string;     // City/area where project was completed
+  /** When project was completed. Format: ISO 8601 date string (e.g., "2024-03-15") */
+  completedDate?: string;
 }
 
 export interface BlogPost {

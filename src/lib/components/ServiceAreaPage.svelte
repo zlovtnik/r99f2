@@ -1,11 +1,13 @@
 <script lang="ts">
   import { siteConfig } from '$config/siteConfig';
-  import { serviceAreas } from '$lib/data/serviceAreas';
+  import { serviceAreas } from '$data/serviceAreas';
   import CTA from '$components/CTA.svelte';
-  import { BUSINESS_INFO, STANDARD_SERVICES } from '$lib/utils/constants';
-  import { createLocalBusinessSchema, createBreadcrumbSchema, createFAQSchema } from '$lib/utils/seo';
+  import { BUSINESS_INFO, STANDARD_SERVICES } from '$utils/constants';
+  import { createLocalBusinessSchema, createBreadcrumbSchema, createFAQSchema } from '$utils/seo';
   import SchemaMarkup from '$components/SchemaMarkup.svelte';
   import TestimonialCard from '$components/TestimonialCard.svelte';
+  import MiniContactForm from '$components/MiniContactForm.svelte';
+  import GoogleMap from '$components/GoogleMap.svelte';
 
   export let areaSlug: string;
 
@@ -31,7 +33,7 @@
     description: `Professional ${area.description}. Emergency roof repair and replacement services available. Call ${BUSINESS_INFO.telephone} for a free quote.`,
     keywords: area.keywords.join(', '),
     url: `${baseUrl}/service-areas/${area.slug}`,
-    image: `${baseUrl}/images/og-service-area.jpg`
+    image: `${baseUrl}/images/og-image.webp`
   } : null;
 
   // Schema markup for service area
@@ -288,21 +290,24 @@
         </div>
       {/if}
 
-      <div class="bg-neutral-light rounded-lg p-8 mb-12">
-        <h2 class="text-2xl font-semibold mb-4 text-neutral-dark">Get Your Free Quote Today</h2>
-        <p class="text-neutral-dark mb-6">
-          Call us at {BUSINESS_INFO.telephone} or fill out our contact form for a free, no-obligation quote
-          for your roofing needs in {area.name}.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/contact" class="btn btn-primary" aria-label="Get a free quote for roofing services in {area.name}">Get Free Quote</a>
-          <a href="tel:{BUSINESS_INFO.telephone}" class="btn btn-secondary" aria-label="Call LR Sunrise Construction at {BUSINESS_INFO.telephone} for service in {area.name}">Call Now</a>
-        </div>
+      <!-- Mini Contact Form -->
+      <div class="mb-12">
+        <MiniContactForm areaName={area.name} />
+      </div>
+
+      <!-- Google Map -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <GoogleMap 
+          address="{area.name}, Maine" 
+          title="Our Service Area in {area.name}"
+          height="300px"
+          showDirections={true}
+        />
       </div>
 
       <div class="text-center">
         <p class="text-lg text-gray-700 mb-8">
-            Serving {area.name} and surrounding areas with quality roofing services since {BUSINESS_INFO.foundedYear}.
+            Serving {area.name} and surrounding areas with quality construction services since {BUSINESS_INFO.foundedYear}.
         </p>
       </div>
     </div>

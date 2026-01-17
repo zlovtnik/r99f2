@@ -2,12 +2,20 @@ const envEmail = import.meta.env.VITE_BUSINESS_EMAIL;
 const envPhone = import.meta.env.VITE_BUSINESS_PHONE;
 const envSiteUrl = import.meta.env.VITE_SITE_URL;
 
+// Define streetAddress once to avoid duplication
+const streetAddress = '144 Veranda St';
+
+/** Country code for phone number formatting (US/Canada). Update if business expands internationally. */
+export const COUNTRY_CODE = '1';
+
 export const BUSINESS_INFO = {
   name: 'LR Sunrise Construction',
   telephone: envPhone || '(978) 519-9774',
   email: envEmail || 'LEMADILAN5@gmail.com',
   // Physical business location address
-  streetAddress: '144 Veranda St',
+  streetAddress,
+  // Alias for LocalBusinessInfo schema compatibility
+  address: streetAddress,
   city: 'Portland',
   state: 'ME',
   zipCode: '04103',
@@ -83,6 +91,12 @@ export const SERVICE_AREAS = [
   'Lake Arrowhead'
 ] as const;
 
+/** Featured service areas for homepage display (limit to 6 for cleaner UX) */
+export const FEATURED_AREAS: readonly (typeof SERVICE_AREAS)[number][] = SERVICE_AREAS.slice(0, 6);
+
+/** Set of featured area names for efficient lookup (typed as Set<string> for flexible filtering) */
+export const FEATURED_AREAS_SET: Set<string> = new Set(FEATURED_AREAS);
+
 export const SERVICE_OPTIONS: readonly string[] = [
   'Siding Installation',
   'Carpentry Services',
@@ -102,21 +116,23 @@ export const STANDARD_SERVICES = SERVICE_OPTIONS;
 
 export const SITE_URL = envSiteUrl || 'https://constructioncompanyme.com';
 export const LOGO_URL = '/images/logo.svg' as const;
-export const OG_IMAGE_URL = '/images/og-image.jpg' as const;
+export const OG_IMAGE_URL = '/images/og-image.webp' as const;
 
 export const KNOWN_ACRONYMS = ['HVAC', 'AC', 'LED'] as const;
 
 export const SOCIAL_LINKS = {
-  facebook: 'https://facebook.com/lrsunriseconstruction',
-  instagram: 'https://instagram.com/lrsunriseconstruction',
-  google: 'https://g.page/lrsunriseconstruction'
+  facebook: 'https://www.facebook.com/profile.php?id=61581974097680',
+  youtube: 'https://www.youtube.com/channel/UCzohehO6gVmAPgq8jETJhLQ',
+  yelp: 'https://www.yelp.com/biz/lr-sunrise-construction-portland',
+  mapquest: 'https://www.mapquest.com/us/maine/lr-sunrise-construction-777793747'
 } as const;
 
 /** Array of social media profile URLs for Schema.org sameAs property */
 export const SOCIAL_URLS = [
   SOCIAL_LINKS.facebook,
-  SOCIAL_LINKS.instagram,
-  SOCIAL_LINKS.google
+  SOCIAL_LINKS.youtube,
+  SOCIAL_LINKS.yelp,
+  SOCIAL_LINKS.mapquest
 ] as const;
 
 /** Default geo coordinates derived from BUSINESS_INFO */
