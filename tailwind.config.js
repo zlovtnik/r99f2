@@ -4,18 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#4CAF50', // Medium Sea Green - Headers, Logos
-        secondary: '#AED581', // Light Green - Accents, Icons
-        accent: '#FFA726', // Soft Orange - CTAs, Buttons
+        primary: '#4CAF50',
+        secondary: '#AED581',
+        accent: '#FFA726',
         neutral: {
-          dark: '#616161', // Slate Gray - Text, Borders
-          light: '#F1F8E9', // Pale Green - Backgrounds, Cards
-          alt: '#F5F5DC', // Beige - Highlights, Hover
-        },
-        'bg-dark': '#1f2937',
-        'bg-light': '#f9fafb',
-      },
-    },
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717'
+        }
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };

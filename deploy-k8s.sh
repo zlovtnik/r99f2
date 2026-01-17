@@ -129,7 +129,7 @@ update_manifests() {
 
     # Update environment variables in deployment
     sed -i.bak "s|https://your-domain.com|$VITE_SITE_URL|g" k8s-deployment.yaml
-    sed -i.bak "s|contact@lbsunrise.com|$VITE_BUSINESS_EMAIL|g" k8s-deployment.yaml
+    sed -i.bak "s|contact@lrsunrise.com|$VITE_BUSINESS_EMAIL|g" k8s-deployment.yaml
     sed -i.bak "s|(978) 519-9774|$VITE_BUSINESS_PHONE|g" k8s-deployment.yaml
 
     if [ -n "$VITE_GA_MEASUREMENT_ID" ]; then

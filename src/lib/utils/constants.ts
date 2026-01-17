@@ -6,7 +6,8 @@ export const BUSINESS_INFO = {
   name: 'LR Sunrise Construction',
   telephone: envPhone || '(978) 519-9774',
   email: envEmail || 'LEMADILAN5@gmail.com',
-  address: '1234 SE Main St, Suite 100',
+  // Physical business location address
+  streetAddress: '144 Veranda St',
   city: 'Portland',
   state: 'ME',
   zipCode: '04103',
@@ -32,7 +33,7 @@ export const BUSINESS_INFO = {
     military: '15% Discount for Military',
     newCustomers: '15% Discount for New Customers'
   },
-  paymentMethods: ['Cash', 'Check']
+  paymentMethods: ['Cash', 'Check', 'Zelle', 'Bank Transfer']
 } as const;
 
 // Derive businessHours from hours for backward compatibility

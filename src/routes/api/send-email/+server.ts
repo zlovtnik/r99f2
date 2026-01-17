@@ -44,6 +44,14 @@ export const POST: RequestHandler = async ({ request }) => {
       }, { status: 400 });
     }
 
+    // Validate recipient email format
+    if (!emailRegex.test(to.trim())) {
+      return json({
+        success: false,
+        error: 'Recipient email is invalid'
+      }, { status: 400 });
+    }
+
     if (!subject || typeof subject !== 'string' || !subject.trim()) {
       return json({
         success: false,
@@ -95,7 +103,7 @@ export const POST: RequestHandler = async ({ request }) => {
           to: [{ email: to }],
           subject: subject,
         }],
-        from: { email: from || 'noreply@lbsunrise.com' },
+        from: { email: from || 'noreply@lrsunrise.com' },
         content: [{
           type: 'text/html',
           value: emailHtml,

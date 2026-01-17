@@ -4,7 +4,7 @@
 
 ### 1. Create GA4 Property
 1. Go to [Google Analytics](https://analytics.google.com/)
-2. Create a new property for "lbsunrise.com"
+2. Create a new property for "lrsunrise.com"
 3. Configure it as a **website** property
 4. Get your **Measurement ID** (format: G-XXXXXXXXXX)
 

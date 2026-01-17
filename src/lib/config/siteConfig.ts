@@ -14,7 +14,7 @@ export const siteConfig = {
   businessName: BUSINESS_INFO.name,
   businessPhone: BUSINESS_INFO.telephone,
   businessEmail: BUSINESS_INFO.email,
-  businessAddress: `${BUSINESS_INFO.address}, ${BUSINESS_INFO.city}, ${BUSINESS_INFO.state} ${BUSINESS_INFO.zipCode}`,
+  businessAddress: `${BUSINESS_INFO.streetAddress}, ${BUSINESS_INFO.city}, ${BUSINESS_INFO.state} ${BUSINESS_INFO.zipCode}`,
   businessHours: BUSINESS_INFO.hoursDisplay,
   
   // SEO

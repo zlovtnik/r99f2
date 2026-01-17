@@ -22,7 +22,7 @@ function escapeHtml(text: string): string {
 }
 
 export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
-  const { to, subject, html, from = 'noreply@lbsunrise.com' } = options;
+  const { to, subject, html, from = 'noreply@lrsunrise.com' } = options;
 
   try {
     // Escape HTML content to prevent XSS

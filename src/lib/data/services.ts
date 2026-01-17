@@ -154,7 +154,7 @@ export const services: Service[] = [
     slug: 'flooring-services',
     description: 'Professional flooring installation and repair services. Understanding subfloor readiness is key before installing new flooring materials. Our team performs surface inspections beforehand to verify flatness tolerance so adhesive bonds form correctly during installation for lasting results.',
     shortDescription: 'Quality flooring installation and repair',
-    imageUrl: '/images/Professional-Construction-Service.webp',
+    imageUrl: '/images/gc-03.webp',
     imageAlt: 'Flooring services in Portland, Maine',
     benefits: [
       'Expert installation',
@@ -251,7 +251,7 @@ export const services: Service[] = [
     slug: 'gutter-services',
     description: 'Comprehensive gutter installation, repair, and maintenance services to protect your property from water damage. Properly functioning gutters direct water away from your foundation and prevent erosion, basement flooding, and structural damage.',
     shortDescription: 'Complete gutter installation and maintenance',
-    imageUrl: '/images/Professional-Construction-Contractor.webp',
+    imageUrl: '/images/s-07.webp',
     imageAlt: 'Gutter services in Portland, Maine',
     benefits: [
       'Water damage prevention',

@@ -498,7 +498,7 @@ export function createLocalBusinessSchema(businessInfo: any) {
       postalCode: businessInfo.zipCode,
       addressCountry: 'US'
     },
-    url: 'https://lbsunrise.com',
+    url: 'https://lrsunrise.com',
     serviceArea: {
       '@type': 'City',
       name: 'Portland, Maine'
@@ -629,7 +629,7 @@ export const SERVICE_AREAS = [
   <title>LB Sunrise - Professional Roofing Services in Portland, Maine</title>
   <meta name="description" content="Expert roof repair, replacement, and inspection services in Portland, Maine. Emergency roofing services available. Call (978) 519-9774 for a free quote." />
   <meta name="keywords" content="roof repair, roof replacement, roofing contractor, Portland Maine" />
-  <link rel="canonical" href="https://lbsunrise.com" />
+  <link rel="canonical" href="https://lrsunrise.com" />
   <meta property="og:title" content="LB Sunrise - Professional Roofing Services" />
   <meta property="og:description" content="Expert roof repair and replacement in Portland, Maine" />
   <meta property="og:type" content="website" />
@@ -665,7 +665,7 @@ export const SERVICE_AREAS = [
 <svelte:head>
   <title>Roofing Services - Roof Repair & Replacement | LB Sunrise</title>
   <meta name="description" content="Browse our roofing services: roof repair, replacement, inspections, and emergency services in Portland, Maine." />
-  <link rel="canonical" href="https://lbsunrise.com/services" />
+  <link rel="canonical" href="https://lrsunrise.com/services" />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-12">
@@ -689,7 +689,7 @@ export const SERVICE_AREAS = [
 <svelte:head>
   <title>Contact LB Sunrise - Free Roofing Estimate</title>
   <meta name="description" content="Contact LB Sunrise for a free roofing estimate. Call {BUSINESS_INFO.phone} or fill out our contact form." />
-  <link rel="canonical" href="https://lbsunrise.com/contact" />
+  <link rel="canonical" href="https://lrsunrise.com/contact" />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-12">
@@ -722,7 +722,7 @@ import { services } from '$data/services';
 import { serviceAreas } from '$data/serviceAreas';
 
 export const GET: RequestHandler = async () => {
-  const baseUrl = 'https://lbsunrise.com';
+  const baseUrl = 'https://lrsunrise.com';
   
   const staticPages = [
     '',
@@ -767,7 +767,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 
-Sitemap: https://lbsunrise.com/sitemap.xml`;
+Sitemap: https://lrsunrise.com/sitemap.xml`;
 
   return new Response(robotsTxt, {
     headers: {
@@ -1317,9 +1317,40 @@ npm run dev
 npx tsc --watch
 ```
 
+#### 12.2.1 Domain Update Checklist
+
+When updating the site domain (e.g., migrating to `https://lrsunrise.com`):
+
+1. **Update `.env.example`** with the new domain:
+   ```bash
+   PUBLIC_SITE_URL=https://lrsunrise.com
+   VITE_SITE_URL=https://lrsunrise.com
+   ```
+
+2. **Update config files** that contain hardcoded domain strings:
+   - `wrangler.toml` - Cloudflare environment variables
+   - `.env` / `.env.local` - Local development
+   - `k8s-deployment.yaml` - Kubernetes deployments
+   - `k8s-ingress.yaml` - Kubernetes ingress host
+
+3. **Update CI/CD pipeline environment variables:**
+   - GitHub Actions secrets/variables
+   - Cloudflare Pages environment settings
+   - OCI DevOps build parameters (if applicable)
+
+4. **Verify all `VITE_*` and `PUBLIC_*` variables** are consistent across:
+   - `.env.example` (template)
+   - `wrangler.toml` (Cloudflare config)
+   - Deployment scripts (`deploy-k8s.sh`, `deploy-oci.sh`)
+
+5. **Search for hardcoded domain strings:**
+   ```bash
+   grep -r "olddomain.com" --include="*.ts" --include="*.js" --include="*.svelte" --include="*.yaml" --include="*.toml" --include="*.md"
+   ```
+
 ### 12.3 Environment Variables
-- **VITE_GA_MEASUREMENT_ID**: Google Analytics 4 Measurement ID (required for analytics)
-- **PUBLIC_SITE_URL**: Public site URL for canonical links (optional, defaults to https://lbsunrise.com)
+- **VITE_GA_MEASUREMENT_ID**: Google Analytics 4 Measurement ID (required for analytics). When changing domains, verify the measurement ID is associated with a GA4 property configured for the new domain.
+- **PUBLIC_SITE_URL**: Public site URL for canonical links (optional, defaults to https://lrsunrise.com)
 - **VITE_EMAIL_API_KEY**: Email service API key (required for contact form email delivery; e.g., SendGrid, Mailgun, or AWS SES API key)
 - **VITE_ENABLE_***: Feature flags to enable/disable sections (all default to true)
 
@@ -1389,7 +1420,21 @@ npm run preview
 - Address: 44 Veranda St, Portland, ME 04101
 - Hours: Mon-Fri 8:00 AM - 6:00 PM, Sat 9:00 AM - 4:00 PM, Sun Closed
 - Service Areas: Portland, Westbrook, Cumberland, Cape Elizabeth, Falmouth
-- Website: https://lbsunrise.com
+- Website: https://lrsunrise.com
+
+### 14.1.1 Domain Migration Checklist
+
+When changing domains (e.g., from `lbsunrise.com` to `lrsunrise.com`), update the following external services:
+
+- [ ] **Google Business Profile**: Update website URL in business info
+- [ ] **Google Analytics 4**: Create/update GA4 property for new domain (see notes in Section 16.1)
+- [ ] **Google Search Console**: Add and verify new domain property, submit updated sitemap
+- [ ] **Google Ads**: Update destination URLs in all campaigns and ad groups
+- [ ] **Social Media Profiles**: Update website links on Facebook, Instagram, LinkedIn, etc.
+- [ ] **Email Signatures & Templates**: Update all links in business email communications
+- [ ] **Local Citations**: Update NAP consistency across Yelp, Home Advisor, Angi, BBB, etc.
+- [ ] **Print Materials**: Plan reprints for business cards, flyers, vehicle wraps if applicable
+- [ ] **301 Redirects**: Set up redirects from old domain to new domain if old domain is retained
 
 ### 14.2 Local Citation Strategy
 - Create NAP (Name, Address, Phone) consistency across:
@@ -1429,7 +1474,7 @@ vercel list
 ```
 
 ### 15.3 Domain & DNS
-- Domain: lbsunrise.com
+- Domain: lrsunrise.com
 - DNS Provider: [To be configured]
 - SSL Certificate: Automatic via Vercel
 
@@ -1444,6 +1489,9 @@ vercel list
 
 ### 16.1 Analytics & Tracking
 - Set up Google Analytics 4
+  - **Domain Migration Note**: When changing domains, create a new GA4 property for the new domain or update the existing property's data streams
+  - Consider running both old and new domain properties in parallel during transition
+  - Historical data from the old domain will NOT migrate automatically; export reports before decommissioning
 - Install Google Tag Manager
 - Configure conversion tracking
 - Track form submissions
@@ -1452,6 +1500,9 @@ vercel list
 
 ### 16.2 Google Search Console
 - Verify ownership
+  - **Domain Migration Note**: Add new domain as a separate property, verify via DNS TXT record or HTML file
+  - Use "Change of Address" tool if migrating from old domain (retains some SEO signals)
+  - Resubmit sitemap for new domain: `https://lrsunrise.com/sitemap.xml`
 - Submit sitemap
 - Monitor indexation
 - Track search performance
@@ -1598,7 +1649,7 @@ vercel list
 **Project Duration:** January 6-16, 2026
 **Budget:** $4,000.00
 **Repository:** [To be created]
-**Live Site:** https://lbsunrise.com (pending deployment)
+**Live Site:** https://lrsunrise.com (pending deployment)
 
 ---
 
@@ -2015,7 +2066,7 @@ vercel list
 1. Create GA4 property and obtain Measurement ID
    - Go to Google Analytics: https://analytics.google.com/
    - Create new GA4 property named "LB Sunrise"
-   - Configure with website URL: `https://lbsunrise.com`
+   - Configure with website URL: `https://lrsunrise.com`
    - Copy the Measurement ID (format: `G-XXXXXXXXXX`)
    - Document ID for later steps
    - Create `/.env.local` file in project root with: `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` (replace X's with actual ID)
@@ -2045,7 +2096,7 @@ vercel list
    - Configure environment variable in Vercel dashboard:
      - Go to Project Settings → Environment Variables
      - Add: `VITE_GA_MEASUREMENT_ID` with your GA4 measurement ID value
-     - Add: `PUBLIC_SITE_URL` with `https://lbsunrise.com` (or your custom domain)
+     - Add: `PUBLIC_SITE_URL` with `https://lrsunrise.com` (or your custom domain)
      - Ensure variables are set for Production environment
    - Trigger production deployment (or set to auto-deploy on git push)
    - Test production preview URL works and is responsive
@@ -2209,9 +2260,9 @@ vercel list
 1. Create GA4 property for production domain (if not already created on Day 7)
    - Go to Google Analytics: https://analytics.google.com/
    - If not done on Day 7: Create new GA4 property named "LB Sunrise - Production"
-   - Configure with website URL: `https://lbsunrise.com` (the final production domain)
+   - Configure with website URL: `https://lrsunrise.com` (the final production domain)
    - Copy the Measurement ID (format: `G-XXXXXXXXXX`)
-   - If already done: Verify the property is set to track `https://lbsunrise.com`
+   - If already done: Verify the property is set to track `https://lrsunrise.com`
 
 2. Verify GA4 production tracking setup
    - Confirm `VITE_GA_MEASUREMENT_ID` is set in Vercel environment variables (from Day 7)
@@ -2229,17 +2280,17 @@ vercel list
    - **Critical:** Confirm production Measurement ID matches `.env.local` and Vercel dashboard
 
 3. Domain configuration
-   - Register domain `lbsunrise.com` (if not already done)
+   - Register domain `lrsunrise.com` (if not already done)
    - Point domain nameservers to Vercel (Vercel will provide nameserver values)
    - Configure custom domain in Vercel:
      - Go to Vercel project → Settings → Domains
-     - Add domain: `lbsunrise.com`
+     - Add domain: `lrsunrise.com`
      - Vercel will prompt for DNS configuration
      - Point nameservers or update A/CNAME records as instructed
    - Note: DNS propagation can take up to 48 hours; proceed with launch while waiting
 
 4. Update all URLs to production domain
-   - Update `src/lib/config/siteConfig.ts` to use `https://lbsunrise.com` as baseUrl
+   - Update `src/lib/config/siteConfig.ts` to use `https://lrsunrise.com` as baseUrl
    - Update `src/routes/sitemap.xml/+server.ts` to use production domain in URLs
    - Update `src/routes/robots.txt/+server.ts` to use production domain (if needed)
    - Update canonical URLs to point to production domain
@@ -2269,7 +2320,7 @@ vercel list
 - ✅ Production (preview) URL successfully tracks events in GA4
 - ✅ Page views, form submissions, and contact requests tracked in real-time
 - ✅ Domain registered and nameservers pointed to Vercel
-- ✅ All URLs updated to production domain (https://lbsunrise.com)
+- ✅ All URLs updated to production domain (https://lrsunrise.com)
 - ✅ Production build deployed and accessible
 - ✅ GA4 real-time dashboard shows production traffic
 
@@ -2372,7 +2423,7 @@ vercel list
 - **Day 7 (Wed, Jan 14):** ⏳ GA4 Setup - Create GA4 property, configure env vars, deploy to Vercel
 - **Day 8 (Thu, Jan 15):** ⏳ Testing & Validation - Analytics verification, SEO validation, accessibility testing, cross-browser testing, Lighthouse audits
 - **Day 9 (Fri, Jan 16 AM):** ⏳ Domain & Launch Prep - Domain registration, GA4 production setup, final verification
-- **Fri, Jan 16 PM:** 🚀 **LAUNCH DAY** - Go live with lbsunrise.com
+- **Fri, Jan 16 PM:** 🚀 **LAUNCH DAY** - Go live with lrsunrise.com
 
 ---
 

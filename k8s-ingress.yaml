@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: lbsunrise.com  # Replace with your actual domain
+  - host: lrsunrise.com  # Replace with your actual domain
     http:
       paths:
       - path: /

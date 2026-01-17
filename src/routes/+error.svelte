@@ -88,7 +88,7 @@
               <div>
                 <p class="font-medium text-gray-900">Email</p>
                 <p class="text-gray-600">
-                  <a href={emailHref} class="hover:underline">{BUSINESS_INFO?.email || 'contact@lbsunrise.com'}</a>
+                  <a href={emailHref} class="hover:underline">{BUSINESS_INFO?.email || 'contact@lrsunrise.com'}</a>
                 </p>
               </div>
             </div>
