@@ -1,5 +1,15 @@
 # Copilot Instructions
 
+## Project Overview
+
+**LR Sunrise Construction** - A local contractor business website for Portland, ME serving 21 communities within 200 miles. The site focuses on siding installation, roofing, carpentry, and remodeling services with strong local SEO.
+
+**Improvement Roadmap**: See [src/lib/assets/fixes.md](src/lib/assets/fixes.md) for the active task list and implementation priorities. Current focus areas:
+- Navigation dropdowns for Services/Areas
+- Limiting homepage service areas to 6 featured (not all 21)
+- Adding urgency messaging to CTAs
+- Google Maps embeds on service area pages
+
 ## Stack & Architecture
 
 - **Framework**: SvelteKit 2 with Vite 7, Tailwind 3.4, PostCSS (autoprefixer), TypeScript
@@ -10,36 +20,66 @@
 ## Routing & Pages
 
 - **Root layout**: [src/routes/+layout.svelte](src/routes/+layout.svelte) loads global styles/favicon and calls `initializeGA()` on mount; guard browser-only code (window/document) to avoid SSR errors
-- **Home page**: [src/routes/+page.svelte](src/routes/+page.svelte) renders schema JSON-LD, hero, services, testimonials, CTA; sources from `services`, `testimonials`, `BUSINESS_INFO`, and `createLocalBusinessSchema`
-- **Static pages**: [src/routes/about/+page.svelte](src/routes/about/+page.svelte) manually sets SEO tags using `siteConfig.siteUrl`; follow this pattern for new pages
-- **Dynamic service areas**: [src/routes/service-areas/[city]/+page.svelte](src/routes/service-areas/[city]/+page.svelte) uses [src/lib/components/ServiceAreaPage.svelte](src/lib/components/ServiceAreaPage.svelte) component with area slug; data from [src/lib/data/serviceAreas.ts](src/lib/data/serviceAreas.ts)
+- **Home page**: [src/routes/+page.svelte](src/routes/+page.svelte) renders schema JSON-LD, hero, services (4 from `featuredServices`), testimonials (3), blog posts (3), featured service areas (6), and CTA sections; sources from `featuredServices` (4-item subset), `testimonials`, `blogPosts`, `serviceAreas`, `benefits`, `BUSINESS_INFO`
+- **Static pages**: [src/routes/about/+page.svelte](src/routes/about/+page.svelte), [src/routes/contact/+page.svelte](src/routes/contact/+page.svelte), [src/routes/faq/+page.svelte](src/routes/faq/+page.svelte), [src/routes/gallery/+page.svelte](src/routes/gallery/+page.svelte), [src/routes/testimonials/+page.svelte](src/routes/testimonials/+page.svelte); all manually set SEO tags using `siteConfig.siteUrl`
+- **Dynamic routes**: 
+  - [src/routes/service-areas/[city]/+page.svelte](src/routes/service-areas/[city]/+page.svelte) uses [ServiceAreaPage.svelte](src/lib/components/ServiceAreaPage.svelte) with area-specific FAQs, testimonials, climate context
+  - [src/routes/services/[slug]/+page.svelte](src/routes/services/[slug]/+page.svelte) for individual service pages
+  - [src/routes/blog/[slug]/+page.svelte](src/routes/blog/[slug]/+page.svelte) for blog posts with markdown content
+- **API routes**: `/api/contact` (form submission), `/api/analytics` (event tracking), `/health` (healthcheck), `/robots.txt`, `/sitemap.xml`, `/llms.txt` (all server-rendered)
 
 ## Data & Configuration
 
-- **Structured data**: Services/testimonials/FAQ/service areas live in [src/lib/data/](src/lib/data/) and use types from [src/lib/types/index.ts](src/lib/types/index.ts); update data files, not inline in components
-- **Constants**: Business/site constants in [src/lib/utils/constants.ts](src/lib/utils/constants.ts) (BUSINESS_INFO, SERVICE_AREAS, SERVICE_OPTIONS exported as const arrays). **SERVICE_OPTIONS is the canonical list of service slugs**; use it for form `<select>` values and ensure [src/lib/data/services.ts](src/lib/data/services.ts) exports a services array whose slug fields are validated against SERVICE_OPTIONS to prevent drift. Any form validation logic that builds select options or validates submitted service slugs must derive its values from SERVICE_OPTIONS so both the data file and form validation code reference the same canonical source
-- **Config flags**: [src/lib/config/siteConfig.ts](src/lib/config/siteConfig.ts) reads `VITE_ENABLE_*` envs for feature toggles (enableContactForm, enableAnalytics, etc.)
-- **Environment vars**: `VITE_GA_MEASUREMENT_ID`, `VITE_ENABLE_*` toggles, `VITE_BUSINESS_EMAIL/PHONE` (client-side display only), `ADMIN_EMAIL` (server-side email recipient for contact API; required for outgoing messages), `VITE_SITE_URL` (default `https://lrsunrise.com`), `RATE_LIMIT_WINDOW_SECONDS` (sliding window in seconds for contact API rate limiter; default 60; server-side), `RATE_LIMIT_MAX` (max submissions per window; default 5; server-side; both read by [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts))
+- **Structured data**: All content lives in [src/lib/data/](src/lib/data/):
+  - `services.ts` - All services defined here; exports `featuredServices` subset (4 items used on homepage)
+  - `serviceAreas.ts` - Service areas with climateContext, seasonalTips, localFaqs, testimonials, galleryItems per area
+  - `testimonials.ts` - Customer reviews with ratings
+  - `blog.ts` - Blog posts with markdown content, featuredImage, relatedServices
+  - `galleryItems.ts` - Project gallery with categories (siding, roofing, carpentry, etc.)
+  - `benefits.ts` - "Why Choose Us" benefits and process steps
+  - `faq.ts` - General FAQs by category
+- **Constants**: [src/lib/utils/constants.ts](src/lib/utils/constants.ts) exports:
+  - `BUSINESS_INFO` - Name, phone, email, address, hours, discounts, service radius
+  - `SERVICE_AREAS` - Array of 21 area names
+  - `SERVICE_OPTIONS` - Canonical list of service names for form validation
+  - `PROMOTIONAL_BADGES`, `STATS`, `KEYWORDS` - Marketing content
+  - `FEATURED_AREAS`, `FEATURED_AREAS_SET` - Featured service areas for homepage display
+- **Config flags**: [src/lib/config/siteConfig.ts](src/lib/config/siteConfig.ts) reads `VITE_ENABLE_*` envs for feature toggles
+- **Environment vars**: `VITE_GA_MEASUREMENT_ID`, `VITE_ENABLE_*` toggles, `VITE_BUSINESS_EMAIL/PHONE` (client-side), `ADMIN_EMAIL` (server-side email recipient), `VITE_SITE_URL` (default `https://lrsunrise.com`), `RATE_LIMIT_WINDOW_SECONDS` (default 60), `RATE_LIMIT_MAX` (default 5)
 
 ## SEO & Analytics
 
-- **SEO utilities**: [src/lib/utils/seo.ts](src/lib/utils/seo.ts) provides `createLocalBusinessSchema`, `createServiceSchema`, `formatPricing`, breadcrumbs
-- **Schema markup**: Use [SchemaMarkup.svelte](src/lib/components/SchemaMarkup.svelte) for JSON-LD injection (not inline scripts)
+- **SEO utilities**: [src/lib/utils/seo.ts](src/lib/utils/seo.ts) provides `createLocalBusinessSchema`, `createServiceSchema`, `createBreadcrumbSchema`, `createFAQSchema`, `formatPricing`
+- **Schema markup**: Use [SchemaMarkup.svelte](src/lib/components/SchemaMarkup.svelte) for JSON-LD injection; supports LocalBusiness, BreadcrumbList, FAQPage schemas
 - **Analytics**: [src/lib/utils/analytics.ts](src/lib/utils/analytics.ts) injects GA4 when `VITE_GA_MEASUREMENT_ID` is valid (not placeholder G-XXXXXXXXXX); tracking helpers are no-ops when GA absent. Call only in browser context.
 - **Schema alignment**: When adding services/locations, keep `SERVICE_AREAS`, `SERVICE_OPTIONS` in [constants.ts](src/lib/utils/constants.ts) and JSON-LD schemas synchronized
+- **Meta tags pattern**: Each page sets `<title>`, `<meta name="description">`, `<link rel="canonical">`, Open Graph, and Twitter meta tags in `<svelte:head>`
 
 ## Forms & Validation
 
-- **Contact form**: [ContactForm.svelte](src/lib/components/ContactForm.svelte) uses `validateContactForm` from [validation.ts](src/lib/utils/validation.ts) (validates name/email/phone/ZIP/service/message)
-- **Service validation**: `ContactForm.svelte` should import **SERVICE_OPTIONS** from constants.ts so the `<select>` only exposes the canonical services and the client-side validation against `SERVICE_OPTIONS` prevents invalid submissions, and `[src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts)` must also import **SERVICE_OPTIONS** and reject requests whose `service` value is not recognized with a clear error response; do not rely on client-side checking alone
-- **API endpoint**: [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts) handles form submission with rate limiting (configurable via `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_MAX`) and sends email to `ADMIN_EMAIL` (server-side env); client-side display uses `VITE_BUSINESS_EMAIL` and `VITE_BUSINESS_PHONE`
+- **Contact form**: [ContactForm.svelte](src/lib/components/ContactForm.svelte) and [Hero.svelte](src/lib/components/Hero.svelte) both have contact forms using `validateContactForm` from [validation.ts](src/lib/utils/validation.ts)
+- **Service validation**: Forms import **SERVICE_OPTIONS** from constants.ts for `<select>` values; [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts) also validates against SERVICE_OPTIONS server-side
+- **Phone formatting**: `formatPhoneNumber` in [format.ts](src/lib/utils/format.ts) formats as (XXX) XXX-XXXX with cursor position preservation
+- **API endpoint**: [src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts) handles form submission with rate limiting and sends email to `ADMIN_EMAIL`
 
 ## UI Components & Styling
 
-- **Components**: Hero/CTA/ServiceCard/TestimonialCard/Footer/Navigation in [src/lib/components/](src/lib/components/); Navigation uses `$page` store for active route highlighting
-- **Tailwind theme**: [tailwind.config.js](tailwind.config.js) extends colors (primary: #4CAF50, secondary: #AED581, accent: #FFA726, neutral shades)
-- **Global styles**: [src/app.css](src/app.css) defines utility classes like `.btn`; maintain utility-first approach
-- **Accessibility**: Components include aria-labels/ids (e.g., Testimonial star ratings, ContactForm errors); follow these patterns for new UI
+- **Core components**: 
+  - `Hero.svelte` - Homepage hero with embedded contact form, background image, promotional badges
+  - `Navigation.svelte` - Sticky nav with desktop dropdowns for Services/Areas, mobile slide-out menu with collapsible sections, phone number in header
+  - `Footer.svelte` - Large contact section + quick links + service links + contact info
+  - `CTA.svelte` - Call-to-action section with secondary navigation cards
+  - `ServiceCard.svelte`, `TestimonialCard.svelte`, `BlogPostCard.svelte` - Card components
+  - `ServiceAreaPage.svelte` - Reusable template for dynamic service area pages with FAQs, testimonials, gallery
+  - `ContactCard.svelte`, `ContactForm.svelte` - Contact UI elements
+  - `SchemaMarkup.svelte` - JSON-LD script injection
+- **Tailwind theme**: [tailwind.config.js](tailwind.config.js) extends colors:
+  - primary: #4CAF50 (green)
+  - secondary: #AED581 (light green)
+  - accent: #FFA726 (orange) - **use for urgent CTAs**
+  - neutral shades for backgrounds
+- **Global styles**: [src/app.css](src/app.css) defines `.btn`, `.nav-link`, `.mobile-nav-link` utility classes
+- **Accessibility**: Components include aria-labels, aria-expanded, focus states; follow these patterns
 
 ## Deployment & DevOps
 
@@ -51,13 +91,43 @@
 ## Development Workflow
 
 - **Quality checks**: Run `npm run check` (svelte-check + tsc) before commits; no dedicated test suite exists yet
-- **Content updates**: Prefer editing structured data files/config over hardcoding copy in components for consistency
+- **Content updates**: Prefer editing structured data files in `src/lib/data/` over hardcoding copy in components
 - **SSR safety**: Always guard browser APIs (window/document) with `typeof window !== 'undefined'` or `onMount`; [analytics.ts](src/lib/utils/analytics.ts) shows proper patterns
+- **Svelte transitions**: Use `fade`, `slide` from `svelte/transition` with `quintOut` easing for smooth animations
 
 ## Key Files Reference
 
-- Config: [svelte.config.js](svelte.config.js), [vite.config.ts](vite.config.ts), [tailwind.config.js](tailwind.config.js)
-- Data: [src/lib/data/services.ts](src/lib/data/services.ts), [testimonials.ts](src/lib/data/testimonials.ts), [serviceAreas.ts](src/lib/data/serviceAreas.ts)
-- Utils: [constants.ts](src/lib/utils/constants.ts), [seo.ts](src/lib/utils/seo.ts), [validation.ts](src/lib/utils/validation.ts), [analytics.ts](src/lib/utils/analytics.ts)
-- Types: [src/lib/types/index.ts](src/lib/types/index.ts) (Service, ServiceArea, Testimonial, ContactFormData)
-- Static: [static/](static/) (robots.txt, sitemap.xml, images/)
+### Config Files
+- [svelte.config.js](svelte.config.js), [vite.config.ts](vite.config.ts), [tailwind.config.js](tailwind.config.js)
+- [wrangler.jsonc](wrangler.jsonc) - Cloudflare Pages config
+
+### Data Files (src/lib/data/)
+- `services.ts` - Services array + `featuredServices` export (4 items for homepage)
+- `serviceAreas.ts` - Service areas with rich content (FAQs, testimonials, gallery per area)
+- `testimonials.ts` - Customer reviews
+- `blog.ts` - Blog posts with markdown content
+- `galleryItems.ts` - Project gallery items with categories
+- `benefits.ts` - "Why Choose Us" benefits and process steps
+- `faq.ts` - General FAQs
+
+### Utils (src/lib/utils/)
+- `constants.ts` - BUSINESS_INFO, SERVICE_AREAS, SERVICE_OPTIONS, STATS, KEYWORDS
+- `seo.ts` - Schema creation functions
+- `validation.ts` - Form validation
+- `analytics.ts` - GA4 integration
+- `format.ts` - Phone formatting
+
+### Types
+- [src/lib/types/index.ts](src/lib/types/index.ts) - Service, ServiceArea, Testimonial, BlogPost, GalleryItem, ContactFormData
+
+### Static Assets
+- [static/images/](static/images/) - Project photos, service images, blog images
+- All images should be WebP format, max 1920px wide, <200KB each
+
+## Task Tracking
+
+All tasks are tracked in [src/lib/assets/fixes.md](src/lib/assets/fixes.md). Key components referenced:
+- `Navigation.svelte` - Desktop/mobile navigation with dropdowns
+- `GoogleMap.svelte` - Embedded maps for service areas and contact page
+- `BeforeAfterSlider.svelte` - Image comparison slider for gallery
+- `FloatingCTA.svelte`, `ExitIntentPopup.svelte` - Conversion optimization components

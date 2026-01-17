@@ -22,7 +22,7 @@
     description: 'Find answers to common questions about our construction services, pricing, service areas, and more. LR Sunrise Construction serves Portland, ME and surrounding areas.',
     keywords: 'construction FAQ, general contractor questions, Portland Maine contractor, construction services questions',
     url: `${baseUrl}/faq`,
-    image: `${baseUrl}/images/og-faq.jpg`
+    image: `${baseUrl}/images/og-image.webp`
   };
 
   // FAQ Schema for SEO

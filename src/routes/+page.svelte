@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { createLocalBusinessSchema } from "$lib/utils/seo";
+  import { createLocalBusinessSchema, createAggregateRatingSchema } from "$lib/utils/seo";
   import SchemaMarkup from "$lib/components/SchemaMarkup.svelte";
   import Hero from "$lib/components/Hero.svelte";
-  import { BUSINESS_INFO, SITE_URL } from "$lib/utils/constants";
+  import { BUSINESS_INFO, SITE_URL, STATS } from "$lib/utils/constants";
   import { featuredServices } from "$lib/data/services";
   import { testimonials } from "$lib/data/testimonials";
-  import { benefits, processSteps } from "$lib/data/benefits";
+  import { benefits } from "$lib/data/benefits";
   import { serviceAreas } from "$lib/data/serviceAreas";
   import ServiceCard from "$lib/components/ServiceCard.svelte";
   import TestimonialCard from "$lib/components/TestimonialCard.svelte";
   import BlogPostCard from "$lib/components/BlogPostCard.svelte";
   import BenefitIcon from "$lib/components/BenefitIcon.svelte";
+  import PhoneIcon from "$lib/components/icons/PhoneIcon.svelte";
   import { blogPosts } from "$lib/data/blog";
   import { fade, slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
@@ -20,6 +21,21 @@
     ...BUSINESS_INFO,
     url: siteUrl,
   });
+
+  // Aggregate rating schema for review rich snippets
+  $: aggregateRatingSchema = createAggregateRatingSchema({
+    ratingValue: STATS.starRating,
+    reviewCount: testimonials.length
+  });
+
+  // Combined LocalBusiness schema with aggregateRating embedded
+  $: localBusinessWithRating = {
+    ...schema,
+    aggregateRating: aggregateRatingSchema
+  };
+
+  // Filter service areas to show only featured ones on homepage
+  $: featuredAreas = serviceAreas.filter(area => area.featured);
 </script>
 
 <svelte:head>
@@ -45,16 +61,16 @@
     content="Professional siding installation and construction services. Carpentry, roofing, remodeling in Portland, Maine."
   />
   <meta property="og:url" content={siteUrl} />
-  <meta property="og:image" content={`${siteUrl}/images/og-image.jpg`} />
+  <meta property="og:image" content={`${siteUrl}/images/og-image.webp`} />
   <meta
     property="og:image:alt"
     content="LR Sunrise Construction professional services in Portland, Maine"
   />
   <meta property="og:type" content="website" />
-  <meta name="twitter:image" content={`${siteUrl}/images/og-image.jpg`} />
+  <meta name="twitter:image" content={`${siteUrl}/images/og-image.webp`} />
 </svelte:head>
 
-<SchemaMarkup {schema} />
+<SchemaMarkup schema={localBusinessWithRating} />
 
 <Hero />
 
@@ -95,72 +111,49 @@
   </div>
 </section>
 
-<!-- Why Choose Us Section -->
+<!-- Why Choose Us Section (Simplified) -->
 <section
   class="bg-gray-50 py-10 sm:py-16"
   in:fade={{ duration: 600, delay: 100, easing: quintOut }}
 >
   <div class="container mx-auto px-4 sm:px-6">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-      <div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-          Why Choose Our General Contractor Services?
-        </h2>
-        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-          Hiring a trusted general contractor isn't just about getting the job
-          done—it's about transforming how you feel about your space. We believe
-          in delivering services that resonate emotionally and strategically
-          with our clients' needs.
-        </p>
-        <p class="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">
-          Working with us means gaining access to a team who listens closely,
-          prioritizes communication at every step, and values meticulous
-          craftsmanship as much as you do.
-        </p>
+    <div class="text-center mb-8 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+        Why Portland Homeowners Trust Us
+      </h2>
+      <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
+        10+ years of quality craftsmanship, transparent pricing, and same-day emergency response.
+      </p>
+    </div>
 
-        <ul class="space-y-3">
-          {#each benefits as benefit, i}
-            <li
-              class="flex items-center gap-3"
-              transition:fade={{ duration: 600, delay: i * 100 }}
-            >
-              <div
-                class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0"
-              >
-                <BenefitIcon icon={benefit.icon} />
-              </div>
-              <span class="text-gray-700 text-sm sm:text-base"
-                >{benefit.text}</span
-              >
-            </li>
-          {/each}
-        </ul>
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
+      {#each benefits.slice(0, 4) as benefit, i}
+        <div
+          class="bg-white rounded-xl shadow-md p-5 sm:p-6 text-center hover:shadow-lg transition-shadow"
+          transition:fade={{ duration: 600, delay: i * 100 }}
+        >
+          <div
+            class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <div class="text-primary">
+              <BenefitIcon icon={benefit.icon} />
+            </div>
+          </div>
+          <p class="text-gray-700 font-medium text-sm sm:text-base">{benefit.text}</p>
+        </div>
+      {/each}
+    </div>
 
-      <div class="bg-white rounded-lg shadow-lg p-5 sm:p-8">
-        <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-          Our Installation & Construction Process
-        </h3>
-        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-          Our approach revolves around transparency, precision, and customer
-          partnership—a philosophy designed to ensure satisfaction at every
-          stage.
-        </p>
-        <ol class="space-y-4">
-          {#each processSteps as step, i}
-            <li
-              class="flex gap-3 sm:gap-4"
-              in:fade={{ duration: 500, delay: i * 100 }}
-            >
-              <span
-                class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm transition-transform hover:scale-110"
-                >{i + 1}</span
-              >
-              <span class="text-gray-700 text-sm sm:text-base">{step}</span>
-            </li>
-          {/each}
-        </ol>
-      </div>
+    <div class="text-center mt-8">
+      <a
+        href="/about"
+        class="inline-flex items-center gap-2 text-primary hover:text-secondary font-semibold transition-colors"
+      >
+        Learn more about our process
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </div>
   </div>
 </section>
@@ -170,24 +163,39 @@
   <div class="container mx-auto px-4 sm:px-6">
     <div class="text-center mb-8 sm:mb-12">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-        Service Areas in Portland & Surrounding Communities
+        Proudly Serving Portland & Nearby Communities
       </h2>
       <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
-        No matter where you're located within Portland, ME, we've got you
-        covered! We proudly extend our services to surrounding communities as
-        part of our commitment to accessibility and convenience.
+        Quality construction services within 200 miles of Portland, ME. Same-day estimates available.
       </p>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-      {#each serviceAreas as area (area.slug)}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 max-w-5xl mx-auto mb-8">
+      {#each featuredAreas as area (area.slug)}
         <a
           href={`/service-areas/${area.slug}`}
-          class="bg-gray-100 hover:bg-neutral-light active:bg-neutral-light/80 text-gray-700 hover:text-primary px-3 sm:px-4 py-2 rounded-full transition-colors text-sm sm:text-base"
+          class="bg-white border-2 border-gray-100 hover:border-primary hover:bg-primary/5 rounded-xl p-4 sm:p-5 text-center transition-all duration-200 hover:shadow-lg group"
         >
-          {area.name}, ME
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="font-semibold text-gray-800 group-hover:text-primary text-sm sm:text-base block">{area.name}</span>
+          <span class="text-xs text-gray-500">Maine</span>
         </a>
       {/each}
+    </div>
+
+    <div class="text-center">
+      <a
+        href="/service-areas"
+        class="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-sm sm:text-base"
+      >
+        View All {serviceAreas.length} Service Areas
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </div>
   </div>
 </section>
@@ -276,37 +284,86 @@
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-10 sm:py-16">
+<!-- CTA Section with Contact Form -->
+<section class="py-10 sm:py-16 bg-gradient-to-br from-gray-50 to-white">
   <div class="container mx-auto px-4 sm:px-6">
-    <div
-      class="bg-primary rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center"
-    >
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-        LR Sunrise Construction: Siding Installation & General Contractor
-        Services
-      </h2>
-      <p
-        class="text-base sm:text-xl text-neutral-light mb-6 sm:mb-8 max-w-3xl mx-auto"
-      >
-        LR Sunrise Construction specializes in delivering comprehensive
-        construction services including siding installation across Portland, ME.
-        Whether you're seeking enhanced curb appeal or structural improvements,
-        we're here to turn your vision into reality.
-      </p>
-      <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
-        <a
-          href="/contact"
-          class="inline-block bg-white text-primary hover:bg-gray-100 active:bg-gray-200 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg"
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-6xl mx-auto">
+      <!-- Left: Contact Info -->
+      <div class="text-center lg:text-left">
+        <span class="inline-block bg-accent/10 text-accent text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
+          🚀 Free Quote in 24 Hours
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+          Ready to Start Your Project?
+        </h2>
+        <p class="text-base sm:text-lg text-gray-600 mb-6">
+          Get a free, no-obligation estimate for your siding, roofing, or construction project. 
+          We'll respond within 24 hours.
+        </p>
+        
+        <div class="space-y-4 mb-6">
+          <a href={`tel:${BUSINESS_INFO.telephone}`} class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow group">
+            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <PhoneIcon class="w-6 h-6 text-primary" />
+            </div>
+            <div class="text-left">
+              <p class="text-sm text-gray-500">Call us now</p>
+              <p class="font-bold text-gray-900 text-lg">{BUSINESS_INFO.telephone}</p>
+            </div>
+          </a>
+          
+          <a href={`mailto:${BUSINESS_INFO.email}`} class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow group">
+            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div class="text-left">
+              <p class="text-sm text-gray-500">Email us</p>
+              <p class="font-bold text-gray-900">{BUSINESS_INFO.email}</p>
+            </div>
+          </a>
+        </div>
+        
+        <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+          <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">✓ 10+ Years Experience</span>
+          <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">✓ Licensed & Insured</span>
+          <span class="bg-purple-100 text-purple-800 text-xs font-medium px-3 py-1 rounded-full">✓ 15% Senior Discount</span>
+        </div>
+      </div>
+      
+      <!-- Right: Quick Contact Card -->
+      <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 text-center">Get Your Free Estimate</h3>
+        <p class="text-gray-500 text-sm text-center mb-6">Fill out the form or call us directly</p>
+        
+        <a 
+          href="/contact" 
+          class="block w-full bg-accent hover:bg-accent/90 text-white font-bold py-4 px-6 rounded-xl text-center transition-all duration-200 hover:scale-[1.02] hover:shadow-lg mb-4"
         >
-          Contact Us Today
+          <span class="flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Request Free Quote Now
+          </span>
         </a>
-        <a
+        
+        <a 
           href={`tel:${BUSINESS_INFO.telephone}`}
-          class="inline-block border-2 border-white text-white hover:bg-white/10 active:bg-white/20 font-semibold px-6 sm:px-8 py-3 rounded-lg transition-colors text-base sm:text-lg"
+          class="block w-full bg-primary hover:bg-secondary text-white font-semibold py-4 px-6 rounded-xl text-center transition-colors"
         >
-          Call: {BUSINESS_INFO.telephone}
+          <span class="flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Call Now: {BUSINESS_INFO.telephone}
+          </span>
         </a>
+        
+        <p class="text-center text-xs text-gray-400 mt-4">
+          Same-day response guaranteed • No obligation
+        </p>
       </div>
     </div>
   </div>

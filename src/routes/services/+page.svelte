@@ -13,9 +13,9 @@
   // SEO metadata
   $: seo = {
     title: `Construction Services | ${siteConfig.businessName}`,
-    description: 'Professional construction services including siding, carpentry, roofing, and remodeling. Expert craftsmen serving Portland, Maine and surrounding areas.',
+    description: 'Professional construction services including siding installation, carpentry, roofing, and remodeling in Portland, Brunswick, Biddeford, Westbrook & surrounding Maine communities. 10+ years experience. Free estimates.',
     url: `${baseUrl}/services`,
-    image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.jpg`
+    image: services.length > 0 ? `${baseUrl}${services[0].imageUrl}` : `${baseUrl}/images/og-image.webp`
   };
 
   // BreadcrumbList schema
@@ -54,18 +54,16 @@
   <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url({heroImage})"></div>
   <div class="container mx-auto px-4 text-center relative z-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Construction Services</h1>
+    <p class="text-xl text-white/90 max-w-3xl mx-auto">
+      Professional construction services with quality craftsmanship and reliable results.
+      Serving Portland, Maine and surrounding areas.
+    </p>
   </div>
 </section>
 
 <section class="py-16 bg-gray-50">
   <div class="container mx-auto px-4">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">Our Construction Services</h1>
-      <p class="text-xl text-center text-gray-600 mb-12">
-        Professional construction services with quality craftsmanship and reliable results.
-        Serving Portland, Maine and surrounding areas.
-      </p>
-
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         {#each services || [] as service (service.id)}
           <ServiceCard {service} />
@@ -74,7 +72,7 @@
 
       <div class="text-center">
         <p class="text-lg text-gray-700 mb-8">
-          Need help with your roofing project? Contact us for expert advice and a free quote.
+          Need help with your next project? Contact us for expert advice and a free quote.
         </p>
       </div>
     </div>

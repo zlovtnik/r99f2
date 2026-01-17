@@ -9,10 +9,10 @@
   // SEO metadata
   $: seo = {
     title: 'About Us | LR Sunrise Construction - Portland, ME',
-    description: 'Learn about LR Sunrise Construction, your trusted construction company in Portland, ME. Over 10 years of experience delivering quality craftsmanship for residential and commercial projects.',
-    keywords: 'construction company, about us, general contractor, Portland Maine, 10 years experience',
+    description: 'LR Sunrise Construction: Your trusted general contractor serving Portland, Brunswick, Biddeford & 21 Maine communities. 10+ years experience in siding, roofing, carpentry & remodeling. 15% discounts available.',
+    keywords: 'construction company Portland Maine, about us, general contractor, Brunswick ME, Biddeford Maine, 10 years experience',
     url: `${baseUrl}/about`,
-    image: `${baseUrl}/images/og-about.jpg`
+    image: `${baseUrl}/images/og-about.webp`
   };
 
   // BreadcrumbList schema

@@ -9,11 +9,11 @@
 
   // SEO metadata
   $: seo = {
-    title: 'Service Areas | LR Sunrise Construction',
-    description: 'Professional roofing services in Portland, Westbrook, and surrounding areas in Maine. Emergency roof repair available.',
-    keywords: 'roofing service areas, Portland Maine roofing, Westbrook Maine roofing',
+    title: 'Service Areas | Construction Services in 21 Maine Communities',
+    description: 'Expert siding, roofing & construction in Portland, Brunswick, Biddeford, Westbrook, Falmouth, Kennebunk & 15 more Maine communities. Same-day emergency service. Free estimates. Call (978) 519-9774.',
+    keywords: 'construction service areas Maine, Portland Maine contractor, Brunswick ME construction, Biddeford Maine contractor',
     url: `${baseUrl}/service-areas`,
-    image: `${baseUrl}/images/og-service-areas.jpg`
+    image: `${baseUrl}/images/og-image.webp`
   };
 
   // JSON-LD schema for service areas list

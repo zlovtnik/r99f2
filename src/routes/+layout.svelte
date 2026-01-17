@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { initializeGA, initializeCloudflare } from '$lib/utils/analytics';
 	import favicon from '$lib/assets/favicon.svg';
+	import FloatingCTA from '$lib/components/FloatingCTA.svelte';
+	import ExitIntentPopup from '$lib/components/ExitIntentPopup.svelte';
 	import '../app.css';
 
 	let { children } = $props();
@@ -41,3 +43,9 @@
 </svelte:head>
 
 {@render children()}
+
+<!-- Mobile floating CTA buttons -->
+<FloatingCTA />
+
+<!-- Exit intent popup (desktop) -->
+<ExitIntentPopup enabled={true} delay={5000} cookieDays={7} />

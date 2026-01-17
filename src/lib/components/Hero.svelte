@@ -111,16 +111,16 @@
           </p>
         </div>
         <div in:slide={{ duration: 600, delay: 200, easing: quintOut }}>
-          <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 leading-tight">
-            Expert Siding & Roof Installation Services in Portland
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
+            Protect Your Home. Boost Your Curb Appeal.
           </h1>
         </div>
         <div in:fade={{ duration: 600, delay: 400, easing: quintOut }}>
-          <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-neutral-light">
-            Your trusted general contractor for quality construction and remodeling.
+          <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-neutral-light font-medium">
+            Portland's trusted choice for siding, roofing & expert craftsmanship.
           </p>
           <p class="text-sm sm:text-base mb-4 sm:mb-6 text-neutral-light/90">
-            LR Sunrise Construction specializes in siding installation, roof replacement, and property improvements. Transform your home with our expert craftsmanship.
+            10+ years serving Maine homeowners. Free estimates within 24 hours. Same-day emergency response available.
           </p>
         </div>
         
@@ -138,8 +138,13 @@
 
         <!-- CTA buttons - stacked on mobile with proper sizing -->
         <div in:slide={{ duration: 500, delay: 800, easing: quintOut }} class="flex flex-col gap-2 sm:flex-row sm:gap-3 justify-center lg:justify-start">
-          <a href="/contact" class="btn bg-accent text-white hover:bg-accent/90 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-sm sm:text-base shadow-lg flex-1 sm:flex-none">
-            Get Free Estimate
+          <a href="/contact" class="btn bg-accent text-white hover:bg-accent/90 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 hover:shadow-lg text-sm sm:text-base shadow-lg flex-1 sm:flex-none group">
+            <span class="flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-pulse motion-reduce:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Free Quote in 24 Hours
+            </span>
           </a>
           <a href={`tel:${BUSINESS_INFO.telephone}`} class="btn border-2 border-white text-white hover:bg-white/10 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-center transition-all duration-200 hover:scale-105 text-xs sm:text-sm flex-1 sm:flex-none">
             <span class="flex items-center justify-center gap-1 sm:gap-2">
@@ -247,10 +252,11 @@
           </div>
           <button
             type="submit"
-            class="w-full bg-accent text-white font-semibold py-2 px-3 sm:px-4 rounded transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-transparent text-xs sm:text-sm"
+            class="w-full bg-accent text-white font-bold py-2.5 px-3 sm:px-4 rounded transition-all duration-200 hover:bg-accent/90 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-transparent text-xs sm:text-sm shadow-lg"
           >
-            Get Free Estimate
+            🚀 Get Your Free Quote Now
           </button>
+          <p class="text-center text-xs text-white/70 mt-1">Same-day response guaranteed</p>
         </form>
       </div>
     </div>
