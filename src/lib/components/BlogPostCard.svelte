@@ -19,7 +19,7 @@
     {/if}
     <div class="{post.featuredImage ? 'lg:w-1/2' : 'lg:w-full'} flex flex-col justify-center">
       <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-        <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">
+        <span class="px-3 py-1 bg-primary text-white rounded-full font-medium text-xs">
           {post.category}
         </span>
         <span>•</span>
@@ -75,7 +75,7 @@
 
     <div class="p-6">
       <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-        <span class="px-2 py-1 bg-primary/20 text-primary font-bold rounded-full text-xs">
+        <span class="px-2 py-1 bg-primary text-white font-semibold rounded-full text-xs">
           {post.category}
         </span>
         <span>•</span>

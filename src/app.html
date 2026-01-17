@@ -7,6 +7,10 @@
 		<!-- Preconnect to external domains for faster loading -->
 		<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous" />
 		<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+		<link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin="anonymous" />
+		<link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+		<!-- Preload LCP hero image for faster paint -->
+		<link rel="preload" href="/images/General-Contractor-1.webp" as="image" type="image/webp" fetchpriority="high" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

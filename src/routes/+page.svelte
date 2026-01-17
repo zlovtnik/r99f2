@@ -43,6 +43,8 @@
     >Siding Installation & Construction Services | LR Sunrise Construction
     Portland ME</title
   >
+  <!-- Preload LCP hero image -->
+  <link rel="preload" as="image" href="/images/General-Contractor-1.webp" fetchpriority="high" />
   <meta
     name="description"
     content="Siding Installation & Construction Services in Portland, ME — Expert siding, carpentry, roofing & remodeling. 10+ years experience. Free estimates. Call (978) 519-9774."
@@ -364,7 +366,7 @@
           </span>
         </a>
         
-        <p class="text-center text-xs text-gray-400 mt-4">
+        <p class="text-center text-xs text-gray-600 mt-4">
           Same-day response guaranteed • No obligation
         </p>
       </div>

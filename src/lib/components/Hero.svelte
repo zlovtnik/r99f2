@@ -87,11 +87,14 @@
 
 <section class="text-white py-12 sm:py-16 md:py-20 relative overflow-hidden">
   <div class="absolute inset-0">
-    <div
-      class="absolute inset-0 bg-cover bg-center"
-      style="background-image: url('/images/General-Contractor-1.webp');"
+    <img
+      src="/images/General-Contractor-1.webp"
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      fetchpriority="high"
+      decoding="async"
       aria-hidden="true"
-    ></div>
+    />
     <div class="absolute inset-0 bg-gradient-to-r from-primary/70 to-secondary/70"></div>
     <div class="absolute inset-0 bg-black/30"></div>
   </div>
@@ -103,21 +106,21 @@
   </div>
   <div class="container mx-auto px-3 sm:px-6 relative z-10">
     <div class="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 items-stretch lg:items-start">
-      <!-- Left side: Hero text -->
+      <!-- Left side: Hero text - No transitions on LCP elements to avoid render delay -->
       <div class="text-center lg:text-left lg:flex-1 w-full lg:w-auto">
-        <div in:fade={{ duration: 800, easing: quintOut }}>
+        <div>
           <p class="text-white/90 uppercase tracking-wider text-xs sm:text-sm font-medium mb-2 sm:mb-3">
             General Contractor • {BUSINESS_INFO.city}, {BUSINESS_INFO.state}
           </p>
         </div>
-        <div in:slide={{ duration: 600, delay: 200, easing: quintOut }}>
+        <div>
           <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
             Protect Your Home. Boost Your Curb Appeal.
           </h1>
         </div>
-        <div in:fade={{ duration: 600, delay: 400, easing: quintOut }}>
+        <div>
           <p class="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 text-white/95 font-medium">
-            Portland's trusted choice for siding, roofing & expert craftsmanship.
+            Portland's trusted choice for siding, roofing &amp; expert craftsmanship.
           </p>
           <p class="text-sm sm:text-base mb-4 sm:mb-6 text-white/90">
             10+ years serving Maine homeowners. Free estimates within 24 hours. Same-day emergency response available.
